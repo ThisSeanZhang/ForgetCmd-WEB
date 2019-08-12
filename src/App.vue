@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <el-container>
-    <el-header>Header</el-header>
-    <el-main><router-view style="height:100%;"/></el-main>
-    <el-footer>Footer</el-footer>
-  </el-container>
+    <router-view/>
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   name: 'app',
+  setup() {
+    const isPro = Object.is(process.env.NODE_ENV, 'development');
+    const baseUrl = isPro ? 'api' : '/';
+    axios.defaults.baseURL = baseUrl;
+  },
 };
 </script>
 
@@ -17,8 +20,5 @@ export default {
 #app, body, html{
   height: 100%;
   margin: 0px;
-}
-.el-main, .el-container{
-  height: 100%;
 }
 </style>

@@ -1,32 +1,34 @@
 <template>
-  <div>
-    <div class="search-bar-wapper">
-      <div><h1>忘记命令怎么使用了(っ °Д °;)っ让我来帮帮你吧[]~(￣▽￣)~*</h1></div>
-      <el-select
-        v-model="value"
-        filterable
-        class="aaaa"
-        popper-class="main-search"
-        remote
-        placeholder="请输入命令的部分或者全部"
-        no-data-text="暂时还没有这条命令的记录呢(ˉ▽ˉ；)..."
-        :remote-method="remoteMethod"
-        v-on:keyup.enter.native="submit(value)"
-        :loading="loading">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
-  </div>
+  <el-select
+    v-model="value"
+    filterable
+    class="aaaa"
+    popper-class="main-search"
+    remote
+    placeholder="请输入命令的部分或者全部"
+    no-data-text="暂时还没有这条命令的记录呢(ˉ▽ˉ；)..."
+    :remote-method="remoteMethod"
+    v-on:keyup.enter.native="submit(value)"
+    @change="handelChange"
+    :loading="loading">
+    <el-option
+      v-for="item in options"
+      :key="item.cid"
+      :label="item.commandName"
+      :value="item.cid">
+      <div class="select-result-option">
+        <span>{{item.commandName}}</span>
+        <span>{{item.briefDesc}}</span>
+      </div>
+    </el-option>
+  </el-select>
 </template>
 <script>
 import {
   value as Wapper, watch, onMounted,
 } from 'vue-function-api';
+import { ajax, wantNothing } from '../../api/fetch';
+import router from '../../router';
 
 export default {
   setup() {
@@ -58,13 +60,28 @@ export default {
     });
     const remoteMethod = (query) => {
       if (query !== '') {
+        console.log(query);
         loading = true;
-        setTimeout(() => {
-          loading = false;
-          options.value = list
-            .filter(item => (item.label.toLowerCase().indexOf(query.toLowerCase()) > -1));
-          console.log(options);
-        }, 200);
+        // setTimeout(() => {
+        //   loading = false;
+        //   options.value = list
+        //     .filter(item => (item.label.toLowerCase().indexOf(query.toLowerCase()) > -1));
+        //   console.log(options);
+        // }, 200);
+        const request = {
+          method: 'GET',
+          url: 'cmds/search-bar',
+          data: {
+            keyword: query,
+          },
+        };
+        ajax(request).then((resp) => {
+          console.log(resp.data);
+          options.value = resp.data.data;
+        }).catch((error) => {
+          wantNothing(error);
+          options.value = [];
+        });
       } else {
         options.value = [];
       }
@@ -72,9 +89,13 @@ export default {
     const submit = (event) => {
       console.log(event.value);
     };
+    const handelChange = (item) => {
+      console.log('handle', item);
+      router.push(`/cmds/${item}`);
+    };
     watch(
       () => value.value,
-      val => console.log('value is ', val),
+      val => console.log(`/cmds/ ${val}`),
     );
     // expose bindings on render context
     return {
@@ -84,24 +105,21 @@ export default {
       loading,
       remoteMethod,
       submit,
+      handelChange,
     };
   },
 };
 </script>
 <style style="scss" scoped>
-.search-bar-wapper{
-  /* height: 100%; */
-  padding-top: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
 .aaaa {
-  width: 50%;
-}
-.main-search{
   width: 100%;
+}
+.main-search {
+  width: 100%!important;
   background-color: aquamarine;
+}
+.select-result-option{
+  display: flex;
+  justify-content: space-between;
 }
 </style>
