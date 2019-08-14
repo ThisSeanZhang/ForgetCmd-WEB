@@ -4,7 +4,7 @@
     <el-main>
       <div class="search-bar-wapper">
         <div><h1>忘记命令怎么使用了(っ °Д °;)っ让我来帮帮你吧[]~(￣▽￣)~*</h1></div>
-        <SelectSearchBar/>
+        <SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/>
       </div>
     </el-main>
     <el-footer>Footer</el-footer>
@@ -16,6 +16,11 @@ import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
 export default {
   name: 'search',
   components: { SelectSearchBar },
+  methods: {
+    hendleSelectCmd(cid) {
+      this.$router.push(`/cmds/${cid}`);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

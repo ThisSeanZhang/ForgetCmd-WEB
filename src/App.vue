@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export default {
   name: 'app',
-  setup() {
+  created() {
     const isPro = Object.is(process.env.NODE_ENV, 'development');
     const baseUrl = isPro ? 'api' : '/';
     axios.defaults.baseURL = baseUrl;

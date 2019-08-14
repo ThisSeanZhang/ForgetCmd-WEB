@@ -1,40 +1,59 @@
 <template>
   <el-container>
     <el-header>
-      <div class="search-bar"><SelectSearchBar/></div>
+      <div class="search-bar"><SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/></div>
     </el-header>
-    <el-main></el-main>
+    <el-main><CommandInfo :cmd="cmd" /></el-main>
     <el-footer>Footer</el-footer>
   </el-container>
 </template>
 <script>
-// import {
-//   value as Wapper, watch, onMounted,
-// } from 'vue-function-api';
-import {
-  value as Wapper, watch,
-} from 'vue-function-api';
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
-// import CommandInfo from '@/components/command/CommandInfo.vue';
+import CommandInfo from '@/components/command/CommandInfo.vue';
+import { ajax, wantNothing } from '../api/fetch';
+import Command from '../entities/Command';
+
 export default {
-  components: { SelectSearchBar },
-  beforeRouteUpdate (to, from, next) {
-    // this.setCurrentPid(to.params.pid)
-    console.log(to, from, next);
-    next();
+  name: 'command',
+  components: { SelectSearchBar, CommandInfo },
+  data() {
+    return {
+      cmd: new Command({}),
+    };
   },
-  setup(_,{ root }) {
-    // beforeRouteUpdate((to, from, next) => {
-    //   // this.setCurrentPid(to.params.pid)
-    //   console.log(to, from, next);
-    //   next();
-    // });
-    watch(() => root,
-    (o, n) => {
-      console.log(o);
-      console.log(n)
-    })
-    return {};
+  methods: {
+    hendleSelectCmd(cid) {
+      this.$router.push(`/cmds/${cid}`);
+    },
+    findCommandById(cid) {
+      const request = {
+        method: 'GET',
+        url: `cmds/${cid}`,
+      };
+      console.log(request);
+      ajax(request).then((resp) => {
+        this.cmd = new Command(resp.data.data);
+        // this.loading = false;
+        console.log(resp.data);
+        // this.options = resp.data.data;
+      }).catch((error) => {
+        // this.loading = false;
+        wantNothing(error);
+        // this.options = [];
+      });
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      console.log(to.params.cid);
+      vm.findCommandById(to.params.cid);
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log(to.params.cid);
+    this.findCommandById(to.params.cid);
+    // console.log(to, from, next);
+    next();
   },
 };
 </script>

@@ -9,7 +9,7 @@ const ajax = (option = {
 }) => {
   const opts = { method: option.method || 'GET', url: option.url };
   const query = {};
-  Object.entries(option.data).forEach(([key, value]) => {
+  Object.entries(option.data || {}).forEach(([key, value]) => {
     if (value && value !== '') {
       (query[key] = value);
     }

@@ -24,44 +24,47 @@
   </el-select>
 </template>
 <script>
-import {
-  value as Wapper, watch, onMounted,
-} from 'vue-function-api';
+// import {
+//   value as Wapper, watch, onMounted,
+// } from 'vue-function-api';
 import { ajax, wantNothing } from '../../api/fetch';
-import router from '../../router';
 
 export default {
-  setup() {
-    const options = Wapper([]);
-    const value = Wapper('');
-    let list = [];
-    let loading = false;
-    const states = ['Alabama', 'Alaska', 'Arizona',
-      'Arkansas', 'California', 'Colorado',
-      'Connecticut', 'Delaware', 'Florida',
-      'Georgia', 'Hawaii', 'Idaho', 'Illinois',
-      'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-      'Louisiana', 'Maine', 'Maryland',
-      'Massachusetts', 'Michigan', 'Minnesota',
-      'Mississippi', 'Missouri', 'Montana',
-      'Nebraska', 'Nevada', 'New Hampshire',
-      'New Jersey', 'New Mexico', 'New York',
-      'North Carolina', 'North Dakota', 'Ohio',
-      'Oklahoma', 'Oregon', 'Pennsylvania',
-      'Rhode Island', 'South Carolina',
-      'South Dakota', 'Tennessee', 'Texas',
-      'Utah', 'Vermont', 'Virginia',
-      'Washington', 'West Virginia', 'Wisconsin',
-      'Wyoming'];
-
-    onMounted(() => {
-      list = states.map(item => ({ value: item, label: item }));
-      console.log(list);
-    });
-    const remoteMethod = (query) => {
+  name: 'select-search-bar',
+  data() {
+    return {
+      options: [],
+      value: '',
+      list: [],
+      loading: false,
+      states: ['Alabama', 'Alaska', 'Arizona',
+        'Arkansas', 'California', 'Colorado',
+        'Connecticut', 'Delaware', 'Florida',
+        'Georgia', 'Hawaii', 'Idaho', 'Illinois',
+        'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+        'Louisiana', 'Maine', 'Maryland',
+        'Massachusetts', 'Michigan', 'Minnesota',
+        'Mississippi', 'Missouri', 'Montana',
+        'Nebraska', 'Nevada', 'New Hampshire',
+        'New Jersey', 'New Mexico', 'New York',
+        'North Carolina', 'North Dakota', 'Ohio',
+        'Oklahoma', 'Oregon', 'Pennsylvania',
+        'Rhode Island', 'South Carolina',
+        'South Dakota', 'Tennessee', 'Texas',
+        'Utah', 'Vermont', 'Virginia',
+        'Washington', 'West Virginia', 'Wisconsin',
+        'Wyoming'],
+    };
+  },
+  mounted() {
+    this.list = this.states.map(item => ({ value: item, label: item }));
+    console.log(this.list);
+  },
+  methods: {
+    remoteMethod(query) {
       if (query !== '') {
         console.log(query);
-        loading = true;
+        this.loading = true;
         // setTimeout(() => {
         //   loading = false;
         //   options.value = list
@@ -76,37 +79,26 @@ export default {
           },
         };
         ajax(request).then((resp) => {
+          this.loading = false;
           console.log(resp.data);
-          options.value = resp.data.data;
+          this.options = resp.data.data;
         }).catch((error) => {
+          this.loading = false;
           wantNothing(error);
-          options.value = [];
+          this.options = [];
         });
       } else {
-        options.value = [];
+        this.options = [];
       }
-    };
-    const submit = (event) => {
+    },
+    submit(event) {
       console.log(event.value);
-    };
-    const handelChange = (item) => {
+    },
+    handelChange(item) {
       console.log('handle', item);
-      router.push(`/cmds/${item}`);
-    };
-    watch(
-      () => value.value,
-      val => console.log(`/cmds/ ${val}`),
-    );
-    // expose bindings on render context
-    return {
-      options,
-      value,
-      list,
-      loading,
-      remoteMethod,
-      submit,
-      handelChange,
-    };
+      this.$emit('currentSelect', item);
+      // this.$router.push(`/cmds/${item}`);
+    },
   },
 };
 </script>
