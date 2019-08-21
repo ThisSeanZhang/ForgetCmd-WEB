@@ -3,8 +3,7 @@
     <div>
       <el-switch
       v-model="value"
-      active-color="#13ce66"
-      >
+      active-color="#13ce66">
     </el-switch>
     </div>
   </div>
