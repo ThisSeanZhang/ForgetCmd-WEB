@@ -3,19 +3,23 @@
     <el-header>
       <div class="search-bar"><SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/></div>
     </el-header>
-    <el-main><CommandInfo :cmd="cmd" /></el-main>
+    <el-main>
+      <CommandInfo :cmd="cmd" />
+      <CommandOption />
+    </el-main>
     <el-footer>Footer</el-footer>
   </el-container>
 </template>
 <script>
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
 import CommandInfo from '@/components/command/CommandInfo.vue';
+import CommandOption from '@/components/command/CommandOption.vue';
 import { ajax, wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
 
 export default {
   name: 'command',
-  components: { SelectSearchBar, CommandInfo },
+  components: { SelectSearchBar, CommandInfo, CommandOption },
   data() {
     return {
       cmd: new Command({}),
