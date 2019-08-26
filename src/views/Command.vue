@@ -3,9 +3,14 @@
     <el-header>
       <div class="search-bar"><SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/></div>
     </el-header>
-    <el-main>
-      <CommandInfo :cmd="cmd" />
-      <CommandOption />
+    <el-main v-if="cmdSuccessLoad">
+      <div class="cmd-info">
+        <CommandInfo :cmd="cmd" />
+      </div>
+      <div>命令参数：</div>
+      <CommandParam :cid="cmd.cid" />
+      <div>命令选项：</div>
+      <CommandOption :cid="cmd.cid" />
     </el-main>
     <el-footer>Footer</el-footer>
   </el-container>
@@ -14,15 +19,19 @@
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
 import CommandInfo from '@/components/command/CommandInfo.vue';
 import CommandOption from '@/components/command/CommandOption.vue';
+import CommandParam from '@/components/command/CommandParam.vue';
 import { ajax, wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
 
 export default {
   name: 'command',
-  components: { SelectSearchBar, CommandInfo, CommandOption },
+  components: {
+    SelectSearchBar, CommandInfo, CommandOption, CommandParam,
+  },
   data() {
     return {
       cmd: new Command({}),
+      cmdSuccessLoad: false,
     };
   },
   methods: {
@@ -30,6 +39,7 @@ export default {
       this.$router.push(`/cmds/${cid}`);
     },
     findCommandById(cid) {
+      this.cmdSuccessLoad = false;
       const request = {
         method: 'GET',
         url: `cmds/${cid}`,
@@ -39,8 +49,10 @@ export default {
         this.cmd = new Command(resp.data.data);
         // this.loading = false;
         console.log(resp.data);
+        this.cmdSuccessLoad = true;
         // this.options = resp.data.data;
       }).catch((error) => {
+        this.cmdSuccessLoad = false;
         // this.loading = false;
         wantNothing(error);
         // this.options = [];
@@ -80,5 +92,8 @@ export default {
 .main-search {
   width: 100%!important;
   background-color: aquamarine;
+}
+.cmd-info{
+  margin-bottom: 10px;
 }
 </style>

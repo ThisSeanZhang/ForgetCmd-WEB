@@ -7,7 +7,6 @@
         何时弃用:<span>{{cmd.whenDeprecated ? cmd.whenDeprecated : '未弃用'}}</span>
       </div>
     </div>
-    <div></div>
     <div class="cmd-description">{{cmd.description}}</div>
     <!-- <div>{{cmd}}</div> -->
   </div>
@@ -20,7 +19,7 @@ export default {
   props: {
     cmd: Command,
   },
-  data () {
+  data() {
     return {};
   },
 };

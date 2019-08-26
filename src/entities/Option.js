@@ -1,14 +1,14 @@
 export default class Option {
-  constructor(cmd) {
-    this.cid = cmd.cid;
-    this.commandName = cmd.commandName;
-    this.briefDesc = cmd.briefDesc;
-    this.description = cmd.description;
-    this.version = cmd.version;
-    this.platform = cmd.platform;
-    this.argNum = cmd.argNum;
-    this.whenDeprecated = cmd.whenDeprecated;
-    this.whenEnable = cmd.whenEnable;
-    this.frequency = cmd.frequency;
+  constructor(option) {
+    this.oid = option.oid;
+    this.cid = option.cid;
+    this.briefName = option.briefName;
+    this.fullName = option.fullName;
+    this.description = option.description;
+    this.whenDeprecated = option.whenDeprecated;
+    this.whenEnable = option.whenEnable;
+    this.frequency = option.frequency;
+    this.selected = false;
+    this.value = '';
   }
 }
