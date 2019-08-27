@@ -37,6 +37,7 @@ export default {
   watch: {
     selectedOption(newV, oldV) {
       console.log(newV, oldV);
+      this.$emit('update', newV);
     },
   },
   computed: {

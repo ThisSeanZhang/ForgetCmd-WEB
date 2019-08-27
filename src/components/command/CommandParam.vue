@@ -24,8 +24,9 @@
   </div>
 </template>
 <script>
-import { ajax, wantNothing } from '../../api/fetch';
+import { wantNothing } from '../../api/fetch';
 import CmdParam from '../../entities/CmdParam';
+import StringUtils from '../../entities/StringUtils';
 
 export default {
   name: 'common-param',
@@ -40,13 +41,26 @@ export default {
       value: false,
     };
   },
+  watch: {
+    selectedParam(newV, oldV) {
+      console.log(newV, oldV);
+      console.log(newV);
+      this.$emit('update', newV);
+    },
+  },
+  computed: {
+    selectedParam: {
+      get() {
+        return this.params.filter(p => StringUtils.nonEmptyString(p.value));
+      },
+      set(val) {
+        console.log(val);
+      },
+    },
+  },
   methods: {
     getAllOption(cid) {
-      const request = {
-        method: 'GET',
-        url: `cmds/${cid}/params`,
-      };
-      ajax(request).then((resp) => {
+      CmdParam.findByCid(cid).then((resp) => {
         this.params = resp.data.data.map(param => new CmdParam(param));
         // this.loading = false;
         console.log(this.params);

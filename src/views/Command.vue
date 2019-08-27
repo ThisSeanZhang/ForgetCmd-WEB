@@ -8,11 +8,11 @@
         <CommandInfo :cmd="cmd" />
       </div>
       <div>命令参数：</div>
-      <CommandParam :cid="cmd.cid" />
+      <CommandParam :cid="cmd.cid" v-on:update="updateParams($event)" />
       <div>命令选项：</div>
-      <CommandOption :cid="cmd.cid" />
+      <CommandOption :cid="cmd.cid" v-on:update="updateOption($event)" />
     </el-main>
-    <el-footer>Footer</el-footer>
+    <el-footer><CommandExhibit :cmd="cmd" :options="options" :params="params" /></el-footer>
   </el-container>
 </template>
 <script>
@@ -20,21 +20,32 @@ import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
 import CommandInfo from '@/components/command/CommandInfo.vue';
 import CommandOption from '@/components/command/CommandOption.vue';
 import CommandParam from '@/components/command/CommandParam.vue';
+import CommandExhibit from '@/components/command/CommandExhibit.vue';
 import { ajax, wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
+// import Option from '../entities/Option';
+// import CmdParam from '../entities/CmdParam';
 
 export default {
   name: 'command',
   components: {
-    SelectSearchBar, CommandInfo, CommandOption, CommandParam,
+    SelectSearchBar, CommandInfo, CommandOption, CommandParam, CommandExhibit,
   },
   data() {
     return {
       cmd: new Command({}),
+      params: [],
+      options: [],
       cmdSuccessLoad: false,
     };
   },
   methods: {
+    updateParams(params) {
+      this.params = params;
+    },
+    updateOption(options) {
+      this.options = options;
+    },
     hendleSelectCmd(cid) {
       this.$router.push(`/cmds/${cid}`);
     },
@@ -95,5 +106,9 @@ export default {
 }
 .cmd-info{
   margin-bottom: 10px;
+}
+.el-footer{
+  height: 300px!important;
+  overflow-y: auto;
 }
 </style>
