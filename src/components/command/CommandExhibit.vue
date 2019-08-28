@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>命令预览</div>
-    <div>{{cmd.commandName}}</div>
+    <div>{{cmd.commandName}}&nbsp;\</div>
     <div>
       <div v-for="option in options"
       :key="option.oid">

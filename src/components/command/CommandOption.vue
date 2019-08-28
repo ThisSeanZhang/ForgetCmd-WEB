@@ -9,12 +9,28 @@
         </el-switch>
       </div>
       <div class="option-input">
-        <el-input
-          class="option-value"
-          placeholder="请输入内容"
-          v-model="option.value"
-          clearable>
-        </el-input>
+         <el-popover
+            placement="right"
+            width="200"
+            trigger="focus"
+            :content="option.description"
+            >
+            <el-input
+              slot="reference"
+              class="option-value"
+              placeholder="请输入内容"
+              v-model="option.value"
+              clearable>
+            </el-input>
+          </el-popover>
+        <!-- <el-tooltip class="item" effect="dark" :content="option.description + 'adasdasfsasfasfafhjkHFJSFJKASBJFABJGBJAKDBGKJBKBKSJGBKJABKDKFNHLKDFNAKJDNKNAHDFKNJFDH'" placement="right-start">
+          <el-input
+            class="option-value"
+            placeholder="请输入内容"
+            v-model="option.value"
+            clearable>
+          </el-input>
+        </el-tooltip> -->
       </div>
     </div>
   </div>
