@@ -1,37 +1,49 @@
 <template>
   <div>
     <div v-for="option in options" :key="option.oid">
-      <div class="option-brief">{{option.briefName + '\n(' + option.fullName + ')'}}</div>
-      <div class="option-switch">
-        <el-switch
-          v-model="option.selected"
-          active-color="#13ce66">
-        </el-switch>
-      </div>
-      <div class="option-input">
-         <el-popover
-            placement="right"
-            width="200"
-            trigger="focus"
-            :content="option.description"
-            >
+      <el-popover
+        placement="right"
+        width="200"
+        trigger="hover"
+        :content="option.description"
+        >
+        <div class="per-option" slot="reference">
+          <div class="option-brief">{{option.showName()}}</div>
+          <div class="option-switch">
+            <el-switch
+              v-model="option.selected"
+              active-color="#13ce66">
+            </el-switch>
+          </div>
+          <!-- {{option.type + 'vvv'}}
+          {{optionType.ENUM + 'aaa'}}
+          {{option.type === optionType.ENUM}} -->
+          <div v-if="option.type === optionType.ENUM" class="option-enum" >
+            <el-radio-group v-model="option.value">
+              <el-radio-button v-for="s in option.rules" :key="s" :label="s">
+              </el-radio-button>
+            </el-radio-group>
+          </div>
+          <div v-else-if="option.type === optionType.NONE" class="option-none" >无参数可填</div>
+          <div class="option-input" v-else>
             <el-input
-              slot="reference"
               class="option-value"
               placeholder="请输入内容"
               v-model="option.value"
               clearable>
             </el-input>
-          </el-popover>
-        <!-- <el-tooltip class="item" effect="dark" :content="option.description + 'adasdasfsasfasfafhjkHFJSFJKASBJFABJGBJAKDBGKJBKBKSJGBKJABKDKFNHLKDFNAKJDNKNAHDFKNJFDH'" placement="right-start">
-          <el-input
-            class="option-value"
-            placeholder="请输入内容"
-            v-model="option.value"
-            clearable>
-          </el-input>
-        </el-tooltip> -->
-      </div>
+          <!-- <el-tooltip class="item" effect="dark"
+          :content="option.description" placement="right-start">
+            <el-input
+              class="option-value"
+              placeholder="请输入内容"
+              v-model="option.value"
+              clearable>
+            </el-input>
+          </el-tooltip> -->
+        </div>
+        </div>
+      </el-popover>
     </div>
   </div>
 </template>
@@ -48,6 +60,7 @@ export default {
     return {
       options: [],
       value: false,
+      optionType: Option.TYPE,
     };
   },
   watch: {
@@ -89,6 +102,8 @@ export default {
     this.params = [];
     console.log(this.cid);
     this.getAllOption(this.cid);
+    // console.log(`enum${this.optionType.ENUM}`);
+    console.log(Option.getType());
   },
 };
 </script>
@@ -108,13 +123,22 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.option-input{
+.option-none{
+  line-height: 40px;
+  text-align: center;
+}
+.option-input, .option-enum,.option-none{
+  display: flex;
   margin-left: 150px;
+  justify-content: center;
 }
 .option-switch{
   // margin-left: 80px;
   float: left;
   line-height: 40px;
   padding: 0px 10px;
+}
+.per-option{
+  margin-bottom: 10px;
 }
 </style>

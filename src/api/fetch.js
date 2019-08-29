@@ -56,6 +56,7 @@ function handleNotHTTPError(error, reject) {
     Message.error('发送失败请检查网络连接╮（╯＿╰）╭');
     reject(error);
   } else {
+    console.log(error);
     Message('欸，好像出错了_(:з)∠)_，再试一次吧');
     reject(error);
   }

@@ -5,7 +5,7 @@
     <div>
       <div v-for="option in options"
       :key="option.oid">
-      -{{option.briefName + ' ' + option.value + '\\'}}
+      {{buildHyphen(option) + option.briefName + ' ' + option.value + ' \\'}}
       </div>
     </div>
     <div>
@@ -38,6 +38,14 @@ export default {
   data() {
     return {
     };
+  },
+  methods: {
+    buildHyphen(option) {
+      if (option.briefName === option.fullName) {
+        return '--';
+      }
+      return '-';
+    },
   },
   created() {
     console.log(this.params, this.options);
