@@ -15,52 +15,58 @@
               active-color="#13ce66">
             </el-switch>
           </div>
+          <div class="option-mulit" v-if="option.isMultip()">
+            <el-button icon="el-icon-set-up" @click="editMultip(option)"></el-button>
+          </div>
+          <div v-if="option.isMultip()" class="option-value-bar is-multip" >
+            <transition name="fade">
+              <div v-if="isEmptyList(option.value)">请点击右侧按钮进行配置参数</div>
+            </transition>
+            <!-- <el-checkbox-group v-model="boxs" size="mini"> -->
+              <!-- <el-checkbox v-model="tag.selected" v-for="(tag, index) in option.value"
+                :key="index" border size="mini">{{tag.value}}</el-checkbox> -->
+            <!-- </el-checkbox-group> -->
+            <el-tag closable
+              class="value-tag" v-for="tag in option.value"
+              :effect="tag.selected ? 'dark' : 'plain'"
+              @click="tag.selected = !tag.selected"
+              @close="option.value = option.value.filter( val => val.value !== tag.value)"
+              :key="tag.value" type="info">{{tag.value}}</el-tag>
+            <!-- {{multipParam(option.value)}} -->
+          </div>
+          <div v-else class="option-value-bar" >
+            <OptionParam :option="option" v-model="option.value" />
+          </div>
           <!-- {{option.type + 'vvv'}}
           {{optionType.ENUM + 'aaa'}}
           {{option.type === optionType.ENUM}} -->
-          <div v-if="option.type === optionType.ENUM" class="option-enum" >
-            <el-radio-group v-model="option.value">
-              <el-radio-button v-for="s in option.rules" :key="s" :label="s">
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-          <div v-else-if="option.type === optionType.NONE" class="option-none" >无参数可填</div>
-          <div class="option-input" v-else>
-            <el-input
-              class="option-value"
-              placeholder="请输入内容"
-              v-model="option.value"
-              clearable>
-            </el-input>
-          <!-- <el-tooltip class="item" effect="dark"
-          :content="option.description" placement="right-start">
-            <el-input
-              class="option-value"
-              placeholder="请输入内容"
-              v-model="option.value"
-              clearable>
-            </el-input>
-          </el-tooltip> -->
-        </div>
         </div>
       </el-popover>
     </div>
+    <MultipParam v-model="optionParamDialog"
+      :option="dialogOption" v-on:updateParam="updateParam($event)"
+    />
   </div>
 </template>
 <script>
 import { ajax, wantNothing } from '../../api/fetch';
 import Option from '../../entities/Option';
+import OptionParam from './OptionParam.vue';
+import MultipParam from './MultipParam.vue';
+import ListUtils from '../../entities/ListUtils';
 
 export default {
   name: 'common-option',
   props: {
     cid: Number,
   },
+  components: { OptionParam, MultipParam },
   data() {
     return {
       options: [],
-      value: false,
-      optionType: Option.TYPE,
+      optionParamDialog: false,
+      dialogOption: null,
+      boxs: [],
     };
   },
   watch: {
@@ -96,6 +102,19 @@ export default {
         // this.options = [];
       });
     },
+    editMultip(option) {
+      this.dialogOption = option;
+      this.optionParamDialog = true;
+    },
+    updateParam(value) {
+      this.dialogOption.value = value;
+    },
+    isEmptyList(params) {
+      return ListUtils.isEmptyList(params);
+    },
+    // closeTag(option, index) {
+    //   // option.value = option.filter((_, i) => i !== index);
+    // },
   },
   created() {
     this.options = [];
@@ -103,7 +122,7 @@ export default {
     console.log(this.cid);
     this.getAllOption(this.cid);
     // console.log(`enum${this.optionType.ENUM}`);
-    console.log(Option.getType());
+    // console.log(Option.getType());
   },
 };
 </script>
@@ -123,15 +142,7 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.option-none{
-  line-height: 40px;
-  text-align: center;
-}
-.option-input, .option-enum,.option-none{
-  display: flex;
-  margin-left: 150px;
-  justify-content: center;
-}
+
 .option-switch{
   // margin-left: 80px;
   float: left;
@@ -140,5 +151,38 @@ export default {
 }
 .per-option{
   margin-bottom: 10px;
+}
+.option-mulit{
+  float: right;
+}
+.option-value-bar{
+  // display: flex;
+  margin-left: 150px;
+  // margin-right: 60px;
+  // justify-content: center;
+}
+.is-multip{
+  margin-right: 60px;
+  overflow: hidden;
+  line-height: 40px;
+  text-align: center;
+  min-height: 40px;
+}
+.value-tag{
+  margin-left: 10px;
+}
+.value-tag{
+  margin-left: 10px;
+}
+.value-tag:hover {
+  cursor: pointer;
+}
+.fade-enter-active, .fade-leave-active {
+  height: 0px;
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  height: 0px;
+  opacity: 0;
 }
 </style>

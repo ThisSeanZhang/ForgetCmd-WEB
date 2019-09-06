@@ -3,9 +3,15 @@
     <div>命令预览</div>
     <div>{{cmd.commandName}}&nbsp;\</div>
     <div>
-      <div v-for="option in options"
-      :key="option.oid">
-      {{buildHyphen(option) + option.briefName + ' ' + option.value + ' \\'}}
+      <div v-for="option in options" :key="option.oid">
+        <div v-if="option.isMultip()">
+          <div v-for="(p, index) in option.value.filter(p => p.selected)" :key="index" >
+            {{buildHyphen(option) + option.briefName + ' ' + p.value + ' \\'}}
+          </div>
+        </div>
+        <div v-else>
+          {{buildHyphen(option) + option.briefName + ' ' + option.value + ' \\'}}
+        </div>
       </div>
     </div>
     <div>

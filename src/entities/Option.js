@@ -22,18 +22,13 @@ export default class Option {
     NONE: 0, NUMBER: 1, ENUM: 2, STRING: 3,
   }
 
-  static getType() {
-    return {
-      STRING: 0, NUMBER: 1, ENUM: 2, NONE: 3,
-    };
-  }
-
   initValue() {
     console.log(this.rules);
+    if (this.isMultip()) return [];
     if (!this.rules) {
       return '';
     }
-    if (this.type === Option.TYPE.ENUM && (typeof this.rules === typeof [])) {
+    if (this.isType(Option.TYPE.ENUM) && (typeof this.rules === typeof [])) {
       return this.rules[0];
     }
     return '';
@@ -44,5 +39,13 @@ export default class Option {
       return this.fullName;
     }
     return `${this.briefName} (${this.fullName})`;
+  }
+
+  isMultip() {
+    return this.type >= 2 ** 14;
+  }
+
+  isType(inType) {
+    return this.type % (2 ** 14) === inType;
   }
 }
