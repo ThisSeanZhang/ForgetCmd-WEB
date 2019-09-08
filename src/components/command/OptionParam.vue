@@ -6,6 +6,19 @@
         </el-radio-button>
       </el-radio-group>
     </div>
+    <div v-else-if="option.isType(optionType.MAP)" class="option-none" >
+      <el-form :inline="true" class="demo-form-inline">
+        <el-form-item >
+          <el-input :value="mapForm.key"
+          @input="mapForm = { key: $event, value: mapForm.value }" placeholder="key"></el-input>
+        </el-form-item>
+        :
+        <el-form-item >
+          <el-input :value="mapForm.value"
+          @input="mapForm = { key: mapForm.key, value: $event }" placeholder="value"></el-input>
+        </el-form-item>
+      </el-form>
+    </div>
     <div v-else-if="option.isType(optionType.NONE)" class="option-none" >无参数可填</div>
     <div class="option-input" v-else>
       <el-input
@@ -19,6 +32,7 @@
 </template>
 <script>
 import Option from '../../entities/Option';
+import StringUtils from '../../entities/StringUtils';
 
 export default {
   name: 'option-param',
@@ -31,6 +45,13 @@ export default {
   //     this.$emit('input', vNew);
   //   },
   // },
+  data() {
+    return {
+      optionType: Option.TYPE,
+      mapKey: null,
+      mapValue: null,
+    };
+  },
   computed: {
     optionArg: {
       get() {
@@ -40,11 +61,45 @@ export default {
         this.$emit('input', vNew);
       },
     },
+    mapForm: {
+      get() {
+        const map = { key: '', value: '' };
+        if (StringUtils.isEmptyString(this.value)) {
+          return map;
+        }
+        const mapArr = this.value.split(':');
+        if (mapArr.length <= 1) {
+          [map.key] = mapArr;
+          return map;
+        }
+        [map.key, map.value] = mapArr;
+        return map;
+      },
+      set(vNew) {
+        console.log(vNew);
+        this.$emit('input', `${vNew.key}:${vNew.value}`);
+      },
+    },
   },
-  data() {
-    return {
-      optionType: Option.TYPE,
-    };
+  methods: {
+    initMap() {
+      this.mapValue = '';
+      if (StringUtils.isEmptyString(this.value)) {
+        this.mapKey = '';
+        return;
+      }
+      const map = this.value.split(':');
+      if (map.length <= 1) {
+        [this.mapKey] = map;
+        return;
+      }
+      [this.mapKey, this.mapValue] = map;
+    },
+  },
+  created() {
+    if (this.option.isType(this.optionType.MAP)) {
+      this.initMap();
+    }
   },
 };
 </script>

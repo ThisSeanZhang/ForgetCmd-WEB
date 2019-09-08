@@ -81,7 +81,7 @@ export default {
       const result = {};
       this.realParams.forEach((p) => { result[p.value] = p; });
       const values = Object.values(result);
-      if (values.length !== this.realParams) {
+      if (values.length !== this.realParams.length) {
         this.$notify.info({
           title: '重复',
           message: '有重复的参数，已经去除',
