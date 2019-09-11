@@ -1,3 +1,5 @@
+import { ajax } from '../api/fetch';
+
 function initRules(rules) {
   if (!rules) return null;
   return rules.split(',');
@@ -47,5 +49,13 @@ export default class Option {
 
   isType(inType) {
     return this.type % (2 ** 14) === inType;
+  }
+
+  static findByCid(cid) {
+    const request = {
+      method: 'GET',
+      url: `cmds/${cid}/options`,
+    };
+    return ajax(request);
   }
 }

@@ -93,12 +93,15 @@ export default {
     dealValue(deal) {
       let allRows = [];
       allRows.push(this.cmd.commandName);
-      const cmdOption = this.options.map((option) => {
-        if (option.isMultip()) {
-          return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${option.briefName} ${p.value}`);
-        }
-        return [`${this.buildHyphen(option)}${option.briefName} ${option.value}`];
-      }).reduce((a1, a2) => a1.concat(a2), []);
+      const cmdOption = this.options
+        .filter(option => option.selected)
+        .map((option) => {
+          if (option.isMultip()) {
+            return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${option.briefName} ${p.value}`);
+          }
+          return [`${this.buildHyphen(option)}${option.briefName} ${option.value}`];
+        })
+        .reduce((a1, a2) => a1.concat(a2), []);
       // console.log(JSON.stringify(cmdOption));
       allRows = allRows.concat(cmdOption);
       allRows = allRows.concat(this.params.map(p => p.value));

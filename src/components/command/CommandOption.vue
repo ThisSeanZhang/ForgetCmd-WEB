@@ -49,8 +49,8 @@
   </div>
 </template>
 <script>
-import { ajax, wantNothing } from '../../api/fetch';
-import Option from '../../entities/Option';
+// import { ajax, wantNothing } from '../../api/fetch';
+// import Option from '../../entities/Option';
 import OptionParam from './OptionParam.vue';
 import MultipParam from './MultipParam.vue';
 import ListUtils from '../../entities/ListUtils';
@@ -58,50 +58,19 @@ import ListUtils from '../../entities/ListUtils';
 export default {
   name: 'common-option',
   props: {
-    cid: Number,
+    options: Array,
   },
   components: { OptionParam, MultipParam },
   data() {
     return {
-      options: [],
       optionParamDialog: false,
       dialogOption: null,
       boxs: [],
     };
   },
-  watch: {
-    selectedOption(newV, oldV) {
-      console.log(newV, oldV);
-      this.$emit('update', newV);
-    },
-  },
   computed: {
-    selectedOption: {
-      get() {
-        return this.options.filter(op => op.selected);
-      },
-      set(val) {
-        console.log(val);
-      },
-    },
   },
   methods: {
-    getAllOption(cid) {
-      const request = {
-        method: 'GET',
-        url: `cmds/${cid}/options`,
-      };
-      ajax(request).then((resp) => {
-        this.options = resp.data.data.map(param => new Option(param));
-        // this.loading = false;
-        console.log(resp.data);
-        // this.options = resp.data.data;
-      }).catch((error) => {
-        // this.loading = false;
-        wantNothing(error);
-        // this.options = [];
-      });
-    },
     editMultip(option) {
       this.dialogOption = option;
       this.optionParamDialog = true;
@@ -117,10 +86,6 @@ export default {
     // },
   },
   created() {
-    this.options = [];
-    this.params = [];
-    console.log(this.cid);
-    this.getAllOption(this.cid);
     // console.log(`enum${this.optionType.ENUM}`);
     // console.log(Option.getType());
   },

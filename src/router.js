@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Search from './views/Search.vue';
 import Command from './views/Command.vue';
+import CommandAdd from './views/CommandAdd.vue';
 
 Vue.use(Router);
 
@@ -21,6 +22,11 @@ export default new Router({
       path: '/cmds/:cid',
       name: 'command',
       component: Command,
+    },
+    {
+      path: '/add/cmds',
+      name: 'Command-add',
+      component: CommandAdd,
     },
   ],
 });

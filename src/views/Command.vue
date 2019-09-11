@@ -8,9 +8,9 @@
         <CommandInfo :cmd="cmd" />
       </div>
       <div>命令参数：</div>
-      <CommandParam :cid="cmd.cid" v-on:update="updateParams($event)" />
+      <CommandParam :params="params" />
       <div>命令选项：</div>
-      <CommandOption :cid="cmd.cid" v-on:update="updateOption($event)" />
+      <CommandOption :options="options" />
     </el-main>
     <el-footer><CommandExhibit :cmd="cmd" :options="options" :params="params" /></el-footer>
   </el-container>
@@ -21,10 +21,10 @@ import CommandInfo from '@/components/command/CommandInfo.vue';
 import CommandOption from '@/components/command/CommandOption.vue';
 import CommandParam from '@/components/command/CommandParam.vue';
 import CommandExhibit from '@/components/command/CommandExhibit.vue';
-import { ajax, wantNothing } from '../api/fetch';
+import { wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
-// import Option from '../entities/Option';
-// import CmdParam from '../entities/CmdParam';
+import CmdParam from '../entities/CmdParam';
+import Option from '../entities/Option';
 
 export default {
   name: 'command',
@@ -51,23 +51,22 @@ export default {
     },
     findCommandById(cid) {
       this.cmdSuccessLoad = false;
-      const request = {
-        method: 'GET',
-        url: `cmds/${cid}`,
-      };
-      console.log(request);
-      ajax(request).then((resp) => {
+      Command.findByCid(cid).then((resp) => {
         this.cmd = new Command(resp.data.data);
-        // this.loading = false;
-        console.log(resp.data);
+        // console.log(resp.data);
         this.cmdSuccessLoad = true;
-        // this.options = resp.data.data;
       }).catch((error) => {
         this.cmdSuccessLoad = false;
-        // this.loading = false;
         wantNothing(error);
-        // this.options = [];
       });
+      CmdParam.findByCid(cid).then((resp) => {
+        this.params = resp.data.data.map(param => new CmdParam(param));
+        // console.log(this.params);
+      }).catch(wantNothing);
+      Option.findByCid(cid).then((resp) => {
+        this.options = resp.data.data.map(param => new Option(param));
+        // console.log(resp.data);
+      }).catch(wantNothing);
     },
   },
   beforeRouteEnter(to, from, next) {
