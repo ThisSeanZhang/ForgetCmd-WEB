@@ -25,7 +25,7 @@ export default class Option {
   }
 
   initValue() {
-    console.log(this.rules);
+    // console.log(this.rules);
     if (this.isMultip()) return [];
     if (!this.rules) {
       return '';
@@ -55,6 +55,14 @@ export default class Option {
     const request = {
       method: 'GET',
       url: `cmds/${cid}/options`,
+    };
+    return ajax(request);
+  }
+
+  static loadType() {
+    const request = {
+      method: 'GET',
+      url: 'options/types',
     };
     return ajax(request);
   }

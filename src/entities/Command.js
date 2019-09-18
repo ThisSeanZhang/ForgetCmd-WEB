@@ -23,4 +23,20 @@ export default class Command {
     };
     return ajax(request);
   }
+
+  static createAddLog(cmd) {
+    console.log(cmd);
+    const data = JSON.parse(JSON.stringify(cmd));
+    cmd.options.forEach((option, index) => {
+      data.options[index].rules = option.rules.join(',');
+    });
+    data.options = JSON.stringify(data.options);
+    data.params = JSON.stringify(data.params);
+    const request = {
+      method: 'POST',
+      url: 'verifies/cmds',
+      data,
+    };
+    return ajax(request);
+  }
 }
