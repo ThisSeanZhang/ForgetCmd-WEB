@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="param in params" :key="param.cpid">
-      <div class="param-brief">{{param.description}}</div>
+      <div class="param-brief">{{param.paramName}}</div>
       <div class="param-input">
         <el-input
           class="param-value"

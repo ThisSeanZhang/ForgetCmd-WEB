@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import Search from './views/Search.vue';
 import Command from './views/Command.vue';
 import CommandAdd from './views/CommandAdd.vue';
+import WaitVerifyCmdLog from './views/WaitVerifyCmdLog.vue';
+import PerViewCommand from './views/PerViewCommand.vue';
 
 Vue.use(Router);
 
@@ -27,6 +29,16 @@ export default new Router({
       path: '/add/cmds',
       name: 'Command-add',
       component: CommandAdd,
+    },
+    {
+      path: '/verify/cmds',
+      name: 'wait-verify',
+      component: WaitVerifyCmdLog,
+    },
+    {
+      path: '/verify/cmds/:cid',
+      name: 'per-view',
+      component: PerViewCommand,
     },
   ],
 });

@@ -5,6 +5,7 @@ export default class CmdParam {
     this.cpid = param.cpid;
     this.cid = param.cid;
     this.sort = param.sort;
+    this.paramName = param.paramName;
     this.description = param.description;
     this.required = param.required;
     this.value = '';

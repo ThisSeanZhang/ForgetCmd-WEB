@@ -39,4 +39,12 @@ export default class Command {
     };
     return ajax(request);
   }
+
+  static findLogCid(cid) {
+    const request = {
+      method: 'GET',
+      url: `verifies/cmds/${cid}`,
+    };
+    return ajax(request);
+  }
 }

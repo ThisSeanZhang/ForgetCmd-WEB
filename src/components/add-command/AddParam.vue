@@ -28,7 +28,8 @@
               @click="handleRemove(index)"></el-button>
             </div>
             <div class="param-value">
-              <el-input v-model="param.value" placeholder="请输入内容" @input="handleAdd()"></el-input>
+              <el-input v-model="param.paramName"
+                placeholder="请输入内容" @input="handleAdd()"></el-input>
             </div>
           </div>
           </el-scrollbar>
@@ -65,7 +66,7 @@ export default {
       },
     },
     realParams() {
-      return this.params.filter(p => StringUtils.nonEmptyString(p.value));
+      return this.params.filter(p => StringUtils.nonEmptyString(p.paramName));
     },
   },
   methods: {
@@ -73,7 +74,7 @@ export default {
       if (ListUtils.isEmptyList(this.InParams)) {
         this.params = [{
           selected: true,
-          value: '',
+          paramName: '',
         }];
         return;
       }
@@ -84,7 +85,7 @@ export default {
     confirmParam() {
       this.drawerVisible = false;
       const result = {};
-      this.realParams.forEach((p) => { result[p.value] = p; });
+      this.realParams.forEach((p) => { result[p.paramName] = p; });
       const values = Object.values(result);
       if (values.length !== this.realParams.length) {
         this.$notify.info({
@@ -100,7 +101,8 @@ export default {
       }
       this.params.push({
         selected: true,
-        value: '',
+        paramName: '',
+
       });
     },
     handleRemove(index) {
@@ -127,7 +129,7 @@ export default {
     console.log(this.value);
     this.params.push({
       selected: true,
-      value: '',
+      paramName: '',
     });
   },
 };
