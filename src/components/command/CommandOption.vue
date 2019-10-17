@@ -8,7 +8,7 @@
         :content="option.description"
         >
         <div class="per-option" slot="reference">
-          <div class="option-brief">{{option.showName()}}</div>
+          <div class="option-brief"><div>{{option.showName()}}</div></div>
           <div class="option-switch">
             <el-switch
               v-model="option.selected"
@@ -96,16 +96,24 @@ export default {
   display: inline-block;
 }
 .option-brief{
+  // 文字居中
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 80px;
-  text-align: right;
-  vertical-align: middle;
+  min-height: 40px;
+  // text-align: right;
   float: left;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
+  // line-height: 40px;
   padding: 0 12px 0 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  div {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 14px;
+    color: #606266;
+  }
 }
 
 .option-switch{

@@ -63,8 +63,8 @@
         </transition>
         <el-tag closable
           class="value-tag" v-for="tag in cmd.params"
-          @close="cmd.params = cmd.params.filter( val => val.value !== tag.value)"
-          :key="tag.value" effect="dark">{{tag.value}}</el-tag>
+          @close="cmd.params = cmd.params.filter( val => val.paramName !== tag.paramName)"
+          :key="tag.paramName" effect="dark">{{tag.paramName}}</el-tag>
       </div>
     </div>
     <!-- <div class="per-option">
