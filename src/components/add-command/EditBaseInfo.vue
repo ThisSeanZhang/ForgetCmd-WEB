@@ -54,7 +54,7 @@
     </div>
     <div class="per-option">
       <!-- <el-button >取消</el-button> -->
-      <el-button type="primary" @click="submitCmd" >确定</el-button>
+      <el-button type="primary" @click="submitCmd" >下一步</el-button>
     </div>
   </div>
 </template>

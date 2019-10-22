@@ -31,6 +31,10 @@
         </div>
       </transition>
     </div>
+    <div style="width: 100%;">
+      <el-button type="primary" @click="submitCmd" >下一步</el-button>
+      <el-button type="primary" @click="submitCmd" >下一步</el-button>
+    </div>
   </div>
 </template>
 <script>

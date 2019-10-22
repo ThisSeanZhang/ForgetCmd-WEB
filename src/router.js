@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Search from './views/Search.vue';
 import Command from './views/Command.vue';
-import CommandAdd from './views/CommandAdd.vue';
+import CommandCommit from './views/CommandCommit.vue';
 import WaitVerifyCmdLog from './views/WaitVerifyCmdLog.vue';
 import PerViewCommand from './views/PerViewCommand.vue';
 
@@ -26,12 +26,12 @@ export default new Router({
       component: Command,
     },
     {
-      path: '/add/cmds',
-      name: 'Command-add',
-      component: CommandAdd,
+      path: '/commits/cmd-add',
+      name: 'command-commit',
+      component: CommandCommit,
     },
     {
-      path: '/verify/cmds',
+      path: '/commits/cmds',
       name: 'wait-verify',
       component: WaitVerifyCmdLog,
     },

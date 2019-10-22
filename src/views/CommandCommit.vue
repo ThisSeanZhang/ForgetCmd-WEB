@@ -14,7 +14,7 @@
 import AddCmd from '../components/add-command/AddCmd-1.vue';
 
 export default {
-  name: 'command-add',
+  name: 'command-commit',
   components: { AddCmd },
 };
 </script>

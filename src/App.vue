@@ -22,6 +22,7 @@ export default {
 #app, body, html{
   height: 100%;
   margin: 0px;
+  scrollbar-width: none;
 }
 .el-scrollbar__wrap::-webkit-scrollbar {display:none}
 .main-scrollbar{
@@ -29,6 +30,7 @@ export default {
   .el-scrollbar__wrap{
     margin-bottom: 0px!important;
     margin-right: 0px!important;
+    scrollbar-width: none;
     .el-scrollbar__view{
       height: 100%;
     }
