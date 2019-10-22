@@ -11,10 +11,20 @@
   </el-container>
 </template>
 <script>
-import AddCmd from '../components/add-command/AddCmd.vue';
+import AddCmd from '../components/add-command/AddCmd-1.vue';
 
 export default {
   name: 'command-add',
   components: { AddCmd },
 };
 </script>
+<style lang="scss" scoped>
+.el-main, .el-container {
+  height: 100%;
+}
+.el-main {
+  width: 700px;
+  margin: auto;
+  overflow: visible;
+}
+</style>

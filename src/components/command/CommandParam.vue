@@ -1,15 +1,24 @@
 <template>
   <div>
     <div v-for="param in params" :key="param.cpid">
-      <div class="param-brief">{{param.paramName}}</div>
-      <div class="param-input">
-        <el-input
-          class="param-value"
-          placeholder="请输入内容"
-          v-model="param.value"
-          clearable>
-        </el-input>
-      </div>
+      <el-popover
+        placement="right"
+        width="200"
+        trigger="hover"
+        :content="param.description"
+        >
+        <div class="per-option" slot="reference">
+          <div class="param-brief">{{param.paramName}}</div>
+          <div class="param-input">
+            <el-input
+              class="param-value"
+              placeholder="请输入内容"
+              v-model="param.value"
+              clearable>
+            </el-input>
+          </div>
+        </div>
+      </el-popover>
     </div>
   </div>
 </template>
@@ -42,5 +51,8 @@ export default {
 }
 .param-input{
   margin-left: 80px;
+}
+.per-option{
+  margin-bottom: 10px;
 }
 </style>
