@@ -95,7 +95,8 @@ export default {
     },
   },
   created() {
-    this.currentStep = this.procedure.BASE_INFO;
+    // this.currentStep = this.procedure.BASE_INFO;
+    this.currentStep = this.procedure.PARAMS_INFO;
     console.log(this.currentStep);
     console.log(this.procedure.BASE_INFO);
     console.log(this.currentStep === this.procedure.BASE_INFO);

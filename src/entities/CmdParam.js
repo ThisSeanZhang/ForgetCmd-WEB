@@ -8,6 +8,7 @@ export default class CmdParam {
     this.paramName = param.paramName;
     this.description = param.description;
     this.required = param.required;
+    this.type = param.type;
     this.value = '';
   }
 
@@ -17,5 +18,17 @@ export default class CmdParam {
       url: `cmds/${cid}/params`,
     };
     return ajax(request);
+  }
+
+  static loadType() {
+    const request = {
+      method: 'GET',
+      url: 'params/types',
+    };
+    return ajax(request);
+  }
+
+  deepCopy() {
+    return new CmdParam(JSON.parse(JSON.stringify(this)));
   }
 }

@@ -1,21 +1,49 @@
 <template>
   <div class="param-container">
-    <el-button icon="el-icon-set-up" @click="paramDdrawerShow = true"></el-button>
-    <div class="per-param">
-      <div style="flex: 2;">参数名</div>
-      <div style="flex: 1;">类型</div>
-      <div style="flex: 4;">简述</div>
-      <div style="width: 80px;">操作</div>
-    </div>
-    <div class="per-param">
-      <div style="flex: 2;">文件夹名称</div>
-      <div style="flex: 1;">STRING</div>
-      <div style="flex: 4;">指定文件夹</div>
-      <div class="per-operation" style="width: 80px;">
-        <i class="el-icon-edit"></i>
-        <i class="el-icon-delete-solid"></i>
+    <el-button icon="el-icon-set-up" @click="editParam(undefined)"></el-button>
+    <div>
+      <div v-for="(param, index) in params" :key="index" class="per-param">
+        <div style="flex: 2;">
+          <div>{{param.paramName}}</div>
+        </div>
+        <div style="flex: 1;">
+          <div>{{param.type}}</div>
+        </div>
+        <div style="flex: 4;">
+          <div>{{param.description}}</div>
+        </div>
+        <div class="per-operation" style="width: 80px;">
+          <i @click="editParam(index)"
+            class="el-icon-edit"></i>
+          <i class="el-icon-delete-solid"></i>
+        </div>
+      </div>
+      <div class="per-param">
+        <div style="flex: 2;">
+          <div>参数名</div>
+        </div>
+        <div style="flex: 1;">
+          <div>类型</div>
+        </div>
+        <div style="flex: 4;">
+          <div>简述</div>
+        </div>
+        <div class="per-operation" style="width: 80px;">
+          <i class="el-icon-edit"></i>
+          <i class="el-icon-delete-solid"></i>
+        </div>
+      </div>
+      <div class="per-param">
+        <div style="flex: 2;">文件夹名称</div>
+        <div style="flex: 1;">STRING</div>
+        <div style="flex: 4;">指定文件夹</div>
+        <div class="per-operation" style="width: 80px;">
+          <i class="el-icon-edit"></i>
+          <i class="el-icon-delete-solid"></i>
+        </div>
       </div>
     </div>
+    <!-- 底部空白填充 -->
     <div style="flex: 1;"></div>
     <div class="per-delete-param" style="display: none">
       <div style="flex: 2;">文件夹名称</div>
@@ -34,42 +62,53 @@
         </el-popover>
       </div>
     </div>
-    <div class="per-option">
-      <div class="option-brief">命令参数</div>
-      <div class="option-mulit" >
-        <el-button icon="el-icon-set-up" @click="paramDdrawerShow = true"></el-button>
-      </div>
-      <div class="option-value-bar is-multip" >
-        <transition name="fade">
-        <div v-if="isEmptyList(params)">请点击右侧按钮进行配置参数</div>
-        </transition>
-        <el-tag closable
-        class="value-tag" v-for="tag in params"
-        @close="params = params.filter( val => val.paramName !== tag.paramName)"
-        :key="tag.paramName" effect="dark">{{tag.paramName}}</el-tag>
-      </div>
-    </div>
-    <AddParam v-model="paramDdrawerShow"
-      :InParams="params" v-on:updateParam="params = $event" />
+    <edit-param-panel v-model="paramDdrawerShow"
+      :InParam="currentParam" v-on:updateParam="updateParam($event)" />
   </div>
 </template>
 <script>
 import ListUtils from '../../entities/ListUtils';
-import AddParam from './AddParam.vue';
+import EditParamPanel from './EditParamPanel.vue';
+import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'edit-param-info',
-  components: { AddParam },
+  components: { EditParamPanel },
   data() {
     return {
       params: [],
       paramDdrawerShow: false,
+      editIndex: undefined,
     };
+  },
+  computed: {
+    currentParam() {
+      return this.params.length > 0 && this.editIndex !== undefined
+        ? this.params[this.editIndex]
+        : new CmdParam({});
+    },
   },
   methods: {
     isEmptyList(params) {
       return ListUtils.isEmptyList(params);
     },
+    editParam(index) {
+      this.editIndex = index;
+      console.log(this.currentParam);
+      this.paramDdrawerShow = true;
+    },
+    updateParam(param) {
+      if (this.editIndex !== undefined) {
+        this.params.splice(this.editIndex, 1, param);
+      } else {
+        this.params.push(param);
+      }
+    },
+  },
+  created() {
+    this.params.push(new CmdParam({ paramName: 'aaaa' }));
+    this.params.push(new CmdParam({ paramName: 'bbb' }));
+    console.log(this.params);
   },
 };
 </script>
@@ -89,6 +128,25 @@ export default {
   // flex: 1;
   height: 40px;
   margin: 10px 0px;
+  // border: 1px solid #DCDFE6;
+  border-radius: 4px;
+  transition: all .5s;
+  div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div{
+      vertical-align: middle;
+      text-align: center;
+      font-size: 14px;
+      color: #606266;
+    }
+  }
+}
+.per-param:hover {
+  -moz-box-shadow:4px 4px 10px #575757;
+  -webkit-box-shadow:4px 4px 10px #575757;
+  box-shadow:4px 4px 10px #575757;
 }
 .per-operation{
   color: rgb(96, 98, 102);
@@ -98,6 +156,9 @@ export default {
     flex: 1;
     text-align: center;
     cursor: pointer;
+  }
+  i:hover {
+    color: #5cb6ff;
   }
 }
 </style>
