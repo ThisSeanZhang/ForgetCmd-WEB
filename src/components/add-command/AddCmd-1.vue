@@ -2,38 +2,51 @@
   <div class="main-container">
     <div style="width: 100%;">
       <el-steps :active="1" finish-status="success">
-        <el-step status="error" title="已完成"></el-step>
-        <el-step title="进行中"></el-step>
-        <el-step title="步骤 3"></el-step>
+        <el-step status="error" title="基本信息"></el-step>
+        <el-step title="参数"></el-step>
+        <el-step title="可选项"></el-step>
+        <el-step title="总览"></el-step>
       </el-steps>
     </div>
     <div class="page-container">
       <transition name="fade" mode="in-out">
-        <div @click="currentStep = procedure.PARAMS_INFO"
+        <div
           v-show="currentStep === procedure.BASE_INFO" class="transition-box">
           <edit-base-info></edit-base-info>
         </div>
       </transition>
-      <transition name="fade">
-        <div key="2" @click="currentStep = procedure.BASE_INFO"
+      <transition name="fade"  mode="in-out">
+        <div key="2"
           v-show="currentStep === procedure.PARAMS_INFO" class="transition-box">
-          .el-fade-in PARAMS_INFO
+          <edit-param-info></edit-param-info>
         </div>
       </transition>
-      <transition name="fade">
+      <transition name="fade"  mode="in-out">
         <div key="3" v-show="currentStep === procedure.OPTIONS_INFO" class="transition-box">
           .el-fade-in OPTIONS_INF
         </div>
       </transition>
-      <transition name="fade">
+      <transition name="fade"  mode="in-out">
         <div key="4" v-show="currentStep === procedure.DONE" class="transition-box">
           .el-fade-in DONE
         </div>
       </transition>
     </div>
     <div style="width: 100%;">
-      <el-button type="primary" @click="submitCmd" >下一步</el-button>
-      <el-button type="primary" @click="submitCmd" >下一步</el-button>
+      <el-button
+        v-show="hasPer" type="primary"
+        @click="perStep"
+        style="float: left;"
+        >上一步</el-button>
+      <el-button
+        v-show="hasNext" type="primary"
+        @click="nextStep"
+        style="float: right;"
+        >下一步</el-button>
+      <el-button
+        v-show="currentStep === procedure.DONE" type="primary"
+        style="float: right;"
+        >提交</el-button>
     </div>
   </div>
 </template>
@@ -41,7 +54,7 @@
 // import Command from '../../entities/Command';
 // // import Option from '../../entities/Option';
 import EditBaseInfo from './EditBaseInfo.vue';
-// import AddParam from './AddParam.vue';
+import EditParamInfo from './EditParamInfo.vue';
 // import AddOption from './AddOption.vue';
 // import ListUtils from '../../entities/ListUtils';
 // import { wantNothing } from '../../api/fetch';
@@ -50,6 +63,7 @@ export default {
   name: 'add-cmd',
   components: {
     EditBaseInfo,
+    EditParamInfo,
   },
   data() {
     return {
@@ -63,8 +77,22 @@ export default {
     };
   },
   methods: {
+    nextStep() {
+      const index = Object.values(this.procedure).indexOf(this.currentStep);
+      this.currentStep = Object.values(this.procedure)[index + 1];
+    },
+    perStep() {
+      const index = Object.values(this.procedure).indexOf(this.currentStep);
+      this.currentStep = Object.values(this.procedure)[index - 1];
+    },
   },
   computed: {
+    hasNext() {
+      return this.currentStep !== this.procedure.DONE;
+    },
+    hasPer() {
+      return this.currentStep !== this.procedure.BASE_INFO;
+    },
   },
   created() {
     this.currentStep = this.procedure.BASE_INFO;
@@ -90,7 +118,7 @@ export default {
 }
 .transition-box {
   width: 100%;
-  // height: 100px;
+  height: 100%;
   border-radius: 4px;
   box-sizing: border-box;
   position: absolute;
