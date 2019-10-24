@@ -2,20 +2,20 @@
   <div class="param-container">
     <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
     <div>
-      <div v-for="(param, index) in params" :key="index" class="per-param">
+      <div v-for="(option, index) in options" :key="index" class="per-param">
         <div style="flex: 2;">
-          <div>{{param.paramName}}</div>
+          <div>{{option.paramName}}</div>
         </div>
         <div style="flex: 1;">
-          <div>{{convertType(param.type)}}</div>
+          <div>{{convertType(option.type)}}</div>
         </div>
         <div style="flex: 4;">
-          <div>{{param.description}}</div>
+          <div>{{option.description}}</div>
         </div>
         <div class="per-operation" style="width: 80px;">
           <i @click="editParam(index)"
             class="el-icon-edit"></i>
-          <i class="el-icon-delete-solid"  @click="delDelete(index)"></i>
+          <i class="el-icon-delete-solid" @click="delDelete(index)"></i>
         </div>
       </div>
     </div>
@@ -38,19 +38,19 @@
         </el-popover>
       </div>
     </div>
-    <edit-param-panel v-model="paramDdrawerShow"
-      :InParam="currentParam" v-on:updateParam="updateParam($event)" />
+    <edit-option-panel v-model="optionDdrawerShow"
+      :InOption="currentParam" v-on:updateOption="updateOption($event)" />
   </div>
 </template>
 <script>
 import ListUtils from '../../entities/ListUtils';
-import EditParamPanel from './EditParamPanel.vue';
-import CmdParam from '../../entities/CmdParam';
+import EditOptionPanel from './EditOptionPanel.vue';
+import Option from '../../entities/Option';
 import { wantNothing } from '../../api/fetch';
 
 export default {
-  name: 'edit-param-info',
-  components: { EditParamPanel },
+  name: 'edit-option-info',
+  components: { EditOptionPanel },
   props: {
     value: {
       type: Array,
@@ -59,17 +59,17 @@ export default {
   },
   data() {
     return {
-      params: null,
-      paramDdrawerShow: false,
+      options: null,
+      optionDdrawerShow: false,
       editIndex: undefined,
       paramTypeEnum: [],
     };
   },
   computed: {
     currentParam() {
-      return this.params.length > 0 && this.editIndex !== undefined
-        ? this.params[this.editIndex]
-        : new CmdParam({});
+      return this.options.length > 0 && this.editIndex !== undefined
+        ? this.options[this.editIndex]
+        : new Option({});
     },
   },
   methods: {
@@ -78,32 +78,31 @@ export default {
       const typeList = this.paramTypeEnum.filter(p => p.key === key);
       return typeList.length > 0 ? typeList[0].value : 'UNDEFINED';
     },
-    isEmptyList(params) {
-      return ListUtils.isEmptyList(params);
+    isEmptyList(options) {
+      return ListUtils.isEmptyList(options);
     },
     editParam(index) {
       this.editIndex = index;
       console.log(this.currentParam);
-      this.paramDdrawerShow = true;
+      this.optionDdrawerShow = true;
     },
-    updateParam(param) {
+    updateOption(option) {
       if (this.editIndex !== undefined) {
-        this.params.splice(this.editIndex, 1, param);
+        this.options.splice(this.editIndex, 1, option);
       } else {
-        this.params.push(param);
+        this.options.push(option);
       }
     },
     delDelete(index) {
-      // this.$emit('input', this.params.filter((_, i) => i !== index));
-      this.params.splice(index, 1);
+      this.options.splice(index, 1);
     },
   },
   created() {
-    this.params = this.value;
-    this.params.push(new CmdParam({ paramName: 'aaaa', type: 1 }));
-    this.params.push(new CmdParam({ paramName: 'bbb' }));
-    console.log(this.params);
-    CmdParam.loadType().then((resp) => {
+    this.options = this.value;
+    this.options.push(new Option({ paramName: 'aaaa', type: 1 }));
+    this.options.push(new Option({ paramName: 'bbb' }));
+    console.log(this.options);
+    Option.loadType().then((resp) => {
       this.paramTypeEnum = resp.data.data;
     }).catch(wantNothing);
   },

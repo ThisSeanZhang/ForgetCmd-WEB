@@ -59,9 +59,18 @@ import Command from '../../entities/Command';
 
 export default {
   name: 'edit-base-info',
+  props: {
+    value: {
+      type: Command,
+      default: () => new Command({}),
+    },
+  },
+  created() {
+    this.cmd = this.value;
+  },
   data() {
     return {
-      cmd: new Command({}),
+      cmd: null,
     };
   },
 };

@@ -66,4 +66,8 @@ export default class Option {
     };
     return ajax(request);
   }
+
+  deepCopy() {
+    return new Option(JSON.parse(JSON.stringify(this)));
+  }
 }
