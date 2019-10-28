@@ -1,7 +1,7 @@
 <template>
   <div class="param-container">
     <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
-    <div>
+    <div class="params-c">
       <div v-for="(param, index) in params" :key="index" class="per-param">
         <div style="flex: 2;">
           <div>{{param.paramName}}</div>
@@ -110,6 +110,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.params-c::-webkit-scrollbar {display:none}
+.params-c{
+  height: 100%;
+  padding: 0px 12px;
+  overflow: auto;
+}
 .param-container{
   display: flex;
   flex-direction: column;
@@ -119,6 +125,9 @@ export default {
   // box-shadow: 0px 5px 6px rgb(160,160,160);
   // filter: (2px);
   // -webkit-filter: blur(15px);
+  button{
+    margin: 0px 12px;
+  }
 }
 .per-param, .per-delete-param{
   display: flex;

@@ -131,6 +131,9 @@ export default {
     cleanParam() {
       // console.log(this.existName);
       this.option = this.InOption.deepCopy();
+      this.option.value = '';
+      this.enums.rules = this.option.rules;
+      console.log(JSON.stringify(this.option));
       Option.loadType().then((resp) => {
         this.optionType = resp.data.data;
       }).catch(wantNothing);

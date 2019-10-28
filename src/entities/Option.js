@@ -1,8 +1,8 @@
 import { ajax } from '../api/fetch';
 
 function initRules(rules) {
-  if (!rules) return null;
-  return rules.split(',');
+  if (!rules) return [];
+  return typeof rules !== 'string' ? rules : rules.split(',');
 }
 export default class Option {
   constructor(option) {
@@ -17,15 +17,16 @@ export default class Option {
     this.selected = false;
     this.type = option.type;
     this.rules = initRules(option.rules);
-    this.value = this.initValue();
+    this.value = this.initValue(option.value);
   }
 
   static TYPE = {
     NONE: 0, NUMBER: 1, ENUM: 2, STRING: 3, MAP: 4,
   }
 
-  initValue() {
+  initValue(value) {
     // console.log(this.rules);
+    if (value) return value;
     if (this.isMultip()) return [];
     if (!this.rules) {
       return '';

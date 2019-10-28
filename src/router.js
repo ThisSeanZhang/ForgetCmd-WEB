@@ -36,7 +36,7 @@ export default new Router({
       component: WaitVerifyCmdLog,
     },
     {
-      path: '/verify/cmds/:cid',
+      path: '/commits/cmds/:cid',
       name: 'per-view',
       component: PerViewCommand,
     },

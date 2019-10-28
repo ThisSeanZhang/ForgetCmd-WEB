@@ -171,7 +171,7 @@ export default {
       Command.createAddLog(this.cmd).then((resp) => {
         console.log(JSON.stringify(resp));
         this.$message('添加成功');
-      }).then(wantNothing);
+      }).catch(wantNothing);
     },
     removeOption(index) {
       this.cmd.options = this.cmd.options.filter((_, i) => i !== index);

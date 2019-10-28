@@ -24,6 +24,7 @@ export default {
   margin: 0px;
   scrollbar-width: none;
 }
+.el-dialog__wrapper::-webkit-scrollbar {display:none}
 .el-scrollbar__wrap::-webkit-scrollbar {display:none}
 .main-scrollbar{
   height: 100%;

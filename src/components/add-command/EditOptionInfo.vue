@@ -1,10 +1,10 @@
 <template>
   <div class="param-container">
     <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
-    <div>
+    <div class="params-c">
       <div v-for="(option, index) in options" :key="index" class="per-param">
         <div style="flex: 2;">
-          <div>{{option.paramName}}</div>
+          <div>{{option.briefName}}</div>
         </div>
         <div style="flex: 1;">
           <div>{{convertType(option.type)}}</div>
@@ -99,8 +99,8 @@ export default {
   },
   created() {
     this.options = this.value;
-    this.options.push(new Option({ paramName: 'aaaa', type: 1 }));
-    this.options.push(new Option({ paramName: 'bbb' }));
+    // this.options.push(new Option({ paramName: 'aaaa', type: 1 }));
+    // this.options.push(new Option({ paramName: 'bbb' }));
     console.log(this.options);
     Option.loadType().then((resp) => {
       this.paramTypeEnum = resp.data.data;
@@ -109,6 +109,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.params-c::-webkit-scrollbar {display:none}
+.params-c{
+  height: 100%;
+  padding: 0px 12px;
+  overflow: auto;
+}
 .param-container{
   display: flex;
   flex-direction: column;
@@ -118,6 +124,9 @@ export default {
   // box-shadow: 0px 5px 6px rgb(160,160,160);
   // filter: (2px);
   // -webkit-filter: blur(15px);
+  button{
+    margin: 0px 12px;
+  }
 }
 .per-param, .per-delete-param{
   display: flex;

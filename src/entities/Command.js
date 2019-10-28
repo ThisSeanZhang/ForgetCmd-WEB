@@ -24,7 +24,7 @@ export default class Command {
     return ajax(request);
   }
 
-  static createAddLog(cmd) {
+  static createCommit(cmd) {
     console.log(cmd);
     const data = JSON.parse(JSON.stringify(cmd));
     cmd.options.forEach((option, index) => {
@@ -34,7 +34,7 @@ export default class Command {
     data.params = JSON.stringify(data.params);
     const request = {
       method: 'POST',
-      url: 'verifies/cmds',
+      url: 'commits/cmds',
       data,
     };
     return ajax(request);
@@ -43,7 +43,7 @@ export default class Command {
   static findLogCid(cid) {
     const request = {
       method: 'GET',
-      url: `verifies/cmds/${cid}`,
+      url: `commits/cmds/${cid}`,
     };
     return ajax(request);
   }
