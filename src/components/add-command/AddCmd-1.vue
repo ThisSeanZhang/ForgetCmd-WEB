@@ -67,6 +67,7 @@
               >再添加一个</el-button>
               <el-button
                 type="primary"
+                @click="gotoMainPage"
               >去搜索</el-button>
             </div>
           </div>
@@ -160,6 +161,9 @@ export default {
     },
     gotoPerView() {
       this.$router.push({ path: `/commits/cmds/${this.ccid}` });
+    },
+    gotoMainPage() {
+      this.$router.push({ path: '/' });
     },
     reflashPage() {
       this.$router.go(0);

@@ -20,8 +20,8 @@
         label="操作">
         <template slot-scope="props">
           <el-button @click="showRawJson(props.$index)">原始JSON</el-button>
-          <el-button @click="review(props.row.rid)">预览</el-button>
-          <el-button @click="confirmLog">通过</el-button>
+          <el-button @click="review(props.row.ccid)">预览</el-button>
+          <el-button @click="confirmLog(props.row.ccid)">通过</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -54,22 +54,33 @@ export default {
     },
   },
   created() {
-    const request = {
-      url: '/verifies/search',
-      method: 'GET',
-    };
-    ajax(request).then((resp) => {
-      console.log(resp.data);
-      this.addLogs = resp.data.data;
-    }).catch(wantNothing);
+    this.fetchCommitsInfo();
   },
   methods: {
     showRawJson(index) {
       this.currentLogIndex = index;
     },
-    confirmLog() {},
+    confirmLog(ccid) {
+      const request = {
+        url: `/commits/cmds/${ccid}/pass`,
+        method: 'PUT',
+      };
+      ajax(request).then(() => {
+        this.fetchCommitsInfo();
+      }).catch(wantNothing);
+    },
     review(cid) {
       this.$router.push(`cmds/${cid}`);
+    },
+    fetchCommitsInfo() {
+      const request = {
+        url: '/commits/cmds',
+        method: 'GET',
+      };
+      ajax(request).then((resp) => {
+        console.log(resp.data);
+        this.addLogs = resp.data.data;
+      }).catch(wantNothing);
     },
   },
 };
