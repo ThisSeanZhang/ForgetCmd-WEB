@@ -19,6 +19,13 @@
             <!-- {{currentModel === exhibitModel.ONELINE ? '单行模式' : '多行模式'}} -->
           </el-button>
         </el-tooltip>
+        <el-tooltip effect="dark" content="创建快照" placement="top">
+          <el-button
+            circle
+            @click="createSnapshot"
+            icon="el-icon-camera">
+          </el-button>
+        </el-tooltip>
       </div>
     </div>
     <!-- <div>{{cmd.commandName}}&nbsp;\</div>
@@ -51,7 +58,7 @@
 </template>
 <script>
 import Command from '../../entities/Command';
-// import Option from '../../entities/Option';
+import Snapshot from '../../entities/Snapshot';
 // import CmdParam from '../../entities/CmdParam';
 
 export default {
@@ -84,6 +91,9 @@ export default {
     },
   },
   methods: {
+    createSnapshot() {
+      Snapshot.createSnapshot(this.cmd);
+    },
     buildHyphen(option) {
       if (option.briefName === option.fullName) {
         return '--';

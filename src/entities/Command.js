@@ -29,6 +29,11 @@ export default class Command {
     const data = JSON.parse(JSON.stringify(cmd));
     cmd.options.forEach((option, index) => {
       data.options[index].rules = option.rules.join(',');
+      delete data.options[index].value;
+      delete data.options[index].selected;
+    });
+    cmd.params.forEach((param, index) => {
+      delete data.params[index].value;
     });
     data.options = JSON.stringify(data.options);
     data.params = JSON.stringify(data.params);

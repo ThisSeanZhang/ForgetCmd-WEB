@@ -5,6 +5,7 @@ import Command from './views/Command.vue';
 import CommandCommit from './views/CommandCommit.vue';
 import WaitVerifyCmdLog from './views/WaitVerifyCmdLog.vue';
 import PerViewCommand from './views/PerViewCommand.vue';
+import SnapshotInject from './views/SnapshotInject.vue';
 
 Vue.use(Router);
 
@@ -39,6 +40,11 @@ export default new Router({
       path: '/commits/cmds/:cid',
       name: 'per-view',
       component: PerViewCommand,
+    },
+    {
+      path: '/snapshots/:sid/inject',
+      name: 'snapshots-inject',
+      component: SnapshotInject,
     },
   ],
 });
