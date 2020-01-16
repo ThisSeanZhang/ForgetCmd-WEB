@@ -1,15 +1,19 @@
 <template>
-  <div>
-    <div>
+  <div class="cmd-panel">
+    <div class="cmd-main">
       <div class="cmd-info">
         <CommandInfo :cmd="cmd" />
       </div>
-      <div>命令参数：</div>
-      <CommandParam :params="params" />
-      <div>命令选项：</div>
-      <CommandOption :options="options" />
+      <el-scrollbar style="height: 90%;">
+        <div>命令参数：</div>
+        <CommandParam :params="params" />
+        <div>命令选项：</div>
+        <CommandOption :options="options" />
+      </el-scrollbar>
     </div>
-    <div><CommandExhibit :cmd="cmd" :options="options" :params="params" /></div>
+    <div class="cmd-exhibit">
+      <CommandExhibit :cmd="cmd" :options="options" :params="params" />
+    </div>
   </div>
 </template>
 <script>
@@ -60,4 +64,19 @@ export default {
 };
 </script>
 <style style="scss" scoped>
+.cmd-panel{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cmd-info{
+  min-height: 10%;
+}
+.cmd-main{
+  height: 70%;
+}
+.cmd-exhibit{
+  height: 30%;
+}
 </style>
