@@ -881,6 +881,11 @@
     eslint "^4.19.1"
     eslint-plugin-vue "^4.7.1"
 
+"@vue/cli-plugin-vuex@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.npm.taobao.org/@vue/cli-plugin-vuex/download/@vue/cli-plugin-vuex-4.1.2.tgz#5e728b56ad9de2f062a8944f838affa0297ccb99"
+  integrity sha1-XnKLVq2d4vBiqJRPg4r/oCl8y5k=
+
 "@vue/cli-service@^3.9.0":
   version "3.11.0"
   resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.11.0.tgz#356526e9100a7a0a258e3c4a13ff421de29eadde"
@@ -8663,10 +8668,10 @@ vue@^2.6.10:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
 
-vuex@^3.0.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
-  integrity sha512-ER5moSbLZuNSMBFnEBVGhQ1uCBNJslH9W/Dw2W7GZN23UQA69uapP5GTT9Vm8Trc0PzBSVt6LzF3hGjmv41xcg==
+vuex@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.npm.taobao.org/vuex/download/vuex-3.1.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvuex%2Fdownload%2Fvuex-3.1.2.tgz#a2863f4005aa73f2587e55c3fadf3f01f69c7d4d"
+  integrity sha1-ooY/QAWqc/JYflXD+t8/AfacfU0=
 
 watchpack@^1.6.0:
   version "1.6.0"
