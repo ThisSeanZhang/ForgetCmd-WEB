@@ -27,6 +27,7 @@ export default {
     fetchSnapShot(sid) {
       Snapshot.findByCid(sid).then((resp) => {
         const snapshot = new Snapshot(resp.data.data);
+        console.log(snapshot);
       }).catch((error) => {
         wantNothing(error);
       });
@@ -43,7 +44,7 @@ export default {
     this.fetchSnapShot(to.params.sid);
     next();
   },
-}
+};
 </script>
 <style lang="scss" scoped>
 
