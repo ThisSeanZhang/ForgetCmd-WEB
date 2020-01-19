@@ -1,5 +1,6 @@
 import { ajax } from '../api/fetch';
 import Option from './Option';
+import Param from './Param';
 
 export default class Command {
   constructor(cmd) {
@@ -72,6 +73,18 @@ export default class Command {
       new Option({}),
       new Option({}),
       new Option({}),
+    ];
+    cmd.paras = [
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
+      new Param({}),
     ];
     return cmd;
   }

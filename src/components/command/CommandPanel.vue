@@ -6,7 +6,7 @@
       </div>
       <el-scrollbar style="height: 90%;">
         <div>命令参数：</div>
-        <CommandParam :params="params" />
+        <CommandParam :params="params" :paras="paras" />
         <div>命令选项：</div>
         <CommandOption :options="options" />
       </el-scrollbar>
@@ -41,6 +41,7 @@ export default {
     return {
       cmd: null,
       params: [],
+      paras: [],
       options: [],
       cmdSuccessLoad: false,
     };
@@ -60,6 +61,7 @@ export default {
     this.cmd = this.inCmd;
     this.options = this.inCmd.options;
     this.params = this.inCmd.params;
+    this.paras = this.inCmd.paras;
   },
 };
 </script>

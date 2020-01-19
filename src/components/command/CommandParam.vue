@@ -20,6 +20,9 @@
         </div>
       </el-popover>
     </div>
+    <div v-for="para in paras" :key="para.index">
+      <div>{{para}}</div>
+    </div>
   </div>
 </template>
 <script>
@@ -28,6 +31,9 @@ export default {
   name: 'common-param',
   props: {
     params: {
+      type: Array,
+    },
+    paras: {
       type: Array,
     },
   },
