@@ -1,4 +1,5 @@
 import { ajax } from '../api/fetch';
+import Option from './Option';
 
 export default class Command {
   constructor(cmd) {
@@ -51,5 +52,27 @@ export default class Command {
       url: `commits/cmds/${cid}`,
     };
     return ajax(request);
+  }
+
+  static CreateFackCmd() {
+    const cmd = new Command({});
+    cmd.briefDesc = '简要描述';
+    cmd.commandName = 'commandName';
+    cmd.frequency = '0';
+    cmd.options = [
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+      new Option({}),
+    ];
+    return cmd;
   }
 }
