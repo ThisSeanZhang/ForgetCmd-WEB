@@ -1,7 +1,7 @@
 export default class Param {
   constructor(param) {
-    this.value = param.value || '';
-    this.paramsDesc = { cn: '' };
+    this.value = param.value || 'default';
+    this.paramsDesc = { cn: 'cn_desc' };
     this.index = param.index;
   }
 

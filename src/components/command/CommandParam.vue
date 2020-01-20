@@ -20,9 +20,34 @@
         </div>
       </el-popover>
     </div>
-    <div v-for="para in paras" :key="para.index">
-      <div>{{para}}</div>
+    <div style="display:inline-block;" v-for="para in cparams" :key="para.index">
+      <!-- <div>{{para}}</div> -->
+      <el-popover
+        placement="top"
+        trigger="hover"
+        :content="para.value">
+        <el-tag
+          slot="reference"
+          closable
+          @dblclick.native="doubleClick"
+          draggable="true"
+
+          type="info">
+          {{para.value}}
+        </el-tag>
+      </el-popover>
     </div>
+    <el-input
+      class="input-new-tag"
+      v-if="inputVisible"
+      v-model="inputValue"
+      ref="saveTagInput"
+      size="small"
+      @keyup.enter.native="handleInputConfirm"
+      @blur="handleInputConfirm"
+    >
+    </el-input>
+    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
   </div>
 </template>
 <script>
@@ -35,6 +60,36 @@ export default {
     },
     paras: {
       type: Array,
+    },
+  },
+  data() {
+    return {
+      cparams: [],
+      inputValue: null,
+      inputVisible: false,
+    };
+  },
+  methods: {
+    oneclick() {
+      console.log('one click');
+    },
+    doubleClick() {
+      console.log('double click');
+    },
+    handleClose(tag) {
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+
+    showInput() {
+      this.inputVisible = true;
+      this.$nextTick(() => this.$refs.saveTagInput.$refs.input.focus());
+    },
+    handleInputConfirm() {
+      if (this.inputValue) {
+        this.cparams.push({ value: this.inputValue });
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
     },
   },
 };
