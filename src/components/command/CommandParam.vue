@@ -24,6 +24,7 @@
       @drop="drop($event)"
       @dragover="dragover($event)"
       >
+      <transition-group name="flip-list" tag="p">
       <div style="display:inline-block;"
         :class="choiceIndex === index ? 'draing-tag' : ''"
         :draggable="true"
@@ -34,7 +35,7 @@
         @dragleave.capture="dragleave(index)"
         @dragexit.capture="dragexit"
 
-        v-for="(para, index) in comp_paras" :key="para.index">
+        v-for="(para, index) in comp_paras" :key="'list-'+index">
         <!-- <div>{{para}}</div> -->
         <el-popover
           placement="top"
@@ -43,13 +44,14 @@
           <el-tag
             slot="reference"
             closable
-
+            @click="oneclick"
             @dblclick.native="doubleClick"
             type="info">
             {{para.value}}
           </el-tag>
         </el-popover>
       </div>
+      </transition-group>
     </div>
     <el-input
       class="input-new-tag"
@@ -83,10 +85,10 @@ export default {
       const cParam = cparams.splice(this.choiceIndex, 1)[0];
       console.log(JSON.stringify(cparams));
       // cParam.choiced = true;
-      const injectIndex = this.onIndex || this.choiceIndex;
+      const injectIndex = this.onIndex !== undefined ? this.onIndex : this.choiceIndex;
       console.log(injectIndex);
       cparams.splice(injectIndex, 0, cParam);
-      return cparams;
+      return cparams.map((o, index) => ({ ...o, index }));
     },
   },
   data() {
@@ -165,6 +167,9 @@ export default {
       event.preventDefault();
     },
   },
+  created() {
+    this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -191,5 +196,8 @@ export default {
 }
 .draing-tag{
   opacity: 0.5;
+}
+.flip-list-move {
+  transition: transform 1s;
 }
 </style>
