@@ -1,83 +1,46 @@
 <template>
-  <div>
-    <div v-for="param in params" :key="param.cpid">
-      <el-popover
-        placement="right"
-        width="200"
-        trigger="hover"
-        :content="param.description"
-        >
-        <div class="per-option" slot="reference">
-          <div class="param-brief">{{param.paramName}}</div>
-          <div class="param-input">
-            <el-input
-              class="param-value"
-              placeholder="请输入内容"
-              v-model="param.value"
-              clearable>
-            </el-input>
-          </div>
-        </div>
-      </el-popover>
-    </div>
-    <div
+  <div
       @drop="drop($event)"
       @dragover="dragover($event)"
+      @dragexit.capture="dragexit($event)"
       >
-      <transition-group name="flip-list" tag="p">
-      <div style="display:inline-block;"
-        :class="choiceIndex === index ? 'draing-tag' : ''"
-        :draggable="true"
-        @drag.capture="drag($event, index)"
-        @dragstart.capture="dragstart($event, index)"
-        @dragend.capture="dragend(index)"
-        @dragenter.capture="dragenter(index)"
-        @dragleave.capture="dragleave(index)"
-        @dragexit.capture="dragexit"
-
-        v-for="(para, index) in comp_paras" :key="'list-'+index">
-        <!-- <div>{{para}}</div> -->
-        <el-popover
-          placement="top"
-          trigger="hover"
-          :content="para.value">
-          <el-tag
-            slot="reference"
-            closable
-            @click="oneclick"
-            @dblclick.native="doubleClick"
-            type="info">
-            {{para.value}}
-          </el-tag>
-        </el-popover>
-      </div>
-      </transition-group>
+  <transition-group name="flip-list">
+  <div class="param-list-each"
+    :draggable="index === choiceIndex"
+    @mousedown="mousedown(index)"
+    @dragstart.capture="dragstart($event, index)"
+    @dragend.capture="dragend(index)"
+    @dragenter.capture="dragenter(index)"
+    @dragleave.capture="dragleave(index)"
+    @drag.capture="drag($event, index)"
+    v-for="(param, index) in params" :key="param.index">
+    <div><i class="el-icon-rank" ></i></div>
+    <div>
+      <el-input
+        placeholder="请输入内容"
+        v-model="param.value"
+        clearable>
+      </el-input>
     </div>
-    <el-input
-      class="input-new-tag"
-      v-if="inputVisible"
-      v-model="inputValue"
-      ref="saveTagInput"
-      size="small"
-      @keyup.enter.native="handleInputConfirm"
-      @blur="handleInputConfirm"
-    >
-    </el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-  <ParamsListPanel :params='aparams' @input="aparams = $event"></ParamsListPanel>
+    <div>删除操作 index {{index}}</div>
+  </div>
+  </transition-group>
+  <!-- <div id="flip-list-demo" class="demo">
+    <button @click="shuffle">Shuffle</button>
+    <transition-group name="flip-list" tag="ul">
+      <li v-for="(item, index) in items" v-bind:key="'aa' + index">
+        {{ item }}
+      </li>
+    </transition-group>
+  </div> -->
   </div>
 </template>
 <script>
-import ParamsListPanel from './ParamsListPanel.vue';
 
 export default {
-  name: 'common-param',
-  components: { ParamsListPanel },
+  name: 'params-list-panel',
   props: {
     params: {
-      type: Array,
-    },
-    paras: {
       type: Array,
     },
   },
@@ -101,20 +64,17 @@ export default {
       onIndex: undefined,
       inputValue: null,
       inputVisible: false,
-      aparams: [],
+      items: [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }],
+      drag_name: false,
     };
   },
   methods: {
-    oneclick() {
-      console.log('one click');
-    },
-    doubleClick() {
-      console.log('double click');
+    shuffle() {
+      this.items = [{ value: 'aaa' }, { value: 'ccc' }, { value: 'bbb' }];
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
     },
-
     showInput() {
       this.inputVisible = true;
       this.$nextTick(() => this.$refs.saveTagInput.$refs.input.focus());
@@ -132,6 +92,7 @@ export default {
     // event 是被拖动的元素
       event.dataTransfer.setData('text/plain', event.target);
       console.log('dragstart', index);
+      this.drag_name = true;
       this.choiceIndex = index;
     },
     // 拖动结束
@@ -140,19 +101,26 @@ export default {
       this.onIndex = undefined;
       this.choiceIndex = undefined;
       // this.params = params;
+      this.drag_name = false;
       console.log('dragend', event);
     },
     // 拖动到某个块中
-    dragenter(event) {
-      this.onIndex = event;
-      console.log('dragenter', event);
+    dragenter(index) {
+      this.onIndex = index;
+      // this.choiceIndex = index;
+      console.log('dragenter', index);
+      // const tempParams = [...this.params];
+      // const cParam = tempParams.splice(this.choiceIndex, 1)[0];
+      // tempParams.splice(index, 0, cParam);
+      // this.$emit('input', tempParams);
     },
     // 拖动到某个
     dragleave(event) {
       this.onIndex = event;
       console.log('dragleave', event);
     },
-    dragexit() {
+    dragexit(event) {
+      event.preventDefault();
       console.log('exit');
     },
     // 当一个元素或是选中的文字被拖拽释放到一个有效的释放目标位置时
@@ -165,15 +133,21 @@ export default {
     drop(event) {
       event.preventDefault();
       console.log('drop');
+      const tempParams = [...this.params];
+      const cParam = tempParams.splice(this.choiceIndex, 1)[0];
+      tempParams.splice(this.onIndex, 0, cParam);
+      this.$emit('input', tempParams);
     },
     dragover(event) {
       // console.log(event);
       event.preventDefault();
     },
+    mousedown(index) {
+      this.choiceIndex = index;
+    },
   },
   created() {
     this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
-    this.aparams = [{ value: 'aaa', index: 0 }, { value: 'bbb', index: 1 }, { value: 'ccc', index: 2 }];
   },
 };
 </script>
