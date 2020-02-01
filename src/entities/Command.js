@@ -61,8 +61,12 @@ export default class Command {
     cmd.commandName = 'commandName';
     cmd.frequency = '0';
     cmd.options = [
-      new Option({}),
-      new Option({}),
+      new Option({
+        oid: 1, cid: 1, briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,
+      }),
+      new Option({
+        oid: 2, cid: 2, briefName: 'p', fullName: 'port', description: { zh: '容器映射端口' }, sort: 2, type: Option.TYPE.NUMBER,
+      }),
       new Option({}),
       new Option({}),
       new Option({}),

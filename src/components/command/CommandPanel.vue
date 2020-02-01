@@ -13,11 +13,11 @@
           v-on:upParamVal="upParamVal($event)"
           :paras="paras" />
         <div>命令选项：</div>
-        <CommandOption :optionVal="optionVal" :options="options" />
+        <CommandOption :options="options"  :optionDef="options" :optionVal="optionVal" />
       </el-scrollbar>
     </div>
     <div class="cmd-exhibit">
-      <CommandExhibit :cmd="cmd" :options="options" :params="params" />
+      <CommandExhibit :cmd="cmd" :options="optionVal" :params="paramVal" />
     </div>
   </div>
 </template>

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div v-for="option in options" :key="option.oid">
+    <OptionSearchBar :optionDef="optionDef" v-on:addOption="addOption($event)"></OptionSearchBar>
+    <div v-for="(option, index) in optionVal" :key="index">
       <el-popover
         placement="right"
         width="200"
         trigger="hover"
-        :content="option.description"
+        :content="option.description.zh"
         >
         <div class="per-option" slot="reference">
           <div class="option-brief"><div>{{option.showName()}}</div></div>
@@ -37,9 +38,7 @@
           <div v-else class="option-value-bar" >
             <OptionParam :option="option" v-model="option.value" />
           </div>
-          <!-- {{option.type + 'vvv'}}
-          {{optionType.ENUM + 'aaa'}}
-          {{option.type === optionType.ENUM}} -->
+          <i class="el-icon-delete" @click="removeOptionVal(index)"></i>
         </div>
       </el-popover>
     </div>
@@ -51,6 +50,7 @@
 <script>
 // import { ajax, wantNothing } from '../../api/fetch';
 // import Option from '../../entities/Option';
+import OptionSearchBar from '../option/OptionSearchBar.vue';
 import OptionParam from './OptionParam.vue';
 import MultipParam from './MultipParam.vue';
 import ListUtils from '../../entities/ListUtils';
@@ -58,9 +58,20 @@ import ListUtils from '../../entities/ListUtils';
 export default {
   name: 'common-option',
   props: {
-    options: Array,
+    options: {
+      type: Array,
+      default: () => [],
+    },
+    optionDef: {
+      type: Array,
+      default: () => [],
+    },
+    optionVal: {
+      type: Array,
+      default: () => [],
+    },
   },
-  components: { OptionParam, MultipParam },
+  components: { OptionSearchBar, OptionParam, MultipParam },
   data() {
     return {
       optionParamDialog: false,
@@ -71,6 +82,13 @@ export default {
   computed: {
   },
   methods: {
+    removeOptionVal(index) {
+      this.optionVal.splice(index, 1);
+    },
+    addOption(option) {
+      // 接收到Bar发送的添加请求 是否要对已有的进行排序 或者改拖动就不需要了
+      this.optionVal.push(option);
+    },
     editMultip(option) {
       this.dialogOption = option;
       this.optionParamDialog = true;
@@ -88,6 +106,7 @@ export default {
   created() {
     // console.log(`enum${this.optionType.ENUM}`);
     // console.log(Option.getType());
+    console.log(this.optionDef);
   },
 };
 </script>

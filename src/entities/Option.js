@@ -71,4 +71,14 @@ export default class Option {
   deepCopy() {
     return new Option(JSON.parse(JSON.stringify(this)));
   }
+
+  static matchKey(value, key) {
+    return value ? value.toLowerCase().indexOf(key.toLowerCase()) >= 0 : false;
+  }
+
+  searchKey(key) {
+    return Option.matchKey(this.briefName, key)
+      || Option.matchKey(this.fullName, key)
+      || Option.matchKey(JSON.stringify(this.description), key);
+  }
 }
