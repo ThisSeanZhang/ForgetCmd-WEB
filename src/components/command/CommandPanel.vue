@@ -6,9 +6,14 @@
       </div>
       <el-scrollbar style="height: 90%;">
         <div>命令参数：</div>
-        <CommandParam :params="params" :paras="paras" />
+        <CommandParam
+          :params="params"
+          :paramDef="paramDef"
+          :paramVal="paramVal"
+          v-on:upParamVal="upParamVal($event)"
+          :paras="paras" />
         <div>命令选项：</div>
-        <CommandOption :options="options" />
+        <CommandOption :optionVal="optionVal" :options="options" />
       </el-scrollbar>
     </div>
     <div class="cmd-exhibit">
@@ -33,6 +38,20 @@ export default {
       type: Command,
       default: () => new Command({}),
     },
+    // 命令的定义
+    paramDef: {
+      type: Array,
+      default: () => [],
+    },
+    // 命令存储用户使用的特定值
+    paramVal: {
+      type: Array,
+      default: () => [],
+    },
+    optionVal: {
+      type: Array,
+      default: () => [],
+    },
   },
   components: {
     CommandInfo, CommandOption, CommandParam, CommandExhibit,
@@ -47,6 +66,10 @@ export default {
     };
   },
   methods: {
+    upParamVal(value) {
+      console.log(`总页面${JSON.stringify(value)}`);
+      this.$emit('upParamVal', value);
+    },
     updateParams(params) {
       this.params = params;
     },

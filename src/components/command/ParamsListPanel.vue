@@ -1,11 +1,18 @@
 <template>
-  <div
+  <el-drawer
+  title="我是标题"
+  :visible.sync="drawer"
+  direction="ltr"
+  :before-close="handleDrawerClose">
+  <i class="el-icon-circle-plus-outline" @click="addParam"></i>
+<div
       @drop="drop($event)"
       @dragover="dragover($event)"
       @dragexit.capture="dragexit($event)"
       >
   <transition-group name="flip-list">
-  <div class="param-list-each"
+  <div style="display: flex;"
+    class="param-list-each"
     :draggable="index === choiceIndex"
     @mousedown="mousedown(index)"
     @dragstart.capture="dragstart($event, index)"
@@ -22,7 +29,7 @@
         clearable>
       </el-input>
     </div>
-    <div>删除操作 index {{index}}</div>
+    <div><i class="el-icon-circle-close" @click="deleteParam(index)"></i></div>
   </div>
   </transition-group>
   <!-- <div id="flip-list-demo" class="demo">
@@ -34,12 +41,17 @@
     </transition-group>
   </div> -->
   </div>
+</el-drawer>
 </template>
 <script>
 
 export default {
   name: 'params-list-panel',
   props: {
+    value: {
+      type: Boolean,
+      default: () => false,
+    },
     params: {
       type: Array,
     },
@@ -56,6 +68,15 @@ export default {
       cparams.splice(injectIndex, 0, cParam);
       return cparams.map((o, index) => ({ ...o, index }));
     },
+    drawer: {
+      set(val) {
+        this.$emit('input', val);
+      },
+      get() {
+        console.log(this.value);
+        return this.value;
+      },
+    },
   },
   data() {
     return {
@@ -69,6 +90,19 @@ export default {
     };
   },
   methods: {
+    addParam() {
+      this.params.push({ index: this.params.length, value: '' });
+    },
+    deleteParam(index) {
+      // 删除指定位置的参数
+      this.params.splice(index, 1);
+      // const tempParams = [...this.params];
+      // tempParams.splice(index, 1);
+      // this.$emit('updateVal', tempParams);
+    },
+    handleDrawerClose() {
+      this.drawer = false;
+    },
     shuffle() {
       this.items = [{ value: 'aaa' }, { value: 'ccc' }, { value: 'bbb' }];
     },
@@ -136,7 +170,7 @@ export default {
       const tempParams = [...this.params];
       const cParam = tempParams.splice(this.choiceIndex, 1)[0];
       tempParams.splice(this.onIndex, 0, cParam);
-      this.$emit('input', tempParams);
+      this.$emit('updateVal', tempParams);
     },
     dragover(event) {
       // console.log(event);
@@ -147,7 +181,7 @@ export default {
     },
   },
   created() {
-    this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
+    // this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
   },
 };
 </script>

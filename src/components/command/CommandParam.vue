@@ -1,79 +1,57 @@
 <template>
   <div>
-    <div v-for="param in params" :key="param.cpid">
+    <div style="display: inline-block;" v-for="(param, index) in paramVal" :key="param.index" >
       <el-popover
-        placement="right"
-        width="200"
+        placement="top"
         trigger="hover"
-        :content="param.description"
-        >
-        <div class="per-option" slot="reference">
-          <div class="param-brief">{{param.paramName}}</div>
-          <div class="param-input">
-            <el-input
-              class="param-value"
-              placeholder="请输入内容"
-              v-model="param.value"
-              clearable>
-            </el-input>
-          </div>
-        </div>
+        :content="paramDef[index].description">
+        <el-tag
+          slot="reference"
+          closable
+          @click="oneclick"
+          type="info">
+          {{param.value}}
+        </el-tag>
       </el-popover>
     </div>
-    <div
-      @drop="drop($event)"
-      @dragover="dragover($event)"
-      >
-      <transition-group name="flip-list" tag="p">
-      <div style="display:inline-block;"
-        :class="choiceIndex === index ? 'draing-tag' : ''"
-        :draggable="true"
-        @drag.capture="drag($event, index)"
-        @dragstart.capture="dragstart($event, index)"
-        @dragend.capture="dragend(index)"
-        @dragenter.capture="dragenter(index)"
-        @dragleave.capture="dragleave(index)"
-        @dragexit.capture="dragexit"
-
-        v-for="(para, index) in comp_paras" :key="'list-'+index">
-        <!-- <div>{{para}}</div> -->
-        <el-popover
-          placement="top"
-          trigger="hover"
-          :content="para.value">
-          <el-tag
-            slot="reference"
-            closable
-            @click="oneclick"
-            @dblclick.native="doubleClick"
-            type="info">
-            {{para.value}}
-          </el-tag>
-        </el-popover>
-      </div>
-      </transition-group>
-    </div>
-    <el-input
-      class="input-new-tag"
-      v-if="inputVisible"
-      v-model="inputValue"
-      ref="saveTagInput"
-      size="small"
-      @keyup.enter.native="handleInputConfirm"
-      @blur="handleInputConfirm"
-    >
-    </el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-  <ParamsListPanel :params='aparams' @input="aparams = $event"></ParamsListPanel>
+    <!-- <div v-for="(para, index) in comp_paras" :key="'list-'+index">
+      <el-popover
+        placement="top"
+        trigger="hover"
+        :content="para.value">
+        <el-tag
+          slot="reference"
+          closable
+          @click="oneclick"
+          type="info">
+          {{para.value}}
+        </el-tag>
+      </el-popover>
+    </div> -->
+    <el-button size="small" icon="el-icon-set-up" @click="paramDrawShow = true" ></el-button>
+  <ParamsListPanel
+    v-model="paramDrawShow"
+    :params='paramVal'
+    v-on:updateVal="updateVal($event)">
+  </ParamsListPanel>
   </div>
 </template>
 <script>
 import ParamsListPanel from './ParamsListPanel.vue';
+import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'common-param',
   components: { ParamsListPanel },
   props: {
+    // paramDef: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    paramVal: {
+      type: Array,
+      default: () => [],
+    },
     params: {
       type: Array,
     },
@@ -101,10 +79,16 @@ export default {
       onIndex: undefined,
       inputValue: null,
       inputVisible: false,
+      paramDrawShow: false,
       aparams: [],
+      paramDef: [],
     };
   },
   methods: {
+    updateVal(event) {
+      console.log(event);
+      this.$emit('upParamVal', event);
+    },
     oneclick() {
       console.log('one click');
     },
@@ -174,6 +158,17 @@ export default {
   created() {
     this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
     this.aparams = [{ value: 'aaa', index: 0 }, { value: 'bbb', index: 1 }, { value: 'ccc', index: 2 }];
+    this.paramDef = [
+      new CmdParam({
+        cpid: 1, sort: 0, paramName: 'paramName1', description: 'description of param1',
+      }),
+      new CmdParam({
+        cpid: 2, sort: 1, paramName: 'paramName2', description: 'description of param2',
+      }),
+      new CmdParam({
+        cpid: 3, sort: 2, paramName: 'paramName3', description: 'description of param3',
+      }),
+    ];
   },
 };
 </script>
