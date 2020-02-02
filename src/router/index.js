@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Search from './views/Search.vue';
-import Command from './views/Command.vue';
-import CommandCommit from './views/CommandCommit.vue';
-import WaitVerifyCmdLog from './views/WaitVerifyCmdLog.vue';
-import PerViewCommand from './views/PerViewCommand.vue';
-import SnapshotInject from './views/SnapshotInject.vue';
+import Search from '@/views/Search.vue';
+import Command from '@/views/Command.vue';
+import CommandCommit from '@/views/CommandCommit.vue';
+import WaitVerifyCmdLog from '@/views/WaitVerifyCmdLog.vue';
+import PerViewCommand from '@/views/PerViewCommand.vue';
+import SnapshotInject from '@/views/SnapshotInject.vue';
+import tempBaseView from '@/views/tempBaseView.vue';
 
 Vue.use(Router);
 
@@ -20,6 +21,11 @@ export default new Router({
       meta: {
         title: 'Forget? For Get!',
       },
+    },
+    {
+      path: '/cmd',
+      name: 'cmd',
+      component: tempBaseView,
     },
     {
       path: '/cmds/:cid',
