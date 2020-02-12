@@ -2,17 +2,26 @@
   <div>
     <div style="display: inline-block;" v-for="(param, index) in paramVal" :key="param.index" >
       <el-popover
+        v-if="index < (paramDef.length -1)"
         placement="top"
         trigger="hover"
-        :content="paramDef[index].description">
+        :content="paramDef[index].getCurrentLangDesc()">
         <el-tag
           slot="reference"
           closable
-          @click="oneclick"
-          type="info">
-          {{param.value}}
+          @click="param.selected = !param.selected"
+          type='info' >
+          {{param.value}}{{param.selected}}
         </el-tag>
       </el-popover>
+      <el-tag
+        v-else
+        slot="reference"
+        closable
+        @click="param.selected = !param.selected"
+        type="info" >
+        {{param.value}}
+      </el-tag>
     </div>
     <!-- <div v-for="(para, index) in comp_paras" :key="'list-'+index">
       <el-popover
@@ -38,25 +47,19 @@
 </template>
 <script>
 import ParamsListPanel from './ParamsListPanel.vue';
-import CmdParam from '../../entities/CmdParam';
+// import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'common-param',
   components: { ParamsListPanel },
   props: {
-    // paramDef: {
-    //   type: Array,
-    //   default: () => [],
-    // },
-    paramVal: {
+    paramDef: {
       type: Array,
       default: () => [],
     },
-    params: {
+    paramVal: {
       type: Array,
-    },
-    paras: {
-      type: Array,
+      default: () => [],
     },
   },
   computed: {
@@ -81,7 +84,6 @@ export default {
       inputVisible: false,
       paramDrawShow: false,
       aparams: [],
-      paramDef: [],
     };
   },
   methods: {
@@ -123,7 +125,6 @@ export default {
       this.cparams = this.comp_paras;
       this.onIndex = undefined;
       this.choiceIndex = undefined;
-      // this.params = params;
       console.log('dragend', event);
     },
     // 拖动到某个块中
@@ -141,34 +142,18 @@ export default {
     },
     // 当一个元素或是选中的文字被拖拽释放到一个有效的释放目标位置时
     drag() {
-    // drag(event, index) {
-      // console.log(event.target);
-      // console.log('drag', index);
-      // console.log(event);
     },
     drop(event) {
       event.preventDefault();
       console.log('drop');
     },
     dragover(event) {
-      // console.log(event);
       event.preventDefault();
     },
   },
   created() {
     this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
     this.aparams = [{ value: 'aaa', index: 0 }, { value: 'bbb', index: 1 }, { value: 'ccc', index: 2 }];
-    this.paramDef = [
-      new CmdParam({
-        cpid: 1, sort: 0, paramName: 'paramName1', description: 'description of param1',
-      }),
-      new CmdParam({
-        cpid: 2, sort: 1, paramName: 'paramName2', description: 'description of param2',
-      }),
-      new CmdParam({
-        cpid: 3, sort: 2, paramName: 'paramName3', description: 'description of param3',
-      }),
-    ];
   },
 };
 </script>

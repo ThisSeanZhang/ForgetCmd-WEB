@@ -2,28 +2,27 @@
   <div class="cmd-panel">
     <div class="cmd-main">
       <div class="cmd-info">
-        <CommandInfo :cmd="cmd" />
+        <CommandInfo :cmd="inCmd" />
       </div>
       <el-scrollbar style="height: 90%;">
         <div>命令参数：</div>
         <CommandParam
-          :params="params"
-          :paramDef="paramDef"
+          :params="inCmd.params"
+          :paramDef="inCmd.params"
           :paramVal="paramVal"
-          v-on:upParamVal="upParamVal($event)"
-          :paras="paras" />
+          v-on:upParamVal="upParamVal($event)" />
         <div>命令选项：</div>
-        <CommandOption :options="options"  :optionDef="options" :optionVal="optionVal" />
+        <OptionPanel :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
       </el-scrollbar>
     </div>
     <div class="cmd-exhibit">
-      <CommandExhibit :cmd="cmd" :options="optionVal" :params="paramVal" />
+      <CommandExhibit :cmd="inCmd" :options="optionVal" :params="paramVal" />
     </div>
   </div>
 </template>
 <script>
 import CommandInfo from './CommandInfo.vue';
-import CommandOption from './CommandOption.vue';
+import OptionPanel from '../option/OptionPanel.vue';
 import CommandParam from './CommandParam.vue';
 import CommandExhibit from './CommandExhibit.vue';
 // import { wantNothing } from '../api/fetch';
@@ -38,30 +37,22 @@ export default {
       type: Command,
       default: () => new Command({}),
     },
-    // 命令的定义
-    paramDef: {
-      type: Array,
-      default: () => [],
-    },
-    // 命令存储用户使用的特定值
+    // 命令参数存储的值
     paramVal: {
       type: Array,
       default: () => [],
     },
+    // 命令选项存储的值
     optionVal: {
       type: Array,
       default: () => [],
     },
   },
   components: {
-    CommandInfo, CommandOption, CommandParam, CommandExhibit,
+    CommandInfo, OptionPanel, CommandParam, CommandExhibit,
   },
   data() {
     return {
-      cmd: null,
-      params: [],
-      paras: [],
-      options: [],
       cmdSuccessLoad: false,
     };
   },
@@ -70,21 +61,8 @@ export default {
       console.log(`总页面${JSON.stringify(value)}`);
       this.$emit('upParamVal', value);
     },
-    updateParams(params) {
-      this.params = params;
-    },
-    updateOption(options) {
-      this.options = options;
-    },
-    hendleSelectCmd(cid) {
-      this.$router.push(`/cmds/${cid}`);
-    },
   },
   created() {
-    this.cmd = this.inCmd;
-    this.options = this.inCmd.options;
-    this.params = this.inCmd.params;
-    this.paras = this.inCmd.paras;
   },
 };
 </script>

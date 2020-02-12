@@ -1,21 +1,26 @@
 import { ajax } from '../api/fetch';
 import Param from './Param';
 import CommandOption from './CommandOption';
+import Command from './Command';
 
-export default class Command {
-  constructor(cmd) {
-    this.cid = cmd.cid;
-    this.commandName = cmd.commandName;
-    this.briefDesc = cmd.briefDesc;
-    this.description = cmd.description;
-    this.version = cmd.version;
-    this.platform = cmd.platform;
-    this.argNum = cmd.argNum;
-    this.whenDeprecated = cmd.whenDeprecated;
-    this.whenEnable = cmd.whenEnable;
-    this.frequency = cmd.frequency;
-    this.options = cmd.options ? cmd.options : [];
-    this.params = cmd.params ? cmd.params : [];
+const currentLang = 'zh';
+
+export default class CommandCommit {
+  constructor(commit) {
+    this.ccid = commit.ccid;
+    this.cid = commit.cid;
+    this.commandName = commit.commandName;
+    this.briefDesc = commit.briefDesc ? commit.briefDesc : { [currentLang]: '' };
+    this.description = commit.description ? commit.description : { [currentLang]: '' };
+    this.version = commit.version;
+    this.platform = commit.platform;
+    this.argNum = commit.argNum;
+    this.whenDeprecated = commit.whenDeprecated;
+    this.whenEnable = commit.whenEnable;
+    this.frequency = commit.frequency;
+    this.options = commit.options ? commit.options : [];
+    this.params = commit.params ? commit.params : [];
+    this.status = commit.status;
   }
 
   static findByCid(cid) {
@@ -55,12 +60,16 @@ export default class Command {
     return ajax(request);
   }
 
-  static CreateFackCmd() {
-    const cmd = new Command({});
-    cmd.briefDesc = '简要描述';
-    cmd.commandName = 'commandName';
-    cmd.frequency = '0';
-    cmd.options = [
+  toCommand() {
+    return new Command(this);
+  }
+
+  static CreateFackCommit() {
+    const commit = new CommandCommit({});
+    commit.briefDesc = { zh: '' };
+    commit.commandName = '';
+    commit.frequency = '0';
+    commit.options = [
       new CommandOption({
         oid: 1, cid: 1, briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,
       }),
@@ -72,18 +81,18 @@ export default class Command {
       }),
       new CommandOption({}),
     ];
-    cmd.paras = [
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
-      new Param({}),
+    commit.params = [
+      new Param({ index: 0 }),
+      new Param({ index: 1 }),
+      new Param({ index: 2 }),
+      new Param({ index: 3 }),
+      new Param({ index: 4 }),
+      new Param({ index: 5 }),
+      new Param({ index: 6 }),
+      new Param({ index: 7 }),
+      new Param({ index: 8 }),
+      new Param({ index: 9 }),
     ];
-    return cmd;
+    return commit;
   }
 }

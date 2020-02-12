@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Option from '../../entities/Option';
+import Option from '../../entities/CommandOption';
 
 export default {
   name: 'option-search-bar',

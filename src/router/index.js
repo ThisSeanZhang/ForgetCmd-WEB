@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Search from '@/views/Search.vue';
 import Command from '@/views/Command.vue';
-import CommandCommit from '@/views/CommandCommit.vue';
+import CreateCommit from '@/views/CreateCommit.vue';
 import WaitVerifyCmdLog from '@/views/WaitVerifyCmdLog.vue';
 import PerViewCommand from '@/views/PerViewCommand.vue';
 import SnapshotInject from '@/views/SnapshotInject.vue';
@@ -33,9 +33,9 @@ export default new Router({
       component: Command,
     },
     {
-      path: '/commits/cmd-add',
-      name: 'command-commit',
-      component: CommandCommit,
+      path: '/commits/create',
+      name: 'create-commit',
+      component: CreateCommit,
     },
     {
       path: '/commits/cmds',
