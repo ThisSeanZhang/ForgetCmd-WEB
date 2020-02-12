@@ -4,19 +4,22 @@ function initRules(rules) {
   if (!rules) return [];
   return typeof rules !== 'string' ? rules : rules.split(',');
 }
+const currentLang = 'zh';
+
 export default class CommandOption {
   constructor(option) {
     this.oid = option.oid;
     this.cid = option.cid;
     this.briefName = option.briefName;
     this.fullName = option.fullName;
-    this.description = option.description;
+    this.description = option.description ? option.description : { [currentLang]: '' };
     this.frequency = option.frequency;
-    this.selected = false;
+    this.selected = option.selected;
     this.type = option.type;
     this.rules = initRules(option.rules);
     this.value = this.initValue(option.value);
     this.ignore = option.ignore;
+    this.repeat = option.repeat;
   }
 
   static TYPE = {
@@ -79,5 +82,11 @@ export default class CommandOption {
     return CommandOption.matchKey(this.briefName, key)
       || CommandOption.matchKey(this.fullName, key)
       || CommandOption.matchKey(JSON.stringify(this.description), key);
+  }
+
+  getCurrentLangDesc() {
+    return Object.prototype.hasOwnProperty.call(this.description, currentLang)
+      ? this.description[currentLang]
+      : '';
   }
 }

@@ -23,7 +23,7 @@
       <transition :name="transitionName"  mode="in-out">
         <div key="3" v-show="currentStep === procedure.OPTIONS_INFO" class="transition-box">
           <el-scrollbar style="height: 100%;">
-          <edit-option-info v-model="cmd.options"></edit-option-info>
+          <edit-option-info v-model="commit.options"></edit-option-info>
           </el-scrollbar>
         </div>
       </transition>

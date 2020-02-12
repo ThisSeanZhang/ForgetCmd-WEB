@@ -1,6 +1,6 @@
 <template>
   <div class="param-container">
-    <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
+    <el-button icon="el-icon-plus" @click="editOption(undefined)"></el-button>
     <div class="params-c">
       <div v-for="(option, index) in options" :key="index" class="per-param">
         <div style="flex: 2;">
@@ -10,10 +10,10 @@
           <div>{{convertType(option.type)}}</div>
         </div>
         <div style="flex: 4;">
-          <div>{{option.description}}</div>
+          <div>{{option.getCurrentLangDesc()}}</div>
         </div>
         <div class="per-operation" style="width: 80px;">
-          <i @click="editParam(index)"
+          <i @click="editOption(index)"
             class="el-icon-edit"></i>
           <i class="el-icon-delete-solid" @click="delDelete(index)"></i>
         </div>
@@ -39,14 +39,14 @@
       </div>
     </div>
     <edit-option-panel v-model="optionDdrawerShow"
-      :InOption="currentParam" v-on:updateOption="updateOption($event)" />
+      :InOption="currentOption" v-on:updateOption="updateOption($event)" />
   </div>
 </template>
 <script>
 import ListUtils from '../../entities/ListUtils';
 import EditOptionPanel from './EditOptionPanel.vue';
-import Option from '../../entities/Option';
-import { wantNothing } from '../../api/fetch';
+import Option from '../../entities/CommandOption';
+// import { wantNothing } from '../../api/fetch';
 
 export default {
   name: 'edit-option-info',
@@ -66,7 +66,7 @@ export default {
     };
   },
   computed: {
-    currentParam() {
+    currentOption() {
       return this.options.length > 0 && this.editIndex !== undefined
         ? this.options[this.editIndex]
         : new Option({});
@@ -81,14 +81,15 @@ export default {
     isEmptyList(options) {
       return ListUtils.isEmptyList(options);
     },
-    editParam(index) {
+    editOption(index) {
       this.editIndex = index;
-      console.log(this.currentParam);
       this.optionDdrawerShow = true;
     },
     updateOption(option) {
+      console.log(`commit option ${JSON.stringify(option)}`);
       if (this.editIndex !== undefined) {
         this.options.splice(this.editIndex, 1, option);
+        console.log(`commit option ${JSON.stringify(this.options)}`);
       } else {
         this.options.push(option);
       }
@@ -99,12 +100,10 @@ export default {
   },
   created() {
     this.options = this.value;
-    // this.options.push(new Option({ paramName: 'aaaa', type: 1 }));
-    // this.options.push(new Option({ paramName: 'bbb' }));
-    console.log(this.options);
-    Option.loadType().then((resp) => {
-      this.paramTypeEnum = resp.data.data;
-    }).catch(wantNothing);
+    console.log(`传入的Option${this.options}`);
+    // Option.loadType().then((resp) => {
+    //   this.paramTypeEnum = resp.data.data;
+    // }).catch(wantNothing);
   },
 };
 </script>

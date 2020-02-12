@@ -14,7 +14,7 @@
         <el-form-item label="简写">
           <el-input v-model="option.briefName"></el-input>
         </el-form-item>
-        <el-form-item label="完整名称">
+        <el-form-item label="全称">
           <el-input v-model="option.fullName"></el-input>
         </el-form-item>
         <el-form-item label="描述">
@@ -22,16 +22,22 @@
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 6}"
             placeholder="请输入描述"
-            v-model="option.description">
+            v-model="option.description[currentLang]">
           </el-input>
+          <el-tooltip  content="更多语言" placement="top">
+            <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="启用时间">
+        <!-- <el-form-item label="启用时间">
           <el-date-picker type="date"
             format="yyyy 年 MM 月 dd 日"
             value-format="timestamp"
             placeholder="选择日期"
             v-model="option.whenEnable"
             style="width: 100%;"></el-date-picker>
+        </el-form-item> -->
+        <el-form-item label="允许重复">
+          <el-switch v-model="option.repeat"></el-switch>
         </el-form-item>
         <el-form-item label="类型">
           <el-select v-model="option.type" placeholder="请选择">
@@ -71,24 +77,29 @@
         </el-form-item>
       </el-form>
     </div>
+    <MultipLangDesc v-model="multipLangDescDialog"
+      :appendToBody='true'
+      v-on:updateDesc='option.description = $event'
+      :inDesc="option.description"
+    />
   </el-drawer>
 </template>
 <script>
 // import ListUtils from '../../entities/ListUtils';
-import Option from '../../entities/Option';
-import { wantNothing } from '../../api/fetch';
+import Option from '../../entities/CommandOption';
+import MultipLangDesc from './MultipLangDesc.vue';
+// import { wantNothing } from '../../api/fetch';
 
 export default {
   name: 'add-option',
+  components: { MultipLangDesc },
   props: {
     value: {
       type: Boolean,
     },
     InOption: {
       type: Option,
-      default: function name() {
-        return new Option({});
-      },
+      default: () => new Option({}),
     },
     existName: {
       type: Array,
@@ -106,14 +117,15 @@ export default {
   },
   data() {
     return {
-      params: [],
       option: new Option({}),
-      optionType: [],
+      optionType: [{ key: 0, value: 'NONE' }, { key: 2, value: 'ENUM' }],
       enums: {
         rules: [],
         inputValue: '',
         inputVisible: false,
       },
+      multipLangDescDialog: false,
+      currentLang: 'zh',
     };
   },
   methods: {
@@ -134,9 +146,9 @@ export default {
       this.option.value = '';
       this.enums.rules = this.option.rules;
       console.log(JSON.stringify(this.option));
-      Option.loadType().then((resp) => {
-        this.optionType = resp.data.data;
-      }).catch(wantNothing);
+      // Option.loadType().then((resp) => {
+      //   this.optionType = resp.data.data;
+      // }).catch(wantNothing);
     },
     handleDrawerClose(done) {
       if (JSON.stringify(this.InOption) === JSON.stringify(this.option)) {
