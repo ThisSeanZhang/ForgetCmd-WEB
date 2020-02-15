@@ -27,13 +27,13 @@
           </el-scrollbar>
         </div>
       </transition>
-      <transition :name="transitionName"  mode="in-out">
+      <!-- <transition :name="transitionName"  mode="in-out">
         <div key="4" v-show="currentStep === procedure.PER_VIEW" class="transition-box">
           <el-scrollbar style="height: 100%;">
-            <command-panel v-bind:inCmd="cmd"></command-panel>
+            <command-panel v-bind:inCmd="commit.toCommand()"></command-panel>
           </el-scrollbar>
         </div>
-      </transition>
+      </transition> -->
       <transition :name="transitionName"  mode="in-out">
         <div key="5" v-show="currentStep === procedure.DONE" class="transition-box">
           <div class="share-panel">
@@ -85,8 +85,13 @@
         @click="nextStep"
         style="float: right;"
         >下一步</el-button>
-      <el-button
+      <!-- <el-button
         v-show="currentStep === procedure.PER_VIEW" type="primary"
+        style="float: right;"
+        @click="submitCmd"
+        >提交</el-button> -->
+      <el-button
+        v-show="currentStep === procedure.OPTIONS_INFO" type="primary"
         style="float: right;"
         @click="submitCmd"
         >提交</el-button>
@@ -100,7 +105,7 @@ import CommandCommit from '../../entities/CommandCommit';
 import EditOptionInfo from './EditOptionInfo.vue';
 import EditBaseInfo from './EditBaseInfo.vue';
 import EditParamInfo from './EditParamInfo.vue';
-import CommandPanel from '../command/CommandPanel.vue';
+// import CommandPanel from '../command/CommandPanel.vue';
 import { wantNothing } from '../../api/fetch';
 
 export default {
@@ -109,7 +114,7 @@ export default {
     EditBaseInfo,
     EditParamInfo,
     EditOptionInfo,
-    CommandPanel,
+    // CommandPanel,
   },
   props: {
     commit: {
@@ -124,7 +129,7 @@ export default {
         BASE_INFO: Symbol('start add status'),
         PARAMS_INFO: Symbol('add params'),
         OPTIONS_INFO: Symbol('add options'),
-        PER_VIEW: Symbol('per view'),
+        // PER_VIEW: Symbol('per view'),
         DONE: Symbol('Done!'),
       },
       currentStep: null,
@@ -189,9 +194,9 @@ export default {
         status: '',
         title: '可选项',
       }, {
-        status: '',
-        title: '预览',
-      }, {
+      //   status: '',
+      //   title: '预览',
+      // }, {
         status: '',
         title: '结果',
       }];
@@ -199,8 +204,10 @@ export default {
   },
   computed: {
     hasNext() {
+      // return this.currentStep !== this.procedure.DONE
+      //   && this.currentStep !== this.procedure.PER_VIEW;
       return this.currentStep !== this.procedure.DONE
-        && this.currentStep !== this.procedure.PER_VIEW;
+        && this.currentStep !== this.procedure.OPTIONS_INFO;
     },
     hasPer() {
       return this.currentStep !== this.procedure.BASE_INFO
