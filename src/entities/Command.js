@@ -2,12 +2,14 @@ import { ajax } from '../api/fetch';
 import Param from './Param';
 import CommandOption from './CommandOption';
 
+const currentLang = 'zh';
+
 export default class Command {
   constructor(cmd) {
     this.cid = cmd.cid;
-    this.commandName = cmd.commandName;
-    this.briefDesc = cmd.briefDesc;
-    this.description = cmd.description;
+    this.commandName = cmd.commandName ? cmd.commandName : '';
+    this.briefDesc = cmd.briefDesc ? cmd.briefDesc : { [currentLang]: '' };
+    this.description = cmd.description ? cmd.description : { [currentLang]: '' };
     this.version = cmd.version;
     this.platform = cmd.platform;
     this.argNum = cmd.argNum;
@@ -85,5 +87,13 @@ export default class Command {
       new Param({}),
     ];
     return cmd;
+  }
+
+  getOptionMap() {
+    const obj = {};
+    this.options.forEach((op) => {
+      obj[op.fullName] = op;
+    });
+    return obj;
   }
 }

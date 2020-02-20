@@ -1,0 +1,220 @@
+<template>
+  <div>
+    <!-- {{baseDiff}} -->
+    <div @click="doTemp(value)"
+      v-for="(value, index) in baseDiff" :key="index">
+      <el-tag
+        :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
+      >{{value.key}}</el-tag>
+      <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
+    </div>
+  </div>
+</template>
+<script>
+import CommandCommit from '../../entities/CommandCommit';
+import CommitItem from '../../entities/CommitItem';
+import Command from '../../entities/Command';
+import StringUtils from '../../entities/StringUtils';
+
+export default {
+  name: 'conclude-panel',
+  components: { },
+  props: {
+    commit: {
+      type: CommandCommit,
+      default: () => new CommandCommit({}),
+    },
+    cmd: {
+      type: Command,
+      default: () => new Command({ description: { zh: 'dd', jp: 'aaa' } }),
+    },
+  },
+  data() {
+    return {
+      currentLang: 'zh',
+      multipLangBriefDescDialog: false,
+      multipLangDescDialog: false,
+      comareKey: ['commandName', 'briefDesc'],
+      tempCmd: new Command({}),
+    };
+  },
+  computed: {
+    baseDiff() {
+      // const cKeys = Object.keys(this.cmd).filter(key => this.comareKey.includes(key));
+      // const items = cKeys.filter(key => !StringUtils.eq(this.cmd[key], this.commit[key]))
+      //   .map(key => new CommitItem({
+      //     type: 'base', key, value: this.commit[key], cValue: this.cmd[key],
+      //   }));
+      // console.log(cKeys, this.cmd);
+      // const desc = this.createItemByComapreObject('base',
+      // 'description', this.cmd.description, this.commit.description);
+      // return items.concat(desc);
+      const cOption = this.cmd.getOptionMap();
+      const cOptionKeys = Object.keys(cOption);
+      const ccOption = this.commit.getOptionMap();
+      const optionIntems = cOptionKeys
+        .concat(Object.keys(ccOption).filter(v => !cOptionKeys.includes(v)))
+        .map(key => this.compareOptions(key, cOption[key], ccOption[key]))
+        .reduce((list, c) => list.concat(c));
+      // return this.compaerBase(this.cmd, this.commit).concat(optionIntems);
+      this.$emit('updateItems', optionIntems);
+      return optionIntems;
+    },
+  },
+  methods: {
+    compaerBase(ob1, ob2) {
+      const compareKey = ['commandName'];
+      const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+        .map(key => new CommitItem({
+          type: 'base', action: 1, key, oValue: ob1[key], value: ob2[key],
+        }));
+      const descItems = this.createItemByComapreObject('base', 'description', ob1.description, ob2.description);
+      const bDescItems = this.createItemByComapreObject('base', 'briefDesc', ob1.briefDesc, ob2.briefDesc);
+      return baseItems.concat(descItems).concat(bDescItems);
+    },
+    compareOptions(fKey, ob1, ob2) {
+      if (!ob1 || !ob2) {
+        return [new CommitItem({
+          type: 'options', action: this.judgeAction(ob1, ob2), key: fKey, oValue: ob1, value: ob2,
+        })];
+      }
+      const compareKey = ['briefName', 'type', 'rules', 'repeat'];
+      const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+        .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
+        .map(m => new CommitItem({
+          action: m.action,
+          type: 'options',
+          key: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'),
+          oValue: ob1[m.key],
+          value: ob2[m.key],
+        }));
+      const descItems = this.createItemByComapreObject('options', `${fKey}.description`, ob1.description, ob2.description);
+      return baseItems.concat(descItems);
+    },
+    compareParam(ob1, ob2) {
+      const compareKey = ['sort', 'paramName', 'required', 'type'];
+      const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+        .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
+        .map(key => new CommitItem({
+          type: 'params', key, oValue: ob1[key], value: ob2[key],
+        }));
+      const descItems = this.createItemByComapreObject('params', 'description', ob1.description, ob2.description);
+      return baseItems.concat(descItems);
+    },
+    createItemByComapreObject(type, fKey, ob1, ob2) {
+      const o1keys = Object.keys(ob1);
+      const o2keys = Object.keys(ob2);
+      // 并集
+      const unionKeys = [].concat(o1keys).concat(o2keys.filter(v => !o1keys.includes(v)));
+      console.log(unionKeys);
+      return unionKeys
+        // 过滤值相同的参数
+        .filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+        // 判断类型
+        .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
+        // 转为对应修改项
+        .map(m => new CommitItem({
+          action: m.action, type, key: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'), oValue: ob1[m.key], value: ob2[m.key],
+        }));
+    },
+    judgeAction(v1, v2) {
+      if (StringUtils.isEmptyString(v1)) {
+        return 0;
+      }
+      if (StringUtils.isEmptyString(v2)) {
+        return 2;
+      }
+      return 1;
+    },
+    doTemp(item) {
+      if (item.type === 'options') {
+        const optionMap = this.tempCmd.getOptionMap();
+        if (item.action === 0) {
+          // this.tempCmd.options.push(item.value);
+          optionMap[item.key] = item.value;
+        }
+        if (item.action === 1) {
+          this.editObject(optionMap, item);
+        }
+        if (item.action === 2) {
+          delete optionMap[item.key];
+          // this.tempCmd.options = this.tempCmd.options.filter(op => op.fullName !== item.key);
+        }
+        this.tempCmd.options = Object.values(optionMap);
+      }
+      // console.log(item);
+      // const keys = item.key.split('.');
+      // const k = keys.pop();
+      // const obj = this.getPathObject(this.tempCmd, keys);
+      // obj[k] = '测试';
+      console.log(JSON.stringify(this.tempCmd));
+    },
+    editObject(inObj, item) {
+      console.log(item);
+      console.log(JSON.stringify(inObj));
+      const keys = item.key.split('.');
+      const k = keys.pop();
+      const obj = this.getPathObject(inObj, keys);
+      obj[k] = item.value;
+      console.log(JSON.stringify(inObj));
+    },
+    getPathObject(obj, keys) {
+      if (!obj || !keys) return obj;
+
+      if (keys.length === 1) {
+        console.log(`remain keys: ${keys}`);
+        return obj[keys[0]];
+      }
+
+      if (keys.length > 1) {
+        const k = keys.shift();
+        return this.getPathObject(obj[k], keys);
+      }
+      return obj;
+    },
+  },
+  mounted() {
+  },
+  created() {
+    this.cmd.options.push({
+      oid: 1,
+      cid: 1,
+      briefName: 'n',
+      fullName: 'name1',
+      description: { zh: '设值容器名称' },
+      rules: [],
+    });
+    this.tempCmd.options.push({
+      oid: 1,
+      cid: 1,
+      briefName: 'n',
+      fullName: 'name1',
+      description: { zh: '设值容器名称' },
+      rules: [],
+    });
+  },
+};
+</script>
+<style lang="scss" scoped>
+.edit-base-info{
+  padding: 10px;
+}
+.per-option{
+  margin-bottom: 10px;
+}
+.option-brief{
+  width: 80px;
+  text-align: right;
+  vertical-align: middle;
+  float: left;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.option-value-bar{
+  margin-left: 80px;
+}
+</style>

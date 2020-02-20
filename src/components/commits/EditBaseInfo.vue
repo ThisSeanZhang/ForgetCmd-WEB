@@ -30,13 +30,13 @@
         </el-tooltip>
       </div>
     </div>
-    <div class="per-option">
+    <!-- <div class="per-option">
       <div class="option-brief">版本</div>
       <div class="option-value-bar" >
         <el-input placeholder="请输入内容" v-model="commit.version" clearable></el-input>
       </div>
-    </div>
-    <div class="per-option">
+    </div> -->
+    <!-- <div class="per-option">
       <div class="option-brief">平台</div>
       <div class="option-value-bar" >
         <el-input placeholder="请输入内容" v-model="commit.platform" clearable></el-input>
@@ -58,7 +58,7 @@
           v-model="commit.whenEnable"
           style="width: 100%;"></el-date-picker>
       </div>
-    </div>
+    </div> -->
     <MultipLangBriefDesc v-model="multipLangBriefDescDialog"
       v-on:updateBriefDesc='commit.briefDesc = $event'
       :inDesc="commit.briefDesc"

@@ -18,7 +18,9 @@ export default class CommandOption {
     this.type = option.type;
     this.rules = initRules(option.rules);
     this.value = this.initValue(option.value);
+    // 使用的时候是否忽略类型
     this.ignore = option.ignore;
+    // 是否能重复添加
     this.repeat = option.repeat;
   }
 

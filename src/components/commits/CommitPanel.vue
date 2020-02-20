@@ -35,6 +35,15 @@
         </div>
       </transition> -->
       <transition :name="transitionName"  mode="in-out">
+        <div key="4" v-show="currentStep === procedure.CONCLUDE_INFO" class="transition-box">
+          <el-scrollbar style="height: 100%;">
+            <ConcludePanel
+              v-on:updateItems='commit.items = $event'
+              :commit='commit' :cmd='originCmd' />
+          </el-scrollbar>
+        </div>
+      </transition>
+      <transition :name="transitionName"  mode="in-out">
         <div key="5" v-show="currentStep === procedure.DONE" class="transition-box">
           <div class="share-panel">
             <div>提交成功</div>
@@ -91,7 +100,7 @@
         @click="submitCmd"
         >提交</el-button> -->
       <el-button
-        v-show="currentStep === procedure.OPTIONS_INFO" type="primary"
+        v-show="currentStep === submitStep" type="primary"
         style="float: right;"
         @click="submitCmd"
         >提交</el-button>
@@ -105,6 +114,7 @@ import CommandCommit from '../../entities/CommandCommit';
 import EditOptionInfo from './EditOptionInfo.vue';
 import EditBaseInfo from './EditBaseInfo.vue';
 import EditParamInfo from './EditParamInfo.vue';
+import ConcludePanel from './ConcludePanel.vue';
 // import CommandPanel from '../command/CommandPanel.vue';
 import { wantNothing } from '../../api/fetch';
 
@@ -114,12 +124,17 @@ export default {
     EditBaseInfo,
     EditParamInfo,
     EditOptionInfo,
+    ConcludePanel,
     // CommandPanel,
   },
   props: {
     commit: {
       type: CommandCommit,
       default: () => new CommandCommit({}),
+    },
+    originCmd: {
+      type: Command,
+      default: () => new Command({}),
     },
   },
   data() {
@@ -130,8 +145,10 @@ export default {
         PARAMS_INFO: Symbol('add params'),
         OPTIONS_INFO: Symbol('add options'),
         // PER_VIEW: Symbol('per view'),
+        CONCLUDE_INFO: Symbol('conclude'),
         DONE: Symbol('Done!'),
       },
+      submitStep: null,
       currentStep: null,
       // stepConfig: {
       //   active: 0,
@@ -144,7 +161,7 @@ export default {
   },
   methods: {
     submitCmd() {
-      Command.createCommit(this.cmd).then((resp) => {
+      CommandCommit.sendCommit(this.commit).then((resp) => {
         console.log(JSON.stringify(resp));
         this.ccid = resp.data.data.ccid;
         this.$message('添加成功');
@@ -198,6 +215,9 @@ export default {
       //   title: '预览',
       // }, {
         status: '',
+        title: '修改项',
+      }, {
+        status: '',
         title: '结果',
       }];
     },
@@ -206,12 +226,10 @@ export default {
     hasNext() {
       // return this.currentStep !== this.procedure.DONE
       //   && this.currentStep !== this.procedure.PER_VIEW;
-      return this.currentStep !== this.procedure.DONE
-        && this.currentStep !== this.procedure.OPTIONS_INFO;
+      return ![this.procedure.DONE, this.submitStep].includes(this.currentStep);
     },
     hasPer() {
-      return this.currentStep !== this.procedure.BASE_INFO
-        && this.currentStep !== this.procedure.DONE;
+      return ![this.procedure.BASE_INFO, this.procedure.DONE].includes(this.currentStep);
     },
     stepConfig() {
       return {
@@ -225,6 +243,7 @@ export default {
   },
   created() {
     this.currentStep = this.procedure.BASE_INFO;
+    this.submitStep = this.procedure.CONCLUDE_INFO;
     console.log(this.currentStep);
     console.log(this.procedure.BASE_INFO);
     console.log(this.currentStep === this.procedure.BASE_INFO);

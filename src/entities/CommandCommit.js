@@ -9,7 +9,7 @@ export default class CommandCommit {
   constructor(commit) {
     this.ccid = commit.ccid;
     this.cid = commit.cid;
-    this.commandName = commit.commandName;
+    this.commandName = commit.commandName ? commit.commandName : '';
     this.briefDesc = commit.briefDesc ? commit.briefDesc : { [currentLang]: '' };
     this.description = commit.description ? commit.description : { [currentLang]: '' };
     this.version = commit.version;
@@ -21,6 +21,7 @@ export default class CommandCommit {
     this.options = commit.options ? commit.options : [];
     this.params = commit.params ? commit.params : [];
     this.status = commit.status;
+    this.items = commit.items;
   }
 
   static findByCid(cid) {
@@ -31,15 +32,15 @@ export default class CommandCommit {
     return ajax(request);
   }
 
-  static createCommit(cmd) {
-    console.log(cmd);
-    const data = JSON.parse(JSON.stringify(cmd));
-    cmd.options.forEach((option, index) => {
+  static sendCommit(commit) {
+    console.log(commit);
+    const data = JSON.parse(JSON.stringify(commit));
+    commit.options.forEach((option, index) => {
       data.options[index].rules = option.rules.join(',');
       delete data.options[index].value;
       delete data.options[index].selected;
     });
-    cmd.params.forEach((param, index) => {
+    commit.params.forEach((param, index) => {
       delete data.params[index].value;
     });
     data.options = JSON.stringify(data.options);
@@ -94,5 +95,24 @@ export default class CommandCommit {
       new Param({ index: 9 }),
     ];
     return commit;
+  }
+
+  static getCommitList() {
+    return [
+      {
+        commandName: 'docker run', cid: undefined, version: 0, type: 'create', status: 0, size: 9, time: 1581908038524,
+      },
+      {
+        commandName: 'docker inspect', cid: 123, version: 0, type: 'modify', status: 0, size: 9, time: 1581908038524,
+      },
+    ];
+  }
+
+  getOptionMap() {
+    const obj = {};
+    this.options.forEach((op) => {
+      obj[op.fullName] = op;
+    });
+    return obj;
   }
 }
