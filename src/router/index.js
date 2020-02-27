@@ -7,6 +7,7 @@ import WaitVerifyCmdLog from '@/views/WaitVerifyCmdLog.vue';
 import PerViewCommand from '@/views/PerViewCommand.vue';
 import SnapshotInject from '@/views/SnapshotInject.vue';
 import tempBaseView from '@/views/tempBaseView.vue';
+import PaddingCommand from '@/views/PaddingCommand.vue';
 
 Vue.use(Router);
 
@@ -21,6 +22,11 @@ export default new Router({
       meta: {
         title: 'Forget? For Get!',
       },
+    },
+    {
+      path: '/cmd/padding',
+      name: 'padding',
+      component: PaddingCommand,
     },
     {
       path: '/cmd',

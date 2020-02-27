@@ -96,4 +96,8 @@ export default class Command {
     });
     return obj;
   }
+
+  toSnap() {
+    return { cid: this.cid, commandName: this.commandName, title: 'text' };
+  }
 }
