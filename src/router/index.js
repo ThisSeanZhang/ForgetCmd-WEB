@@ -7,6 +7,7 @@ import WaitVerifyCmdLog from '@/views/WaitVerifyCmdLog.vue';
 import PerViewCommand from '@/views/PerViewCommand.vue';
 import SnapshotInject from '@/views/SnapshotInject.vue';
 import tempBaseView from '@/views/tempBaseView.vue';
+import ReviewCommit from '@/views/ReviewCommit.vue';
 
 Vue.use(Router);
 
@@ -36,6 +37,11 @@ export default new Router({
       path: '/commits/create',
       name: 'create-commit',
       component: CreateCommit,
+    },
+    {
+      path: '/commits/review',
+      name: 'review-commit',
+      component: ReviewCommit,
     },
     {
       path: '/commits/cmds',

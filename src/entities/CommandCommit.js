@@ -17,7 +17,6 @@ export default class CommandCommit {
     this.argNum = commit.argNum;
     this.whenDeprecated = commit.whenDeprecated;
     this.whenEnable = commit.whenEnable;
-    this.frequency = commit.frequency;
     this.options = commit.options ? commit.options : [];
     this.params = commit.params ? commit.params : [];
     this.status = commit.status;
@@ -69,7 +68,6 @@ export default class CommandCommit {
     const commit = new CommandCommit({});
     commit.briefDesc = { zh: '' };
     commit.commandName = '';
-    commit.frequency = '0';
     commit.options = [
       new CommandOption({
         oid: 1, cid: 1, briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,

@@ -96,4 +96,8 @@ export default class Command {
     });
     return obj;
   }
+
+  deepCopy() {
+    return new Command(JSON.parse(JSON.stringify(this)));
+  }
 }
