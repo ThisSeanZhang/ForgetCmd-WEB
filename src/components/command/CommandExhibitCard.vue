@@ -1,51 +1,44 @@
 <template>
-  <div>
-    <div class="exhibit-head">
-      <div>命令预览</div>
-      <div>
-        <el-tooltip effect="dark" content="复制" placement="top">
-          <el-button circle
-          v-clipboard:copy="dealValue(copyLine)"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-          icon="el-icon-copy-document"></el-button>
+  <el-card class="" shadow="hover">
+    <div slot="header" class="">
+      <span>{{ snap.title }}</span>
+        <!-- 删除按钮 -->
+          <el-popover
+            placement="top"
+            width="160"
+            v-model="btn.deleteVisble">
+            <p>确定删除吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="btn.deleteVisble = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="confirmDel()">确定</el-button>
+            </div>
+            <el-tooltip class="" effect="dark"
+            content="删除" placement="top"
+            :disabled="btn.deleteVisble"
+            slot="reference" >
+              <i style="float: right; padding: 3px 3px" class="el-icon-close"></i>
+          </el-tooltip>
+        </el-popover>
+        <!-- 复制按钮 -->
+        <el-tooltip class="" effect="dark" content="复制" placement="top">
+          <i style="float: right; padding: 3px 3px" class="el-icon-copy-document"
+            v-clipboard:copy="dealValue(copyLine)"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+          ></i>
         </el-tooltip>
-        <el-tooltip effect="dark" :content="exhibitBtn.desc" placement="top">
-          <el-button
-            circle
+        <!-- 单多行切换 -->
+        <el-tooltip class="" effect="dark" :content="exhibitBtn.desc" placement="top">
+          <i style="float: right; padding: 3px 3px" :class="exhibitBtn.icon"
             @click="currentModel = currentModel === exhibitModel.ONELINE
             ? exhibitModel.MULTLINE : exhibitModel.ONELINE"
-            :icon="exhibitBtn.icon">
-            <!-- {{currentModel === exhibitModel.ONELINE ? '单行模式' : '多行模式'}} -->
-          </el-button>
+          ></i>
         </el-tooltip>
-        <el-tooltip effect="dark" content="创建快照" placement="top">
-          <el-button
-            circle
-            @click="createSnapshot"
-            icon="el-icon-camera">
-          </el-button>
+        <!-- 恢复/查看快照按钮 -->
+        <el-tooltip class="" effect="dark" content="复原" placement="top">
+          <i style="float: right; padding: 3px 3px" class="el-icon-refresh-right"></i>
         </el-tooltip>
-      </div>
     </div>
-    <!-- <div>{{cmd.commandName}}&nbsp;\</div>
-    <div>
-      <div v-for="option in options" :key="option.oid">
-        <div v-if="option.isMultip()">
-          <div v-for="(p, index) in option.value.filter(p => p.selected)" :key="index" >
-            {{buildHyphen(option) + option.briefName + ' ' + p.value + ' \\'}}
-          </div>
-        </div>
-        <div v-else>
-          {{buildHyphen(option) + option.briefName + ' ' + option.value + ' \\'}}
-        </div>
-      </div>
-    </div>
-    <div>
-      <div v-for="(param, index) in params" :key="param.cpid">{{param.value}}
-        <span v-if="index !== params.length - 1">&nbsp;\</span>
-      </div>
-    </div> -->
     <div v-if="currentModel === exhibitModel.ONELINE">
         {{dealValue(oneLine)}}
     </div>
@@ -54,27 +47,23 @@
         {{line}}
       </div>
     </div>
-  </div>
+  </el-card>
 </template>
 <script>
-import { mapMutations } from 'vuex';
-import Command from '../../entities/Command';
 import Snapshot from '../../entities/Snapshot';
-// import CmdParam from '../../entities/CmdParam';
+import CommandOption from '../../entities/CommandOption';
+import CmdParam from '../../entities/CmdParam';
 
 export default {
-  name: 'command-exhibit',
+  name: 'command-exhibit-card',
   props: {
-    cmd: {
-      type: Command,
+    snap: {
+      type: Snapshot,
+      default: () => new Snapshot(),
     },
-    options: {
-      type: Array,
-      default: () => [],
-    },
-    params: {
-      type: Array,
-      default: () => [],
+    index: {
+      type: Number,
+      default: () => -1,
     },
   },
   data() {
@@ -82,6 +71,9 @@ export default {
       allRows: [],
       exhibitModel: { ONELINE: Symbol('one line'), MULTLINE: Symbol('Multip line') },
       currentModel: null,
+      btn: {
+        deleteVisiable: false,
+      },
     };
   },
   computed: {
@@ -89,6 +81,16 @@ export default {
       return this.currentModel === this.exhibitModel.ONELINE
         ? { icon: 'el-icon-document-remove', desc: '单行模式' }
         : { icon: 'el-icon-document', desc: '多行模式' };
+    },
+    options() {
+      return this.snap.optionVal
+        .filter(option => option.selected)
+        .map(option => new CommandOption(option));
+    },
+    params() {
+      return this.snap.paramVal
+        // .filter(param => param.selected)
+        .map(param => new CmdParam(param));
     },
   },
   methods: {
@@ -102,10 +104,8 @@ export default {
       return '-';
     },
     dealValue(deal) {
-      let allRows = [];
-      allRows.push(this.cmd.commandName);
+      let allRows = [this.snap.commandName];
       const cmdOption = this.options
-        .filter(option => option.selected)
         .map((option) => {
           if (option.isMultip()) {
             return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${option.briefName} ${p.value}`);
@@ -117,13 +117,6 @@ export default {
       allRows = allRows.concat(cmdOption);
       allRows = allRows.concat(this.params.map(p => p.value));
       return typeof deal === 'function' ? deal(allRows) : allRows;
-    },
-    craeteHistory() {
-      this.newRecord({
-        ...this.cmd.toSnap(),
-        paramVal: this.params,
-        optionVal: this.options,
-      });
     },
     oneLine(params) {
       return params.join(' ');
@@ -137,7 +130,6 @@ export default {
         : params.map((p, index) => (index === params.length - 1 ? p : `${p} \\\r`)).join('');
     },
     onCopy() {
-      this.craeteHistory();
       this.$notify({
         title: '复制成功',
         type: 'success',
@@ -148,18 +140,16 @@ export default {
         title: '复制失败！',
       });
     },
-    ...mapMutations('CommandHistory', ['newRecord']),
+    confirmDel() {
+      this.btn.deleteVisble = false;
+      this.$emit('delThis');
+    },
   },
   created() {
     this.currentModel = this.exhibitModel.MULTLINE;
-    // console.log(this.params, this.options);
+    console.log(this.snap);
   },
 };
 </script>
 <style lang="scss" scoped>
-.exhibit-head{
-  display: flex;
-  line-height: 44px;
-  justify-content: space-between;
-}
 </style>

@@ -9,7 +9,8 @@ export default class CmdParam {
     this.description = param.description;
     this.required = param.required;
     this.type = param.type;
-    this.value = '';
+    this.selectd = param.selectd;
+    this.value = param.value;
   }
 
   static findByCid(cid) {

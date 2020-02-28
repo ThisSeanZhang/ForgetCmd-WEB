@@ -100,4 +100,8 @@ export default class Command {
   deepCopy() {
     return new Command(JSON.parse(JSON.stringify(this)));
   }
+
+  toSnap() {
+    return { cid: this.cid, commandName: this.commandName, title: 'text' };
+  }
 }

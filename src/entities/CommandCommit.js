@@ -66,6 +66,7 @@ export default class CommandCommit {
 
   static CreateFackCommit() {
     const commit = new CommandCommit({});
+    commit.commandName = 'docker run';
     commit.briefDesc = { zh: '' };
     commit.commandName = '';
     commit.options = [
