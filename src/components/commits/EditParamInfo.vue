@@ -23,7 +23,7 @@
           <div class="per-operation" style="width: 80px;">
             <i @click="editParam(index)"
               class="el-icon-edit"></i>
-            <i class="el-icon-delete-solid"  @click="delDelete(index)"></i>
+            <i class="el-icon-delete-solid"  @click.stop="delDelete(index)"></i>
           </div>
         </div>
       </transition-group>
@@ -213,6 +213,6 @@ export default {
   }
 }
 .flip-list-move {
-  transition: transform 1s;
+  transition: transform 0.6s;
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <div style="display: inline-block;" v-for="(param, index) in paramVal" :key="param.index" >
       <el-popover
-        v-if="index < (paramDef.length -1)"
+        v-if="index < (paramDef.length)"
         placement="top"
         trigger="hover"
         :content="paramDef[index].getCurrentLangDesc()">

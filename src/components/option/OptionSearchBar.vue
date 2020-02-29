@@ -39,8 +39,8 @@ export default {
   methods: {
     querySearch(queryString, cb) {
       const results = queryString
-        ? this.options.filter(option => option.searchKey(queryString))
-        : this.options;
+        ? this.optionDef.filter(option => option.searchKey(queryString))
+        : this.optionDef;
       // 调用 callback 返回建议列表的数据
       cb(results);
     },

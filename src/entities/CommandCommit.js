@@ -68,7 +68,6 @@ export default class CommandCommit {
     const commit = new CommandCommit({});
     commit.commandName = 'docker run';
     commit.briefDesc = { zh: '' };
-    commit.commandName = '';
     commit.options = [
       new CommandOption({
         oid: 1, cid: 1, briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,

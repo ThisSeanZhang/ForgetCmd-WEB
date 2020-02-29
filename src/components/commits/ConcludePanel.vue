@@ -58,6 +58,7 @@ export default {
         .reduce((list, c) => list.concat(c));
       // return this.compaerBase(this.cmd, this.commit).concat(optionIntems);
       this.$emit('updateItems', optionIntems);
+      console.log(JSON.stringify(optionIntems));
       return optionIntems;
     },
   },
@@ -78,6 +79,8 @@ export default {
           type: 'options', action: this.judgeAction(ob1, ob2), key: fKey, oValue: ob1, value: ob2,
         })];
       }
+      // const ob1 = ib1 || {};
+      // const ob2 = ib2 || {};
       const compareKey = ['briefName', 'type', 'rules', 'repeat'];
       const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
@@ -102,6 +105,8 @@ export default {
       return baseItems.concat(descItems);
     },
     createItemByComapreObject(type, fKey, ob1, ob2) {
+      // const ob1 = ib1 || {};
+      // const ob2 = ib2 || {};
       const o1keys = Object.keys(ob1);
       const o2keys = Object.keys(ob2);
       // 并集
