@@ -14,9 +14,49 @@ export default class CommitItem {
     CREATE: 0, MODIFY: 1, DELETE: 2,
   }
 
+  static COMPARE_KEY = {
+    OPTION: ['briefName', 'type', 'rules', 'repeat'],
+    PARAM: ['sort', 'paramName', 'required', 'type'],
+  }
+
+  notDelete() {
+    return this.action !== CommitItem.ACTION.DELETE;
+  }
+
+  expend() {
+    // 因为删除和修改都是原有值存在的，要么删除全部，要么删除或修改具体值
+    // 但是创建是从无到有，为减少修改项，所以展示的时候需要单独展开
+    if (this.action !== CommitItem.ACTION.CREATE) return [this];
+    let value;
+    try {
+      value = JSON.parse(this.value);
+    } catch {
+      return [this];
+    }
+    let base = CommitItem.COMPARE_KEY.OPTION
+      .filter(key => key !== 'description')
+      .map(key => new CommitItem({
+        ...this,
+        key: `${this.key}.${key}`,
+        oValue: null,
+        value: value[key],
+      }));
+    if (typeof value.description === (typeof {})) {
+      const description = Object.keys(value.description)
+        .map(key => new CommitItem({
+          ...this,
+          key: `${this.key}.description.${key}`,
+          oValue: null,
+          value: value.description[key],
+        }));
+      base = base.concat(description);
+    }
+    return base;
+  }
+
   static getItemsByCommitId(ccid) {
     console.log(ccid);
-    const json = '[{"type":"options","key":"name1","oValue":{"oid":1,"cid":1,"briefName":"n","fullName":"name1","description":{"zh":"设值容器名称"},"rules":[]},"action":2},{"type":"options","key":"name","value":{"oid":1,"cid":1,"briefName":"n","fullName":"name","description":{"zh":"设值容器名称"},"rules":[],"value":""},"action":0},{"type":"options","key":"port","value":{"oid":2,"cid":2,"briefName":"p","fullName":"port","description":{"zh":"容器映射端口"},"type":4,"rules":[],"value":""},"action":0},{"type":"options","key":"a","value":{"oid":3,"cid":3,"briefName":"a","fullName":"a","description":{"zh":"aaa"},"type":2,"rules":["aaa","bbbb","ccc"],"value":"aaa"},"action":0},{"type":"options","key":"undefined","value":{"description":{"zh":""},"rules":[],"value":""},"action":0}]';
+    const json = '[{"type":"options","key":"name","value":{"oid":1,"cid":1,"briefName":"n","fullName":"name","description":{"zh":"设值容器名称dede", "en": "set container name"},"rules":[],"value":""},"action":0},{"type":"options","key":"name1","oValue":{"oid":1,"cid":1,"briefName":"n","fullName":"name1","description":{"zh":"设值容器名称"},"rules":[]},"action":2},{"type":"options","key":"name","value":{"oid":1,"cid":1,"briefName":"n","fullName":"name","description":{"zh":"设值容器名称"},"rules":[],"value":""},"action":0},{"type":"options","key":"port","value":{"oid":2,"cid":2,"briefName":"p","fullName":"port","description":{"zh":"容器映射端口"},"type":4,"rules":[],"value":""},"action":0},{"type":"options","key":"a","value":{"oid":3,"cid":3,"briefName":"a","fullName":"a","description":{"zh":"aaa"},"type":2,"rules":["aaa","bbbb","ccc"],"value":"aaa"},"action":0},{"type":"options","key":"undefined","value":{"description":{"zh":""},"rules":[],"value":""},"action":0}]';
     return JSON.parse(json)
       .map(v => new CommitItem({
         ...v, value: JSON.stringify(v.value), oValue: JSON.stringify(v.oValue),

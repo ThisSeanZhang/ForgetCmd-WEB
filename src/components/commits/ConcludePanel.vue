@@ -2,7 +2,7 @@
   <div>
     <!-- {{baseDiff}} -->
     <div @click="doTemp(value)"
-      v-for="(value, index) in baseDiff" :key="index">
+      v-for="(value, index) in concludeDiff" :key="index">
       <el-tag
         :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
       >{{value.key}}</el-tag>
@@ -34,32 +34,40 @@ export default {
       currentLang: 'zh',
       multipLangBriefDescDialog: false,
       multipLangDescDialog: false,
-      comareKey: ['commandName', 'briefDesc'],
       tempCmd: new Command({}),
     };
   },
   computed: {
-    baseDiff() {
-      // const cKeys = Object.keys(this.cmd).filter(key => this.comareKey.includes(key));
-      // const items = cKeys.filter(key => !StringUtils.eq(this.cmd[key], this.commit[key]))
-      //   .map(key => new CommitItem({
-      //     type: 'base', key, value: this.commit[key], cValue: this.cmd[key],
-      //   }));
-      // console.log(cKeys, this.cmd);
-      // const desc = this.createItemByComapreObject('base',
-      // 'description', this.cmd.description, this.commit.description);
-      // return items.concat(desc);
+    compareParamLength() {
+      return this.cmd.params.length > this.commit.params.length
+        ? this.cmd.params.length
+        : this.commit.params.length;
+    },
+    // 比较Option
+    optionDiff() {
       const cOption = this.cmd.getOptionMap();
       const cOptionKeys = Object.keys(cOption);
       const ccOption = this.commit.getOptionMap();
-      const optionIntems = cOptionKeys
+      return cOptionKeys
         .concat(Object.keys(ccOption).filter(v => !cOptionKeys.includes(v)))
         .map(key => this.compareOptions(key, cOption[key], ccOption[key]))
         .reduce((list, c) => list.concat(c));
-      // return this.compaerBase(this.cmd, this.commit).concat(optionIntems);
-      this.$emit('updateItems', optionIntems);
-      console.log(JSON.stringify(optionIntems));
-      return optionIntems;
+    },
+    // 比较Param
+    paramDiff() {
+      if (!this.compareParamLength || this.compareParamLength === 0) return [];
+      return [...Array(this.compareParamLength).keys()]
+        .map(index => this.compareParam(index, this.cmd.params[index], this.commit.params[index]))
+        .reduce((list, c) => list.concat(c));
+    },
+    baseDiff() {
+      return this.compaerBase(this.cmd, this.commit);
+    },
+    concludeDiff() {
+      const all = this.baseDiff.concat(this.optionDiff).concat(this.paramDiff);
+      this.$emit('updateItems', all);
+      console.log(all);
+      return all;
     },
   },
   methods: {
@@ -79,10 +87,8 @@ export default {
           type: 'options', action: this.judgeAction(ob1, ob2), key: fKey, oValue: ob1, value: ob2,
         })];
       }
-      // const ob1 = ib1 || {};
-      // const ob2 = ib2 || {};
-      const compareKey = ['briefName', 'type', 'rules', 'repeat'];
-      const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+      const baseItems = CommitItem.COMPARE_KEY.OPTION
+        .filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
         .map(m => new CommitItem({
           action: m.action,
@@ -94,14 +100,19 @@ export default {
       const descItems = this.createItemByComapreObject('options', `${fKey}.description`, ob1.description, ob2.description);
       return baseItems.concat(descItems);
     },
-    compareParam(ob1, ob2) {
-      const compareKey = ['sort', 'paramName', 'required', 'type'];
-      const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
+    compareParam(index, ob1, ob2) {
+      if (!ob1 || !ob2) {
+        return [new CommitItem({
+          type: 'params', action: this.judgeAction(ob1, ob2), key: index, oValue: ob1, value: ob2,
+        })];
+      }
+      const baseItems = CommitItem.COMPARE_KEY.PARAM
+        .filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
         .map(key => new CommitItem({
           type: 'params', key, oValue: ob1[key], value: ob2[key],
         }));
-      const descItems = this.createItemByComapreObject('params', 'description', ob1.description, ob2.description);
+      const descItems = this.createItemByComapreObject('params', `${index}.description`, ob1.description, ob2.description);
       return baseItems.concat(descItems);
     },
     createItemByComapreObject(type, fKey, ob1, ob2) {

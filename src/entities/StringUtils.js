@@ -19,7 +19,7 @@ function eq(str1, str2) {
   }
   const s1 = type[typeof str1](str1);
   const s2 = type[typeof str2](str2);
-  console.log(s1, s2);
+  // console.log(s1, s2);
   // 长度不同 false
   if (s1.length !== s2.length) {
     return false;

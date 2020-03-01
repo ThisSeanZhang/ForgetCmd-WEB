@@ -63,20 +63,7 @@ export default {
     },
     doTemp(inCmd, item) {
       if (item.type === 'options') {
-        const optionMap = inCmd.getOptionMap();
-        if (item.action === 0) {
-          // this.tempCmd.options.push(item.value);
-          optionMap[item.key] = new CommandOption(JSON.parse(item.value));
-          console.log(optionMap);
-        }
-        if (item.action === 1) {
-          this.editObject(optionMap, item);
-        }
-        if (item.action === 2) {
-          delete optionMap[item.key];
-          // this.tempCmd.options = this.tempCmd.options.filter(op => op.fullName !== item.key);
-        }
-        this.$set(inCmd, 'options', Object.values(optionMap));
+        this.$set(inCmd, 'options', this.feedOption(inCmd, item));
         // this.cmd.options = Object.values(optionMap);
       }
       // console.log(item);
@@ -84,7 +71,7 @@ export default {
       // const k = keys.pop();
       // const obj = this.getPathObject(this.tempCmd, keys);
       // obj[k] = '测试';
-      console.log(JSON.stringify(inCmd));
+      console.log(inCmd);
     },
     editObject(inObj, item) {
       console.log(item);
@@ -109,8 +96,38 @@ export default {
       }
       return obj;
     },
+    feedOption(inCmd, item) {
+      const optionMap = inCmd.getOptionMap();
+      if (item.action === 0) {
+        const path = item.key.split('.');
+        if (path.length < 1) {
+          optionMap[item.key] = new CommandOption(JSON.parse(item.value));
+          return Object.values(optionMap);
+        }
+        if (!Object.keys(optionMap).includes(path[0])) {
+          optionMap[path[0]] = new CommandOption({ fullName: path[0] });
+        }
+        this.editObject(optionMap, item);
+      }
+      if (item.action === 1) {
+        this.editObject(optionMap, item);
+      }
+      if (item.action === 2) {
+        delete optionMap[item.key];
+        // this.tempCmd.options = this.tempCmd.options.filter(op => op.fullName !== item.key);
+      }
+      return Object.values(optionMap);
+    },
   },
   created() {
+    this.cmd.options.push({
+      oid: 1,
+      cid: 1,
+      briefName: 'n',
+      fullName: 'name1',
+      description: { zh: '设值容器名称' },
+      rules: [],
+    });
   },
 };
 </script>
