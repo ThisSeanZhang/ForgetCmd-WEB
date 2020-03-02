@@ -1,13 +1,14 @@
 <template>
   <div>
     <!-- {{baseDiff}} -->
-    <div @click="doTemp(value)"
+    <!-- <div @click="doTemp(value)"
       v-for="(value, index) in concludeDiff" :key="index">
       <el-tag
         :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
       >{{value.key}}</el-tag>
       <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
-    </div>
+    </div> -->
+    <ItemExhibit v-for="(value, index) in concludeDiff" :item="value" :key="index" />
   </div>
 </template>
 <script>
@@ -15,10 +16,11 @@ import CommandCommit from '../../entities/CommandCommit';
 import CommitItem from '../../entities/CommitItem';
 import Command from '../../entities/Command';
 import StringUtils from '../../entities/StringUtils';
+import ItemExhibit from './ItemExhibit.vue';
 
 export default {
   name: 'conclude-panel',
-  components: { },
+  components: { ItemExhibit },
   props: {
     commit: {
       type: CommandCommit,

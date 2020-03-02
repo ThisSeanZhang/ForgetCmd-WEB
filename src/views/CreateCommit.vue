@@ -10,7 +10,7 @@
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
-      <CommitPanel :commit="commit" class="commit" />
+      <CommitPanel :commit="commit" :originCmd="originCmd" class="commit" />
     </el-main>
     <el-footer>
     </el-footer>
@@ -18,7 +18,7 @@
 </template>
 <script>
 import Commit from '../entities/CommandCommit';
-// import Command from '../entities/Command';
+import Command from '../entities/Command';
 import CommitPanel from '../components/commits/CommitPanel.vue';
 import CommandPanel from '../components/command/CommandPanel.vue';
 
@@ -30,7 +30,7 @@ export default {
       paramVal: [],
       optionVal: [],
       commit: Commit.CreateFackCommit(),
-      // cmd: null,
+      originCmd: new Command({ commandName: 'docker' }),
     };
   },
   watch: {
