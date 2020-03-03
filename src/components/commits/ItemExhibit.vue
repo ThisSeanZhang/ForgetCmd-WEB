@@ -1,16 +1,38 @@
 <template>
   <el-card class="box-card" shadow="hover">
-    <el-tag
-      :type="item.action === 0 ? 'success' : (item.action === 1 ? 'info' : 'danger')"
-    >{{item.key}}</el-tag>
+    <!-- <div>
+      <el-tag @click="isOpen = !isOpen"
+        :type="item.action === 0 ? 'success' : (item.action === 1 ? 'info' : 'danger')"
+      >{{item.key}}</el-tag>
+      <span></span>
+    </div> -->
     <div v-if="item.action === 0" class="value">
-      <span>{{item.value}}</span>
+      <el-tag @click="isOpen = !isOpen" type='success' >{{item.key}}</el-tag>
+      <div v-if="isObj(item.value)">
+        <el-collapse-transition>
+          <div class="transition-box" v-show="isOpen">
+            {{item.value}}
+          </div>
+        </el-collapse-transition>
+      </div>
+      <span v-else>{{item.value}}</span>
     </div>
     <div v-else-if="item.action === 1" class="value">
+      <el-tag type='info' >{{item.key}}</el-tag>
       <span>{{item.oValue}}</span>=><span>{{item.value}}</span>
     </div>
     <div v-else-if="item.action === 2" class="value">
-      <span>{{item.oVlaue}}</span>
+      <div>
+        <el-tag @click="isOpen = !isOpen" type='danger' >{{item.key}}</el-tag>
+      </div>
+      <div v-if="isObj(item.oValue)">
+        <el-collapse-transition>
+          <div class="transition-box" v-show="isOpen">
+            {{item.oValue}}
+          </div>
+        </el-collapse-transition>
+      </div>
+      <span v-else>{{item.oValue}}</span>
     </div>
   </el-card>
 </template>
@@ -21,6 +43,7 @@ export default {
   name: 'item-exhibit',
   data() {
     return {
+      isOpen: false,
     };
   },
   props: {
@@ -32,6 +55,18 @@ export default {
   computed: {
   },
   methods: {
+    isObj(value) {
+      const type = Object.prototype.toString.call(value);
+      if (type === '[object String]') {
+        try {
+          const obj = JSON.parse(value);
+          return Object.prototype.toString.call(obj) === '[object Object]';
+        } catch {
+          return false;
+        }
+      }
+      return type === '[object Object]';
+    },
   },
   created() {
   },
@@ -44,4 +79,19 @@ export default {
 .value{
   display: inline;
 }
+.base-block{
+  background-color: #5e7c86;
+}
+.option-block{
+  background-color: #429aa0;
+}
+.param-block{
+  background-color: #7cb458;
+}
+.transition-box {
+    // height: 100px;
+    // border-radius: 4px;
+    box-sizing: border-box;
+    margin-right: 20px;
+  }
 </style>
