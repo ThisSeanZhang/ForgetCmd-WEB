@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="hover">
+  <el-card class="box-card modify" shadow="hover">
     <!-- <div>
       <el-tag @click="isOpen = !isOpen"
         :type="item.action === 0 ? 'success' : (item.action === 1 ? 'info' : 'danger')"
@@ -7,7 +7,9 @@
       <span></span>
     </div> -->
     <div v-if="item.action === 0" class="value">
-      <el-tag @click="isOpen = !isOpen" type='success' >{{item.key}}</el-tag>
+      <div>
+        <el-tag @click="isOpen = !isOpen" type='success' >{{splitExhibitKey}}:</el-tag>
+      </div>
       <div v-if="isObj(item.value)">
         <el-collapse-transition>
           <div class="transition-box" v-show="isOpen">
@@ -53,6 +55,21 @@ export default {
     },
   },
   computed: {
+    valueIsObj() {
+      if (this.item.action === 1) return false;
+      if (this.item.type === 'base') return false;
+      if (String(this.item.key).includes('.')) return false;
+      return true;
+    },
+    splitExhibitKey() {
+      if (this.item.type === 'base') return this.item.key;
+      const keys = this.item.key.split('.');
+      if (keys.length >= 2) {
+        // TODO need lang map translate
+        return `${keys.shift()} ${keys.join('.')}`;
+      }
+      return this.item.key;
+    },
   },
   methods: {
     isObj(value) {
@@ -89,9 +106,14 @@ export default {
   background-color: #7cb458;
 }
 .transition-box {
-    // height: 100px;
-    // border-radius: 4px;
-    box-sizing: border-box;
-    margin-right: 20px;
-  }
+  // height: 100px;
+  // border-radius: 4px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+.modify{
+  // background-color: #f4f4f5;
+  // background-color: #f0f9eb;
+  // background-color: #f0f9eb;
+}
 </style>
