@@ -100,7 +100,7 @@ export default {
       const optionMap = inCmd.getOptionMap();
       if (item.action === 0) {
         const path = item.key.split('.');
-        if (path.length < 1) {
+        if (path.length <= 1) {
           optionMap[item.key] = new CommandOption(JSON.parse(item.value));
           return Object.values(optionMap);
         }
