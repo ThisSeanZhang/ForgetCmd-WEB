@@ -7,13 +7,17 @@
       <span></span>
     </div> -->
     <!-- 动作为创建 -->
-    <div v-if="item.action === 0" class="value">
-      <div @click="isOpen = !isOpen">
-        <el-tag type="success" >{{splitExhibitKey}}</el-tag>
-        <span v-if="!valueIsObj">{{item.value}}</span>
-        <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.briefName}}</span>
-        <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
-        <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
+    <div v-if="item.action === 0" >
+      <div @click="isOpen = !isOpen" class="panel-head">
+        <div class="head-title">
+          <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+          <span v-if="!valueIsObj">{{item.value}}</span>
+          <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.briefName}}</span>
+          <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+        </div>
+        <span class="head-arrow">
+          <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
+        </span>
       </div>
       <div v-if="isObj(item.value)">
         <el-collapse-transition>
@@ -180,5 +184,16 @@ export default {
   background-color: #fef0f0;
   border-color: #fde2e2;
   color: #f56c6c;
+}
+
+// 以下是确定需要的
+.panel-head{
+  display: flex;
+}
+.head-title{
+  flex: 1;
+}
+.head-arrow{
+  padding: 5px 0px;
 }
 </style>
