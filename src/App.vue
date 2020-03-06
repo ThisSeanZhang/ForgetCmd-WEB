@@ -3,6 +3,7 @@
     <el-scrollbar class="main-scrollbar">
       <router-view/>
     </el-scrollbar>
+    {{ $t('ccc.aaa') }}
   </div>
 </template>
 <script>
