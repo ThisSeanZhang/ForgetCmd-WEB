@@ -2,8 +2,8 @@ import Vue from 'vue';
 // import { plugin } from 'vue-function-api';
 import VueClipboard from 'vue-clipboard2';
 import App from './App.vue';
-import router from './router';
 import store from './store';
+import router from './router';
 import i18n from './lang';
 import './plugins/element';
 
