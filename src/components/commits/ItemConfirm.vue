@@ -1,10 +1,19 @@
 <template>
   <div class="item-wrapper">
-    <el-collapse class="item-choose" value="activeName" accordion>
-      <el-collapse-item v-for="(item, key) in chooseItemsMap" :key="key" :title="key" :name="key">
-        <div>{{item}}</div>
-      </el-collapse-item>
-    </el-collapse>
+    <el-scrollbar style="height: 100%; flex: 1;">
+      <el-collapse class="item-choose" value="activeName" >
+        <el-collapse-item v-for="(items, key) in chooseItemsMap" :key="key"
+          :title="key" :name="key">
+          <!-- <div>{{item}}</div> -->
+          <div v-for="(value, index) in items" :key="index" class="per-item">
+            <ItemExhibit style="flex: 1;"  :item="value"  />
+            <el-tooltip class="item" effect="dark" content="移除" placement="top">
+              <i @click="removeChoose(value.key)" class='el-icon-caret-right'></i>
+            </el-tooltip>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-scrollbar>
     <!-- <div class="item-choose">
       <div @click="removeChoose(index)"
         v-for="(value, index) in Object.values(this.chooseItemMap)" :key="index">
@@ -14,24 +23,34 @@
         <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
       </div>
     </div> -->
-    <div class="item-alternative">
-      <div @click="addToChoose(value)"
-        v-for="(value, index) in alternativeItems" :key="index">
-        <el-tag
-          :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
-        >{{value.key}}</el-tag>
-        <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
+    <el-scrollbar style="height: 100%; flex: 1;">
+      <div class="item-alternative">
+        <div v-for="(value, index) in alternativeItems" :key="index" class="per-item">
+          <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top">
+            <i @click="addToChoose(value)" class='el-icon-caret-left'></i>
+          </el-tooltip>
+          <ItemExhibit style="flex: 1;" :item="value"  />
+        </div>
+        <!-- <div @click="addToChoose(value)"
+          v-for="(value, index) in alternativeItems" :key="index">
+          <el-tag
+            :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
+          >{{value.key}}</el-tag>
+          <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
+        </div> -->
       </div>
-    </div>
+    </el-scrollbar>
   </div>
 </template>
 <script>
 import Vue from 'vue';
 import CommitItem from '../../entities/CommitItem';
 import Command from '../../entities/Command';
+import ItemExhibit from './ItemExhibit.vue';
 
 export default {
   name: 'item-confirm',
+  components: { ItemExhibit },
   data() {
     return {
       // 当前使用的key map
@@ -64,7 +83,8 @@ export default {
       const result = {};
       Object.values(this.chooseItemMap)
         .forEach((item) => {
-          const maiKey = item.key.split('.')[0];
+          const maiKey = item.type === 'options'
+            ? item.key.split('.')[0] : item.type;
           let tmp = result[maiKey];
           if (!tmp) {
             result[maiKey] = [];
@@ -83,8 +103,10 @@ export default {
       this.$emit('effectItems', Object.values(this.chooseItemMap));
     },
     removeChoose(index) {
-      this.chooseItems.splice(index, 1);
-      this.$emit('effectItems', this.chooseItems);
+      // this.chooseItems.splice(index, 1);
+      // this.$emit('effectItems', this.chooseItems);
+      this.$delete(this.chooseItemMap, index);
+      this.$emit('effectItems', Object.values(this.chooseItemMap));
     },
     getCreateDuplicateKey(items) {
       const keyCount = {};
@@ -111,11 +133,16 @@ export default {
   width: 60%;
   display: flex;
   // flex-direction: column;
-  .item-alternative{
-    width: 50%;
-  }
-  .item-choose{
-    width: 50%;
-  }
+  // .item-alternative{
+  //   width: 50%;
+  // }
+  // .item-choose{
+  //   width: 50%;
+  // }
+}
+.per-item{
+  display: flex;
+  // flex-direction: column;
+  align-items: center;
 }
 </style>

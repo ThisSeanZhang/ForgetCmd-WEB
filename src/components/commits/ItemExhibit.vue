@@ -10,7 +10,7 @@
     <div v-if="item.action === 0" >
       <div @click="isOpen = !isOpen" class="panel-head">
         <div v-if="item.type ==='options'" class="head-title">
-          <el-row v-if="valueIsObj" :gutter="20">
+          <el-row class="row-aligned" v-if="valueIsObj" :gutter="20">
             <el-col :span="6">
               <el-tag type="success" >{{splitExhibitKey}}</el-tag>
             </el-col>
@@ -18,30 +18,30 @@
               <span style="margin: 0px 10px;" >{{item.value.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+              <span style="margin: 0px 10px;" >{{item.value.description}}</span>
             </el-col>
           </el-row>
-          <el-row v-else :gutter="20">
-            <el-col :span="6">
+          <el-row class="row-aligned" v-else :gutter="20">
+            <el-col :span="8">
               <el-tag type="success" >{{splitExhibitKey}}</el-tag>
             </el-col>
-            <el-col :span="18"><span >{{item.value}}</span></el-col>
+            <el-col :span="16"><span >{{item.value}}</span></el-col>
           </el-row>
         </div>
         <div v-if="item.type ==='params'" class="head-title">
-          <el-row v-if="valueIsObj" :gutter="20">
-            <el-col :span="6">
+          <el-row class="row-aligned" v-if="valueIsObj" :gutter="20">
+            <el-col :span="8">
               <el-tag type="success" >{{splitExhibitKey}}</el-tag>
             </el-col>
-            <el-col :span="18">
-              <span style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+            <el-col :span="16">
+              <span style="margin: 0px 10px;" >{{item.value.description}}</span>
             </el-col>
           </el-row>
-          <el-row v-else :gutter="20">
-            <el-col :span="6">
+          <el-row class="row-aligned" v-else :gutter="20">
+            <el-col :span="8">
               <el-tag type="success" >{{splitExhibitKey}}</el-tag>
             </el-col>
-            <el-col :span="18"><span >{{item.value}}</span></el-col>
+            <el-col :span="16"><span >{{item.value}}</span></el-col>
           </el-row>
         </div>
         <span class="head-arrow">
@@ -75,15 +75,15 @@
     <!-- 动作为修改 -->
     <div v-else-if="item.action === 1" class="value">
       <div class="head-title">
-        <el-row :gutter="20">
-          <el-col :span="6">
+        <el-row class="row-aligned" :gutter="20">
+          <el-col :span="8">
             <el-tag type='info'>{{splitExhibitKey}}:</el-tag>
           </el-col>
           <el-col :span="8">
             <span>{{item.oValue}}</span>
           </el-col>
-          <el-col :span="2">=></el-col>
-          <el-col :span="8">
+          <el-col :span="1">=></el-col>
+          <el-col :span="7">
             <span>{{item.value}}</span>
           </el-col>
         </el-row>
@@ -93,7 +93,7 @@
     <div v-else-if="item.action === 2" class="value">
       <div @click="isOpen = !isOpen" class="panel-head">
         <div v-if="item.type === 'options'" class="head-title">
-          <el-row v-if="valueIsObj" :gutter="20">
+          <el-row class="row-aligned" v-if="valueIsObj" :gutter="20">
             <el-col :span="6">
               <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
             </el-col>
@@ -101,18 +101,18 @@
               <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.oValue.description.zh}}</span>
+              <span style="margin: 0px 10px;" >{{item.oValue.description}}</span>
             </el-col>
           </el-row>
-          <el-row v-else :gutter="20">
-            <el-col :span="6">
+          <el-row class="row-aligned" v-else :gutter="20">
+            <el-col :span="8">
               <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
             </el-col>
-            <el-col :span="18"><span >{{item.oValue}}</span></el-col>
+            <el-col :span="16"><span >{{item.oValue}}</span></el-col>
           </el-row>
         </div>
         <div v-else-if="item.type === 'params'" class="head-title">
-          <el-row v-if="valueIsObj" :gutter="20">
+          <el-row class="row-aligned" v-if="valueIsObj" :gutter="20">
             <el-col :span="6">
               <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
             </el-col>
@@ -120,14 +120,14 @@
               <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.oValue.description.zh}}</span>
+              <span style="margin: 0px 10px;" >{{item.oValue.description}}</span>
             </el-col>
           </el-row>
-          <el-row v-else :gutter="20">
-            <el-col :span="6">
+          <el-row class="row-aligned" v-else :gutter="20">
+            <el-col :span="8">
               <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
             </el-col>
-            <el-col :span="18"><span >{{item.oValue}}</span></el-col>
+            <el-col :span="16"><span >{{item.oValue}}</span></el-col>
           </el-row>
         </div>
         <span class="head-arrow">
@@ -275,5 +275,9 @@ export default {
 }
 .head-arrow{
   padding: 5px 0px;
+}
+.row-aligned{
+  display: flex;
+  align-items: center;
 }
 </style>

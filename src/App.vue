@@ -3,8 +3,6 @@
     <el-scrollbar class="main-scrollbar">
       <router-view/>
     </el-scrollbar>
-    {{ $t('ccc.aaa') }}
-    <div @click="setLang"> asdasdasdas </div>
   </div>
 </template>
 <script>
@@ -16,11 +14,6 @@ export default {
     const isPro = Object.is(process.env.NODE_ENV, 'development');
     const baseUrl = isPro ? 'api' : '/';
     axios.defaults.baseURL = baseUrl;
-  },
-  methods: {
-    setLang() {
-      localStorage.setItem('lang', 'en');
-    },
   },
 };
 </script>
