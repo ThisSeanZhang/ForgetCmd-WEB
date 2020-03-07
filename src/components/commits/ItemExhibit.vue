@@ -9,24 +9,53 @@
     <!-- 动作为创建 -->
     <div v-if="item.action === 0" >
       <div @click="isOpen = !isOpen" class="panel-head">
-        <div class="head-title">
-          <el-tag type="success" >{{splitExhibitKey}}</el-tag>
-          <span v-if="!valueIsObj">{{item.value}}</span>
-          <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.briefName}}</span>
-          <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+        <div v-if="item.type ==='options'" class="head-title">
+          <el-row v-if="valueIsObj" :gutter="20">
+            <el-col :span="6">
+              <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="2">
+              <span style="margin: 0px 10px;" >{{item.value.briefName}}</span>
+            </el-col>
+            <el-col :span="16">
+              <span style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+            </el-col>
+          </el-row>
+          <el-row v-else :gutter="20">
+            <el-col :span="6">
+              <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="18"><span >{{item.value}}</span></el-col>
+          </el-row>
+        </div>
+        <div v-if="item.type ==='params'" class="head-title">
+          <el-row v-if="valueIsObj" :gutter="20">
+            <el-col :span="6">
+              <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="18">
+              <span style="margin: 0px 10px;" >{{item.value.description.zh}}</span>
+            </el-col>
+          </el-row>
+          <el-row v-else :gutter="20">
+            <el-col :span="6">
+              <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="18"><span >{{item.value}}</span></el-col>
+          </el-row>
         </div>
         <span class="head-arrow">
           <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
         </span>
       </div>
       <div v-if="isObj(item.value)">
-        <el-collapse-transition>
-          <div v-if="item.type === 'options'" class="transition-box" v-show="isOpen">
-            <div v-for="(value, key) in item.value.description" :key="key">
+        <el-collapse-transition >
+          <div v-if="item.type === 'options'" class="transition-box" v-show="isOpen" >
+            <div class="item" v-for="(value, key) in item.value.description" :key="key">
               {{key}}: {{value}}
             </div>
-            <div>类型：{{getype(item.value.type)}}</div>
-            <div v-if="isEnum">
+            <div class="item">类型：{{getype(item.value.type)}}</div>
+            <div class="item" v-if="isEnum">
               ENUM 备选值：
               <el-tag style="margin: 0 5px;"
                 v-for="item in item.value.rules" :key="item" effect="plain">
@@ -36,7 +65,7 @@
             <!-- {{item.value}} -->
           </div>
           <div v-if="item.type === 'params'" class="transition-box" v-show="isOpen">
-            <div v-for="(value, key) in item.value.description" :key="key">
+            <div class="item" v-for="(value, key) in item.value.description" :key="key">
               {{key}}: {{value}}
             </div>
           </div>
@@ -45,26 +74,74 @@
     </div>
     <!-- 动作为修改 -->
     <div v-else-if="item.action === 1" class="value">
-      <el-tag type='info' >{{splitExhibitKey}}:</el-tag>
-      <span>{{item.oValue}}</span>=><span>{{item.value}}</span>
+      <div class="head-title">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-tag type='info'>{{splitExhibitKey}}:</el-tag>
+          </el-col>
+          <el-col :span="8">
+            <span>{{item.oValue}}</span>
+          </el-col>
+          <el-col :span="2">=></el-col>
+          <el-col :span="8">
+            <span>{{item.value}}</span>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <!-- 动作为删除 -->
     <div v-else-if="item.action === 2" class="value">
-      <div  @click="isOpen = !isOpen" >
-        <el-tag type='danger' >{{splitExhibitKey}}</el-tag>
-        <span v-if="!valueIsObj">{{item.oValue}}</span>
-        <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
-        <span v-if="valueIsObj" style="margin: 0px 10px;" >{{item.oValue.description.zh}}</span>
-        <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
+      <div @click="isOpen = !isOpen" class="panel-head">
+        <div v-if="item.type === 'options'" class="head-title">
+          <el-row v-if="valueIsObj" :gutter="20">
+            <el-col :span="6">
+              <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="2">
+              <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
+            </el-col>
+            <el-col :span="16">
+              <span style="margin: 0px 10px;" >{{item.oValue.description.zh}}</span>
+            </el-col>
+          </el-row>
+          <el-row v-else :gutter="20">
+            <el-col :span="6">
+              <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="18"><span >{{item.oValue}}</span></el-col>
+          </el-row>
+        </div>
+        <div v-else-if="item.type === 'params'" class="head-title">
+          <el-row v-if="valueIsObj" :gutter="20">
+            <el-col :span="6">
+              <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="2">
+              <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
+            </el-col>
+            <el-col :span="16">
+              <span style="margin: 0px 10px;" >{{item.oValue.description.zh}}</span>
+            </el-col>
+          </el-row>
+          <el-row v-else :gutter="20">
+            <el-col :span="6">
+              <el-tag type="danger" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="18"><span >{{item.oValue}}</span></el-col>
+          </el-row>
+        </div>
+        <span class="head-arrow">
+          <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
+        </span>
       </div>
       <div v-if="isObj(item.oValue)">
         <el-collapse-transition>
           <div v-if="item.type === 'options'" class="transition-box" v-show="isOpen">
-            <div v-for="(desc, key) in item.oValue.description" :key="key">
-              {{key}}: {{desc}}
+            <div class="item" v-for="(oValue, key) in item.oValue.description" :key="key">
+              {{key}}: {{oValue}}
             </div>
-            <div>类型：{{getype(item.oValue.type)}}</div>
-            <div v-if="isEnum">
+            <div class="item">类型：{{getype(item.oValue.type)}}</div>
+            <div class="item" v-if="isEnum">
               ENUM 备选值：
               <el-tag style="margin: 0 5px;"
                 v-for="item in item.oValue.rules" :key="item" effect="plain">
@@ -74,7 +151,7 @@
             <!-- {{item.oValue}} -->
           </div>
           <div v-if="item.type === 'params'" class="transition-box" v-show="isOpen">
-            <div v-for="(oValue, key) in item.oValue.description" :key="key">
+            <div class="item" v-for="(oValue, key) in item.oValue.description" :key="key">
               {{key}}: {{oValue}}
             </div>
           </div>
@@ -170,6 +247,9 @@ export default {
   // border-radius: 4px;
   // box-sizing: border-box;
   // margin-right: 20px;
+  .item {
+    padding: 5px 0px;
+  }
 }
 // .modify{
   //

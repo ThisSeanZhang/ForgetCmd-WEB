@@ -10,9 +10,10 @@ const messages = {
   en,
   zh,
 };
+const localLnag = localStorage.getItem('lang');
 // Create VueI18n instance with options
 const i18n = new VueI18n({
-  locale: 'zh', // set locale
+  locale: Object.keys(messages).includes(localLnag) ? localLnag : 'zh', // set locale
   messages, // set locale messages
 });
 
