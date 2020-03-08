@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Element from 'element-ui';
 import VueI18n from 'vue-i18n';
+import store from '../store';
 import en from './en';
 import zh from './zh';
 
@@ -10,7 +11,8 @@ const messages = {
   en,
   zh,
 };
-const localLnag = localStorage.getItem('lang');
+store.commit('Language/initLangs', messages);
+const localLnag = localStorage.getItem('LANG_KEY');
 // Create VueI18n instance with options
 const i18n = new VueI18n({
   locale: Object.keys(messages).includes(localLnag) ? localLnag : 'zh', // set locale

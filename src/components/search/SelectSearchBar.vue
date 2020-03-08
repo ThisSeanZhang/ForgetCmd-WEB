@@ -5,8 +5,8 @@
     class="aaaa"
     popper-class="main-search"
     remote
-    placeholder="请输入命令的部分或者全部"
-    no-data-text="暂时还没有这条命令的记录呢(ˉ▽ˉ；)..."
+    :placeholder="$t('page.searchBar.placeholder')"
+    :no-data-text="$t('page.searchBar.no-data-text')"
     :remote-method="remoteMethod"
     v-on:keyup.enter.native="submit(value)"
     @change="handelChange"
@@ -35,42 +35,14 @@ export default {
     return {
       options: [],
       value: '',
-      list: [],
       loading: false,
-      states: ['Alabama', 'Alaska', 'Arizona',
-        'Arkansas', 'California', 'Colorado',
-        'Connecticut', 'Delaware', 'Florida',
-        'Georgia', 'Hawaii', 'Idaho', 'Illinois',
-        'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-        'Louisiana', 'Maine', 'Maryland',
-        'Massachusetts', 'Michigan', 'Minnesota',
-        'Mississippi', 'Missouri', 'Montana',
-        'Nebraska', 'Nevada', 'New Hampshire',
-        'New Jersey', 'New Mexico', 'New York',
-        'North Carolina', 'North Dakota', 'Ohio',
-        'Oklahoma', 'Oregon', 'Pennsylvania',
-        'Rhode Island', 'South Carolina',
-        'South Dakota', 'Tennessee', 'Texas',
-        'Utah', 'Vermont', 'Virginia',
-        'Washington', 'West Virginia', 'Wisconsin',
-        'Wyoming'],
     };
-  },
-  mounted() {
-    this.list = this.states.map(item => ({ value: item, label: item }));
-    console.log(this.list);
   },
   methods: {
     remoteMethod(query) {
       if (query !== '') {
         console.log(query);
         this.loading = true;
-        // setTimeout(() => {
-        //   loading = false;
-        //   options.value = list
-        //     .filter(item => (item.label.toLowerCase().indexOf(query.toLowerCase()) > -1));
-        //   console.log(options);
-        // }, 200);
         const request = {
           method: 'GET',
           url: 'cmds/search-bar',
