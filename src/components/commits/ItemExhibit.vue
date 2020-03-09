@@ -188,20 +188,20 @@ export default {
     valueIsObj() {
       if (this.item.action === 1) return false;
       if (this.item.type === 'base') return false;
-      if (String(this.item.key).includes('.')) return false;
+      if (String(this.item.keyPath).includes('.')) return false;
       return true;
     },
     splitExhibitKey() {
-      if (this.item.type === 'base') return this.item.key;
-      const keys = String(this.item.key).split('.');
+      if (this.item.type === 'base') return this.item.keyPath;
+      const keys = String(this.item.keyPath).split('.');
       if (keys.length >= 2) {
         // TODO need lang map translate
         let mainKey = keys.shift();
         if (this.item.type === 'params') mainKey = `参数${mainKey} : `;
         return `${mainKey} ${keys.join('.')}`;
       }
-      if (this.item.type === 'params') return `参数${this.item.key + 1}: `;
-      return this.item.key;
+      if (this.item.type === 'params') return `参数${this.item.keyPath + 1}: `;
+      return this.item.keyPath;
     },
   },
   methods: {

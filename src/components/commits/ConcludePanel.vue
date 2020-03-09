@@ -77,7 +77,7 @@ export default {
       const compareKey = ['commandName'];
       const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => new CommitItem({
-          type: 'base', action: 1, key, oValue: ob1[key], value: ob2[key],
+          type: 'base', action: 1, keyPath: key, oValue: ob1[key], value: ob2[key],
         }));
       const descItems = this.createItemByComapreObject('base', 'description', ob1.description, ob2.description);
       const bDescItems = this.createItemByComapreObject('base', 'briefDesc', ob1.briefDesc, ob2.briefDesc);
@@ -86,7 +86,7 @@ export default {
     compareOptions(fKey, ob1, ob2) {
       if (!ob1 || !ob2) {
         return [new CommitItem({
-          type: 'options', action: this.judgeAction(ob1, ob2), key: fKey, oValue: ob1, value: ob2,
+          type: 'options', action: this.judgeAction(ob1, ob2), keyPath: fKey, oValue: ob1, value: ob2,
         })];
       }
       const baseItems = CommitItem.COMPARE_KEY.OPTION
@@ -95,7 +95,7 @@ export default {
         .map(m => new CommitItem({
           action: m.action,
           type: 'options',
-          key: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'),
+          keyPath: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'),
           oValue: ob1[m.key],
           value: ob2[m.key],
         }));
@@ -105,14 +105,14 @@ export default {
     compareParam(index, ob1, ob2) {
       if (!ob1 || !ob2) {
         return [new CommitItem({
-          type: 'params', action: this.judgeAction(ob1, ob2), key: index, oValue: ob1, value: ob2,
+          type: 'params', action: this.judgeAction(ob1, ob2), keyPath: index, oValue: ob1, value: ob2,
         })];
       }
       const baseItems = CommitItem.COMPARE_KEY.PARAM
         .filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
         .map(key => new CommitItem({
-          type: 'params', key, oValue: ob1[key], value: ob2[key],
+          type: 'params', keyPath: key, oValue: ob1[key], value: ob2[key],
         }));
       const descItems = this.createItemByComapreObject('params', `${index}.description`, ob1.description, ob2.description);
       return baseItems.concat(descItems);
@@ -132,7 +132,7 @@ export default {
         .map(key => ({ key, action: this.judgeAction(ob1[key], ob2[key]) }))
         // 转为对应修改项
         .map(m => new CommitItem({
-          action: m.action, type, key: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'), oValue: ob1[m.key], value: ob2[m.key],
+          action: m.action, type, keyPath: [fKey, m.key].filter(v => StringUtils.nonEmptyString(v)).join('.'), oValue: ob1[m.key], value: ob2[m.key],
         }));
     },
     judgeAction(v1, v2) {

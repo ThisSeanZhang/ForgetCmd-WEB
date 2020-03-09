@@ -8,7 +8,7 @@
           <div v-for="(value, index) in items" :key="index" class="per-item">
             <ItemExhibit style="flex: 1;"  :item="value"  />
             <el-tooltip class="item" effect="dark" content="移除" placement="top">
-              <i @click="removeChoose(value.key)" class='el-icon-caret-right'></i>
+              <i @click="removeChoose(value.keyPath)" class='el-icon-caret-right'></i>
             </el-tooltip>
           </div>
         </el-collapse-item>
@@ -76,7 +76,7 @@ export default {
       return Object.keys(this.chooseItemMap);
     },
     alternativeItems() {
-      return this.processedItems.filter(item => !this.chooseItemsKeys.includes(item.key));
+      return this.processedItems.filter(item => !this.chooseItemsKeys.includes(item.keyPath));
       // return this.items;
     },
     chooseItemsMap() {
@@ -84,7 +84,7 @@ export default {
       Object.values(this.chooseItemMap)
         .forEach((item) => {
           const maiKey = item.type === 'options'
-            ? item.key.split('.')[0] : item.type;
+            ? item.keyPath.split('.')[0] : item.type;
           let tmp = result[maiKey];
           if (!tmp) {
             result[maiKey] = [];
@@ -98,7 +98,7 @@ export default {
   methods: {
     addToChoose(value) {
       // this.chooseItems.push(value);
-      Vue.set(this.chooseItemMap, value.key, value);
+      Vue.set(this.chooseItemMap, value.keyPath, value);
       console.log(Object.values(this.chooseItemMap));
       this.$emit('effectItems', Object.values(this.chooseItemMap));
     },
@@ -111,12 +111,12 @@ export default {
     getCreateDuplicateKey(items) {
       const keyCount = {};
       items.filter(item => item.action === CommitItem.ACTION.CREATE)
-        .filter(item => !item.key.includes('.'))
-        .forEach((item) => { keyCount[item.key] = (keyCount[item.key] || 0) + 1; });
+        .filter(item => !item.keyPath.includes('.'))
+        .forEach((item) => { keyCount[item.keyPath] = (keyCount[item.keyPath] || 0) + 1; });
       return Object.keys(keyCount).filter(key => keyCount[key] > 1);
     },
     expandCreateDuplicateItem(items, keys) {
-      return items.filter(item => keys.includes(item.key))
+      return items.filter(item => keys.includes(item.keyPath))
         .map(item => item.expend())
         .reduce((i1, i2) => i1.concat(i2));
     },
@@ -124,7 +124,7 @@ export default {
   created() {
     const keys = this.getCreateDuplicateKey(this.items);
     const expend = this.expandCreateDuplicateItem(this.items, keys);
-    this.processedItems = this.items.filter(item => !keys.includes(item.key)).concat(expend);
+    this.processedItems = this.items.filter(item => !keys.includes(item.keyPath)).concat(expend);
   },
 };
 </script>

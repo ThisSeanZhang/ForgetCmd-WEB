@@ -76,7 +76,7 @@ export default {
     editObject(inObj, item) {
       console.log(item);
       console.log(JSON.stringify(inObj));
-      const keys = item.key.split('.');
+      const keys = item.keyPath.split('.');
       const k = keys.pop();
       const obj = this.getPathObject(inObj, keys);
       obj[k] = item.value;
@@ -99,9 +99,9 @@ export default {
     feedOption(inCmd, item) {
       const optionMap = inCmd.getOptionMap();
       if (item.action === 0) {
-        const path = item.key.split('.');
+        const path = item.keyPath.split('.');
         if (path.length <= 1) {
-          optionMap[item.key] = new CommandOption(JSON.parse(item.value));
+          optionMap[item.keyPath] = new CommandOption(JSON.parse(item.value));
           return Object.values(optionMap);
         }
         if (!Object.keys(optionMap).includes(path[0])) {
@@ -113,7 +113,7 @@ export default {
         this.editObject(optionMap, item);
       }
       if (item.action === 2) {
-        delete optionMap[item.key];
+        delete optionMap[item.keyPath];
         // this.tempCmd.options = this.tempCmd.options.filter(op => op.fullName !== item.key);
       }
       return Object.values(optionMap);
