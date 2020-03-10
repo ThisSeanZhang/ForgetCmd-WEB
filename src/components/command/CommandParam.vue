@@ -1,27 +1,20 @@
 <template>
   <div>
-    <div style="display: inline-block;" v-for="(param, index) in paramVal" :key="param.index" >
+    <div style="display: inline-block;" v-for="(param, index) in exhibitParam" :key="param.index" >
       <el-popover
-        v-if="index < (paramDef.length)"
         placement="top"
         trigger="hover"
-        :content="paramDef[index].getCurrentLangDesc()">
+        :disabled="!param.selected || param.descIndex >= paramDef.length"
+        :content="getDefSesc(param.descIndex)">
         <el-tag
           slot="reference"
           closable
-          @click="param.selected = !param.selected"
-          type='info' >
-          {{param.value}}{{param.selected}}
+          @close="handleClose(index)"
+          @click="changeSelect(index)"
+          :type="param.selected ? 'success': 'info'" >
+          {{param.value}}
         </el-tag>
       </el-popover>
-      <el-tag
-        v-else
-        slot="reference"
-        closable
-        @click="param.selected = !param.selected"
-        type="info" >
-        {{param.value}}
-      </el-tag>
     </div>
     <!-- <div v-for="(para, index) in comp_paras" :key="'list-'+index">
       <el-popover
@@ -63,25 +56,23 @@ export default {
     },
   },
   computed: {
-    comp_paras() {
-      if (this.choiceIndex === undefined) return this.cparams;
-      const [...cparams] = this.cparams;
-      const cParam = cparams.splice(this.choiceIndex, 1)[0];
-      console.log(JSON.stringify(cparams));
-      // cParam.choiced = true;
-      const injectIndex = this.onIndex !== undefined ? this.onIndex : this.choiceIndex;
-      console.log(injectIndex);
-      cparams.splice(injectIndex, 0, cParam);
-      return cparams.map((o, index) => ({ ...o, index }));
+    exhibitParam() {
+      let index = -1;
+      return this.paramVal
+        .map((p) => {
+          const r = { ...p };
+          r.descIndex = p.selected ? index += 1 : -1;
+          return r;
+        });
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   data() {
     return {
       cparams: [],
-      choiceIndex: undefined,
-      onIndex: undefined,
       inputValue: null,
-      inputVisible: false,
       paramDrawShow: false,
       aparams: [],
     };
@@ -97,14 +88,6 @@ export default {
     doubleClick() {
       console.log('double click');
     },
-    handleClose(tag) {
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(() => this.$refs.saveTagInput.$refs.input.focus());
-    },
     handleInputConfirm() {
       if (this.inputValue) {
         this.cparams.push({ value: this.inputValue });
@@ -112,43 +95,16 @@ export default {
       this.inputVisible = false;
       this.inputValue = '';
     },
-
-    // 拖动开始
-    dragstart(event, index) {
-    // event 是被拖动的元素
-      event.dataTransfer.setData('text/plain', event.target);
-      console.log('dragstart', index);
-      this.choiceIndex = index;
+    getDefSesc(index) {
+      if (index < 0 || index >= this.paramDef.length) return '';
+      return this.paramDef[index].getCurrentLangDesc(this.currentLang);
     },
-    // 拖动结束
-    dragend(event) {
-      this.cparams = this.comp_paras;
-      this.onIndex = undefined;
-      this.choiceIndex = undefined;
-      console.log('dragend', event);
+    changeSelect(index) {
+      const param = this.paramVal[index];
+      this.$set(param, 'selected', !param.selected);
     },
-    // 拖动到某个块中
-    dragenter(event) {
-      this.onIndex = event;
-      console.log('dragenter', event);
-    },
-    // 拖动到某个
-    dragleave(event) {
-      this.onIndex = event;
-      console.log('dragleave', event);
-    },
-    dragexit() {
-      console.log('exit');
-    },
-    // 当一个元素或是选中的文字被拖拽释放到一个有效的释放目标位置时
-    drag() {
-    },
-    drop(event) {
-      event.preventDefault();
-      console.log('drop');
-    },
-    dragover(event) {
-      event.preventDefault();
+    handleClose(index) {
+      this.paramVal.splice(index, 1);
     },
   },
   created() {

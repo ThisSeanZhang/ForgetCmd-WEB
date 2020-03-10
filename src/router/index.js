@@ -30,6 +30,16 @@ export default new Router({
       component: PaddingCommand,
     },
     {
+      path: '/cmd/:cid/commits/create',
+      name: 'create-commit',
+      component: CreateCommit,
+    },
+    {
+      path: '/commits/create',
+      name: 'create-commit',
+      component: CreateCommit,
+    },
+    {
       path: '/cmd',
       name: 'cmd',
       component: tempBaseView,
@@ -38,11 +48,6 @@ export default new Router({
       path: '/cmds/:cid',
       name: 'command',
       component: Command,
-    },
-    {
-      path: '/commits/create',
-      name: 'create-commit',
-      component: CreateCommit,
     },
     {
       path: '/commits/review',

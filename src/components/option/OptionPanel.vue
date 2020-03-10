@@ -6,7 +6,7 @@
         placement="right"
         width="200"
         trigger="hover"
-        :content="option.description.zh"
+        :content="getDescription(option.description)"
         >
         <div class="per-option" slot="reference">
           <div class="option-brief"><div>{{option.showName()}}</div></div>
@@ -20,7 +20,8 @@
             <OptionParam :option="option" v-model="option.value" />
           </div>
           <i class="el-icon-delete" @click="removeOptionVal(index)"></i>
-          <el-tooltip class="item" effect="dark" content="忽略定义的类型" placement="top">
+          <el-tooltip class="item" effect="dark"
+            :content="$t('page.commandPanel.optionPanel.ignore')" placement="top">
             <el-checkbox v-model="option.ignore"></el-checkbox>
           </el-tooltip>
         </div>
@@ -64,8 +65,14 @@ export default {
     };
   },
   computed: {
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
   },
   methods: {
+    getDescription(desc) {
+      return desc && desc[this.currentLang] ? desc[this.currentLang] : '';
+    },
     removeOptionVal(index) {
       this.optionVal.splice(index, 1);
     },

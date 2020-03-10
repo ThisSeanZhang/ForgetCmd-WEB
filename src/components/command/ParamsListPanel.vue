@@ -1,9 +1,9 @@
 <template>
   <el-drawer
-  title="我是标题"
   :visible.sync="drawer"
   direction="ltr"
   :before-close="handleDrawerClose">
+  <div slot="title">{{$t('page.commandPanel.paramPanel.edit-title')}}</div>
   <i class="el-icon-circle-plus-outline" @click="addParam"></i>
 <div
       @drop="drop($event)"
@@ -14,36 +14,30 @@
   <div style="display: flex;"
     class="param-list-each"
     :draggable="index === choiceIndex"
-    @mousedown="mousedown(index)"
     @dragstart.capture="dragstart($event, index)"
     @dragend.capture="dragend(index)"
     @dragenter.capture="dragenter(index)"
     @dragleave.capture="dragleave(index)"
     @drag.capture="drag($event, index)"
     v-for="(param, index) in params" :key="param.index">
-    <div><i class="el-icon-rank" ></i></div>
+    <div><i @mousedown="mousedown(index)" class="el-icon-rank" ></i></div>
     <div>
       <el-input
+        draggable='false'
         placeholder="请输入内容"
         v-model="param.value"
+        @mousedown.stop
         clearable>
       </el-input>
     </div>
     <div><i class="el-icon-circle-close" @click="deleteParam(index)"></i></div>
   </div>
   </transition-group>
-  <!-- <div id="flip-list-demo" class="demo">
-    <button @click="shuffle">Shuffle</button>
-    <transition-group name="flip-list" tag="ul">
-      <li v-for="(item, index) in items" v-bind:key="'aa' + index">
-        {{ item }}
-      </li>
-    </transition-group>
-  </div> -->
   </div>
 </el-drawer>
 </template>
 <script>
+import Param from '@/entities/Param';
 
 export default {
   name: 'params-list-panel',
@@ -91,7 +85,7 @@ export default {
   },
   methods: {
     addParam() {
-      this.params.push({ index: this.params.length, value: '' });
+      this.params.push(new Param({ index: this.params.length, value: '', selected: true }));
     },
     deleteParam(index) {
       // 删除指定位置的参数
@@ -102,9 +96,6 @@ export default {
     },
     handleDrawerClose() {
       this.drawer = false;
-    },
-    shuffle() {
-      this.items = [{ value: 'aaa' }, { value: 'ccc' }, { value: 'bbb' }];
     },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -212,5 +203,8 @@ export default {
 }
 .flip-list-move {
   transition: transform 1s;
+}
+:focus{
+  outline:0;
 }
 </style>

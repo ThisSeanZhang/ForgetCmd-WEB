@@ -5,13 +5,13 @@
         <CommandInfo :cmd="inCmd" />
       </div>
       <el-scrollbar style="height: 90%;">
-        <div>命令参数：</div>
+        <div>{{$t('page.commandPanel.param')}}:</div>
         <CommandParam
           :params="inCmd.params"
           :paramDef="inCmd.params"
           :paramVal="paramVal"
           v-on:upParamVal="upParamVal($event)" />
-        <div>命令选项：</div>
+        <div>{{$t('page.commandPanel.option')}}:</div>
         <OptionPanel :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
       </el-scrollbar>
     </div>

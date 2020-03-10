@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="exhibit-head">
-      <div>命令预览</div>
+      <div>{{$t('page.commandPanel.preview')}}</div>
       <div>
-        <el-tooltip effect="dark" content="复制" placement="top">
+        <el-tooltip effect="dark"
+          :content="$t('page.commandPanel.previewPanel.copy')" placement="top">
           <el-button circle
           v-clipboard:copy="dealValue(copyLine)"
           v-clipboard:success="onCopy"
@@ -19,7 +20,8 @@
             <!-- {{currentModel === exhibitModel.ONELINE ? '单行模式' : '多行模式'}} -->
           </el-button>
         </el-tooltip>
-        <el-tooltip effect="dark" content="创建快照" placement="top">
+        <el-tooltip effect="dark"
+          :content="$t('page.commandPanel.previewPanel.snapshot')" placement="top">
           <el-button
             circle
             @click="createSnapshot"
@@ -87,8 +89,8 @@ export default {
   computed: {
     exhibitBtn() {
       return this.currentModel === this.exhibitModel.ONELINE
-        ? { icon: 'el-icon-document-remove', desc: '单行模式' }
-        : { icon: 'el-icon-document', desc: '多行模式' };
+        ? { icon: 'el-icon-document-remove', desc: this.$t('page.commandPanel.previewPanel.oneLine') }
+        : { icon: 'el-icon-document', desc: this.$t('page.commandPanel.previewPanel.multiple') };
     },
   },
   methods: {
@@ -115,7 +117,7 @@ export default {
         .reduce((a1, a2) => a1.concat(a2), []);
       // console.log(JSON.stringify(cmdOption));
       allRows = allRows.concat(cmdOption);
-      allRows = allRows.concat(this.params.map(p => p.value));
+      allRows = allRows.concat(this.params.filter(p => p.selected).map(p => p.value));
       return typeof deal === 'function' ? deal(allRows) : allRows;
     },
     craeteHistory() {

@@ -12,6 +12,24 @@ export default {
       placeholder: '请输入命令的部分或者全部',
       'no-data-text': '暂时还没有这条命令的记录呢(ˉ▽ˉ；)...',
     },
+    commandPanel: {
+      param: '命令参数',
+      option: '命令参数',
+      preview: '命令预览',
+      paramPanel: {
+        'edit-title': '编辑参数',
+      },
+      optionPanel: {
+        ignore: '忽略定义的类型',
+        searchBar: '选项名称或描述关键字',
+      },
+      previewPanel: {
+        copy: '复制',
+        oneLine: '单行模式',
+        multiple: '多行模式',
+        snapshot: '创建快照',
+      },
+    },
   },
   ccc: {
     aaa: '顶顶顶顶',

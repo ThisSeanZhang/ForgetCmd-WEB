@@ -4,7 +4,7 @@
   popper-class='my-autocomplete'
   v-model='state'
   :fetch-suggestions='querySearch'
-  placeholder='请输入内容'
+  :placeholder="$t('page.commandPanel.optionPanel.searchBar')"
   clearable
   @select='handleSelect'>
   <!-- <i
@@ -13,14 +13,21 @@
     @click='handleIconClick'>
   </i> -->
   <template slot-scope='{ item }'>
-    <div class='name'>{{ item.briefName }}{{ item.description }}</div>
-    <span class='addr'>{{ item.address }}</span>
+    <div class='name'>
+      <div>
+        {{ optionKey(item) }}
+      </div>
+      <div>
+        {{ description(item.description) }}
+      </div>
+    </div>
   </template>
 </el-autocomplete>
 </template>
 
 <script>
 import Option from '../../entities/CommandOption';
+import StringUtils from '../../entities/StringUtils';
 
 export default {
   name: 'option-search-bar',
@@ -36,6 +43,11 @@ export default {
       state: '',
     };
   },
+  computed: {
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
+  },
   methods: {
     querySearch(queryString, cb) {
       const results = queryString
@@ -46,7 +58,15 @@ export default {
     },
     handleSelect(item) {
       this.$emit('addOption', new Option(item));
+      this.state = '';
+      console.log(this.state);
       console.log(JSON.stringify(item));
+    },
+    description(description) {
+      return description && description[this.currentLang] ? description[this.currentLang] : '';
+    },
+    optionKey(item) {
+      return [item.briefName, item.fullName].filter(StringUtils.nonEmptyString).join('/');
     },
   },
   created() {
@@ -64,13 +84,8 @@ export default {
     .name {
       text-overflow: ellipsis;
       overflow: hidden;
-    }
-    .addr {
-      font-size: 12px;
-      color: #b4b4b4;
-    }
-    .highlighted .addr {
-      color: #ddd;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

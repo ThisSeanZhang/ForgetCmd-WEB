@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      添加命令
+      <CMDHeader></CMDHeader>
     </el-header>
     <el-main>
       <CommandPanel
@@ -21,10 +21,11 @@ import Commit from '../entities/CommandCommit';
 import Command from '../entities/Command';
 import CommitPanel from '../components/commits/CommitPanel.vue';
 import CommandPanel from '../components/command/CommandPanel.vue';
+import CMDHeader from '@/components/header/Header.vue';
 
 export default {
   name: 'create-commit',
-  components: { CommitPanel, CommandPanel },
+  components: { CommitPanel, CommandPanel, CMDHeader },
   data() {
     return {
       paramVal: [],
@@ -32,16 +33,6 @@ export default {
       commit: Commit.CreateFackCommit(),
       originCmd: new Command({ commandName: 'docker' }),
     };
-  },
-  watch: {
-    // commit: {
-    //   handler(nval, oval) {
-    //     console.log(nval, oval);
-    //     this.cmd = this.commit.toCommand();
-    //     console.log(JSON.stringify(this.cmd));
-    //   },
-    //   deep: true,
-    // },
   },
   computed: {
     cmd() {
@@ -54,6 +45,8 @@ export default {
     },
   },
   created() {
+    // TODO 如果有ID的话需要获取相比较的cmd， commit 也要使用cmd进行初始化
+    console.log(this.$route.params);
   },
 };
 </script>

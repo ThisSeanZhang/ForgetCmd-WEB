@@ -17,14 +17,6 @@
               >{{lang.desc}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!-- <el-select v-model="currentLang" placeholder="请选择">
-          <el-option
-            v-for="l in allLangs"
-            :key="l"
-            :label="l"
-            :value="l">
-          </el-option>
-        </el-select> -->
       </div>
       <div class="user-info">用户信息/登录</div>
     </div>

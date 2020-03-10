@@ -1,10 +1,10 @@
-const currentLang = 'zh';
+
 export default class Param {
   constructor(param) {
     this.value = param.value || 'default';
-    this.description = param.description ? param.description : { [currentLang]: '' };
+    this.description = param.description || {};
     this.index = param.index;
-    this.selected = true;
+    this.selected = param.selected;
   }
 
   getCurrentLocationDesc() {
@@ -15,7 +15,7 @@ export default class Param {
     return new Param(JSON.parse(JSON.stringify(this)));
   }
 
-  getCurrentLangDesc() {
+  getCurrentLangDesc(currentLang) {
     return Object.prototype.hasOwnProperty.call(this.description, currentLang)
       ? this.description[currentLang]
       : '';
