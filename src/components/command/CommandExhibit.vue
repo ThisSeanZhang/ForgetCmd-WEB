@@ -48,14 +48,16 @@
         <span v-if="index !== params.length - 1">&nbsp;\</span>
       </div>
     </div> -->
-    <div v-if="currentModel === exhibitModel.ONELINE">
-        {{dealValue(oneLine)}}
-    </div>
-    <div v-if="currentModel === exhibitModel.MULTLINE">
-      <div v-for="(line, index) in dealValue(multLine)" :key="index">
-        {{line}}
+    <el-scrollbar>
+      <div v-if="currentModel === exhibitModel.ONELINE">
+          {{dealValue(oneLine)}}
       </div>
-    </div>
+      <div v-if="currentModel === exhibitModel.MULTLINE">
+        <div v-for="(line, index) in dealValue(multLine)" :key="index">
+          {{line}}
+        </div>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 <script>

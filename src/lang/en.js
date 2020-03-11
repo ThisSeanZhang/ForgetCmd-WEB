@@ -15,8 +15,14 @@ export default {
       param: 'PARAMS',
       option: 'OPTIONS',
       preview: 'PREVIEW',
+      paramPanel: {
+        'edit-title': 'Edit Params',
+        add: 'add',
+        remove: 'Remove',
+      },
       optionPanel: {
         ignore: 'ignore type limit',
+        remove: 'Remove Option',
         searchBar: 'brief or full or key word',
       },
       previewPanel: {

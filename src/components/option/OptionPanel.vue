@@ -9,7 +9,9 @@
         :content="getDescription(option.description)"
         >
         <div class="per-option" slot="reference">
-          <div class="option-brief"><div>{{option.showName()}}</div></div>
+          <div class="option-brief">
+            <div>{{option.showName()}}</div>
+          </div>
           <div class="option-switch">
             <el-switch
               v-model="option.selected"
@@ -19,11 +21,16 @@
           <div class="option-value-bar" >
             <OptionParam :option="option" v-model="option.value" />
           </div>
-          <i class="el-icon-delete" @click="removeOptionVal(index)"></i>
-          <el-tooltip class="item" effect="dark"
-            :content="$t('page.commandPanel.optionPanel.ignore')" placement="top">
-            <el-checkbox v-model="option.ignore"></el-checkbox>
-          </el-tooltip>
+          <div class="option-operation">
+            <el-tooltip class="item" effect="dark"
+              :content="$t('page.commandPanel.optionPanel.remove')" placement="top">
+              <i class="option-delete el-icon-delete" @click="removeOptionVal(index)"></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark"
+              :content="$t('page.commandPanel.optionPanel.ignore')" placement="top">
+              <el-checkbox v-model="option.ignore"></el-checkbox>
+            </el-tooltip>
+          </div>
         </div>
       </el-popover>
     </div>
@@ -115,7 +122,7 @@ export default {
   // text-align: right;
   float: left;
   // line-height: 40px;
-  padding: 0 12px 0 0;
+  margin-right: 10px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   div {
@@ -133,16 +140,24 @@ export default {
   padding: 0px 10px;
 }
 .per-option{
-  margin-bottom: 10px;
+  display: flex;
+  margin: 10px 0px;
 }
 .option-mulit{
   float: right;
 }
 .option-value-bar{
   // display: flex;
-  margin-left: 150px;
+  // margin-left: 150px;
+  flex: 1;
   // margin-right: 60px;
   // justify-content: center;
+}
+.option-operation{
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-right: 10px;
 }
 .is-multip{
   margin-right: 60px;

@@ -18,9 +18,12 @@ export default {
       preview: '命令预览',
       paramPanel: {
         'edit-title': '编辑参数',
+        add: '添加参数',
+        remove: '删除参数',
       },
       optionPanel: {
         ignore: '忽略定义的类型',
+        remove: '删除选项',
         searchBar: '选项名称或描述关键字',
       },
       previewPanel: {

@@ -7,7 +7,6 @@
       <el-scrollbar style="height: 90%;">
         <div>{{$t('page.commandPanel.param')}}:</div>
         <CommandParam
-          :params="inCmd.params"
           :paramDef="inCmd.params"
           :paramVal="paramVal"
           v-on:upParamVal="upParamVal($event)" />
@@ -15,9 +14,7 @@
         <OptionPanel :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
       </el-scrollbar>
     </div>
-    <div class="cmd-exhibit">
-      <CommandExhibit :cmd="inCmd" :options="optionVal" :params="paramVal" />
-    </div>
+    <CommandExhibit class="cmd-exhibit" :cmd="inCmd" :options="optionVal" :params="paramVal" />
   </div>
 </template>
 <script>

@@ -3,8 +3,12 @@
   :visible.sync="drawer"
   direction="ltr"
   :before-close="handleDrawerClose">
-  <div slot="title">{{$t('page.commandPanel.paramPanel.edit-title')}}</div>
-  <i class="el-icon-circle-plus-outline" @click="addParam"></i>
+  <div slot="title" class="param-edit-title">
+    <div class="param-edit-desc">{{$t('page.commandPanel.paramPanel.edit-title')}}</div>
+    <el-tooltip effect="dark" :content="$t('page.commandPanel.paramPanel.add')" placement="left">
+      <i class="param-edit-option el-icon-circle-plus-outline" @click="addParam"></i>
+    </el-tooltip>
+  </div>
 <div
       @drop="drop($event)"
       @dragover="dragover($event)"
@@ -20,17 +24,19 @@
     @dragleave.capture="dragleave(index)"
     @drag.capture="drag($event, index)"
     v-for="(param, index) in params" :key="param.index">
-    <div><i @mousedown="mousedown(index)" class="el-icon-rank" ></i></div>
-    <div>
-      <el-input
-        draggable='false'
-        placeholder="请输入内容"
-        v-model="param.value"
-        @mousedown.stop
-        clearable>
-      </el-input>
-    </div>
-    <div><i class="el-icon-circle-close" @click="deleteParam(index)"></i></div>
+    <div class="drag-icon"><i @mousedown="mousedown(index)" class="el-icon-rank" ></i></div>
+    <el-input
+      class="param-input"
+      placeholder="请输入内容"
+      v-model="param.value"
+      @mousedown.stop
+      clearable>
+    </el-input>
+    <el-tooltip effect="dark"
+      :content="$t('page.commandPanel.paramPanel.remove')"
+      placement="right">
+      <i class="delete-icon el-icon-circle-close" @click="deleteParam(index)"></i>
+    </el-tooltip>
   </div>
   </transition-group>
   </div>
@@ -192,9 +198,6 @@ export default {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.param-input{
-  margin-left: 80px;
-}
 .per-option{
   margin-bottom: 10px;
 }
@@ -206,5 +209,36 @@ export default {
 }
 :focus{
   outline:0;
+}
+.param-list-each{
+  display: flex;
+  margin: 5px 0px;
+  .drag-icon{
+    opacity: 0.6;
+    cursor: move;
+    margin: 0px 10px;
+    display: flex;
+    align-items: center;
+  }
+  .drag-icon:hover{
+    opacity: 1;
+  }
+  .param-input{
+    flex: 1;
+  }
+  .delete-icon{
+    opacity: 0.6;
+    margin: 0px 10px;
+    display: flex;
+    align-items: center;
+  }
+  .delete-icon:hover{
+    opacity: 1;
+  }
+}
+.param-edit-title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
