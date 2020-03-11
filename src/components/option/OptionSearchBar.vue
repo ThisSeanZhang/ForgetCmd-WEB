@@ -36,6 +36,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    limitOption: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -57,8 +61,16 @@ export default {
       cb(results);
     },
     handleSelect(item) {
-      this.$emit('addOption', new Option(item));
       this.state = '';
+      // if (this.limitOption.includes(item.fullName)) {
+      //   this.$message({
+      //     showClose: true,
+      //     message: '该选项不能重复添加',
+      //     type: 'warning',
+      //   });
+      //   return;
+      // }
+      this.$emit('addOption', new Option(item));
       console.log(this.state);
       console.log(JSON.stringify(item));
     },

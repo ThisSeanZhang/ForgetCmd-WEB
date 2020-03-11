@@ -1,6 +1,9 @@
 <template>
   <div>
-    <OptionSearchBar :optionDef="optionDef" v-on:addOption="addOption($event)"></OptionSearchBar>
+    <OptionSearchBar
+      :optionDef="optionDef"
+      :limitOption="limitOption"
+      v-on:addOption="addOption($event)"></OptionSearchBar>
     <div v-for="(option, index) in optionVal" :key="index">
       <el-popover
         placement="right"
@@ -23,12 +26,12 @@
           </div>
           <div class="option-operation">
             <el-tooltip class="item" effect="dark"
-              :content="$t('page.commandPanel.optionPanel.remove')" placement="top">
-              <i class="option-delete el-icon-delete" @click="removeOptionVal(index)"></i>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark"
               :content="$t('page.commandPanel.optionPanel.ignore')" placement="top">
               <el-checkbox v-model="option.ignore"></el-checkbox>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark"
+              :content="$t('page.commandPanel.optionPanel.remove')" placement="top">
+              <i class="option-delete el-icon-delete" @click="removeOptionVal(index)"></i>
             </el-tooltip>
           </div>
         </div>
@@ -75,6 +78,9 @@ export default {
     currentLang() {
       return this.$i18n.locale || 'zh';
     },
+    limitOption() {
+      return this.optionVal.filter(op => !op.repeat).map(op => op.fullName);
+    },
   },
   methods: {
     getDescription(desc) {
@@ -84,7 +90,6 @@ export default {
       this.optionVal.splice(index, 1);
     },
     addOption(option) {
-      // 接收到Bar发送的添加请求 是否要对已有的进行排序 或者改拖动就不需要了
       this.optionVal.push(option);
     },
     editMultip(option) {
