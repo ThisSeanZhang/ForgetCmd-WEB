@@ -61,6 +61,7 @@ export default {
       'desc-input': 'Command Description',
     },
     param: {
+      'index-name': 'param index',
       description: 'DESC',
       'desc-input': 'Param Description',
     },

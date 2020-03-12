@@ -61,6 +61,7 @@ export default {
       'desc-input': '请输入命令完整描述',
     },
     param: {
+      'index-name': '参数位置',
       description: '描述',
       'desc-input': '请输入描述',
     },

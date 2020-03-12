@@ -46,19 +46,24 @@
             <el-col :span="16"><span >{{item.value}}</span></el-col>
           </el-row>
         </div>
-        <span class="head-arrow">
-          <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
-        </span>
+        <div v-if="item.type ==='base'" class="head-title">
+          <el-row class="row-aligned" :gutter="20">
+            <el-col :span="8">
+              <el-tag type="success" >{{splitExhibitKey}}</el-tag>
+            </el-col>
+            <el-col :span="16"><span >{{item.value}}</span></el-col>
+          </el-row>
+        </div>
       </div>
       <div v-if="isObj(item.value)">
         <el-collapse-transition >
           <div v-if="item.type === 'options'" class="transition-box" v-show="isOpen" >
             <div class="item" v-for="(value, key) in item.value.description" :key="key">
-              {{key}}: {{value}}
+              {{getLangKey(key)}}: {{value}}
             </div>
-            <div class="item">类型：{{getype(item.value.type)}}</div>
+            <div class="item">{{$t('entities.option.type')}}：{{getype(item.value.type)}}</div>
             <div class="item" v-if="isEnum">
-              ENUM 备选值：
+              {{$t('entities.option.enum')}}：
               <el-tag style="margin: 0 5px;"
                 v-for="item in item.value.rules" :key="item" effect="plain">
                 {{ item }}
@@ -68,7 +73,7 @@
           </div>
           <div v-if="item.type === 'params'" class="transition-box" v-show="isOpen">
             <div class="item" v-for="(value, key) in item.value.description" :key="key">
-              {{key}}: {{value}}
+              {{getLangKey(key)}}: {{value}}
             </div>
           </div>
         </el-collapse-transition>
@@ -144,11 +149,11 @@
         <el-collapse-transition>
           <div v-if="item.type === 'options'" class="transition-box" v-show="isOpen">
             <div class="item" v-for="(oValue, key) in item.oValue.description" :key="key">
-              {{key}}: {{oValue}}
+              {{getLangKey(key)}}: {{oValue}}
             </div>
-            <div class="item">类型：{{getype(item.oValue.type)}}</div>
+            <div class="item">{{$t('entities.option.type')}}：{{getype(item.oValue.type)}}</div>
             <div class="item" v-if="isEnum">
-              ENUM 备选值：
+              {{$t('entities.option.enum')}}：
               <el-tag style="margin: 0 5px;"
                 v-for="item in item.oValue.rules" :key="item" effect="plain">
                 {{ item }}
@@ -158,7 +163,7 @@
           </div>
           <div v-if="item.type === 'params'" class="transition-box" v-show="isOpen">
             <div class="item" v-for="(oValue, key) in item.oValue.description" :key="key">
-              {{key}}: {{oValue}}
+              {{getLangKey(key)}}: {{oValue}}
             </div>
           </div>
         </el-collapse-transition>
@@ -167,6 +172,7 @@
   </el-card>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import CommitItem from '../../entities/CommitItem';
 import CommandOption from '../../entities/CommandOption';
 
@@ -203,15 +209,16 @@ export default {
       if (keys.length >= 2) {
         // TODO need lang map translate
         let mainKey = keys.shift();
-        if (this.item.type === 'params') mainKey = `参数${mainKey} : `;
+        if (this.item.type === 'params') mainKey = `${this.$t('entities.param.index-name')} ${mainKey} : `;
         return `${mainKey} ${keys.join('.')}`;
       }
-      if (this.item.type === 'params') return `参数${this.item.keyPath + 1}: `;
+      if (this.item.type === 'params') return `${this.$t('entities.param.index-name')} ${this.item.keyPath + 1}: `;
       return this.item.keyPath;
     },
     currentLang() {
       return this.$i18n.locale || 'zh';
     },
+    ...mapGetters('Language', ['allLangs']),
   },
   methods: {
     isObj(value) {
@@ -232,6 +239,10 @@ export default {
     },
     getCurrentLangDesc(desc) {
       return desc && desc[this.currentLang] ? desc[this.currentLang] : '';
+    },
+    getLangKey(langKey) {
+      const remain = this.allLangs.filter(l => l.key === langKey);
+      return remain.length > 0 ? remain[0].desc : langKey;
     },
   },
   created() {
