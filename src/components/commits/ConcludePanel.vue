@@ -1,13 +1,5 @@
 <template>
   <div>
-    <!-- {{baseDiff}} -->
-    <!-- <div @click="doTemp(value)"
-      v-for="(value, index) in concludeDiff" :key="index">
-      <el-tag
-        :type="value.action === 0 ? 'success' : (value.action === 1 ? 'info' : 'danger')"
-      >{{value.key}}</el-tag>
-      <span>{{value.oVlaue}}</span>=><span>{{value.value}}</span>
-    </div> -->
     <ItemExhibit v-for="(value, index) in concludeDiff" :item="value" :key="index" />
   </div>
 </template>

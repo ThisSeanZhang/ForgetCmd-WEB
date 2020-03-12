@@ -32,6 +32,74 @@ export default {
         snapshot: 'create snapshot',
       },
     },
+    commitPanel: {
+      stepInfo: {
+        base: 'Base',
+        params: 'Params',
+        options: 'Options',
+        conclude: 'Conclude',
+        result: 'Result',
+      },
+      editBaseInfo: {
+      },
+      editParams: {
+        'edit-title': 'Edit Param',
+      },
+      editOption: {
+        'edit-title': 'Edit Option',
+        'repeat-enum': 'Repeat ENUM',
+      },
+    },
+  },
+  entities: {
+    command: {
+      commandName: 'CMD',
+      'name-input': 'Command Name',
+      briefDesc: 'Brief',
+      'b-desc-input': 'Command Brief Description',
+      description: 'DESC',
+      'desc-input': 'Command Description',
+    },
+    param: {
+      description: 'DESC',
+      'desc-input': 'Param Description',
+    },
+    option: {
+      'brief-name': 'Brief',
+      'b-name-input': 'Option Brief Name',
+      'full-name': 'Full',
+      'full-name-input': 'Option Full Name',
+      description: 'DESC',
+      'desc-input': 'Option Description',
+      repeat: 'Repeat',
+      type: 'Type',
+      'choice-type': 'Choice Type',
+      enum: 'Enum',
+      'enum-add': 'NEW ENUM',
+      'enum-option': '',
+    },
+  },
+  other: {
+    lang: {
+      moreLang: 'More Language',
+      choiceLang: 'Choice Lang',
+    },
+    btn: {
+      cancel: 'cancel',
+      ok: 'OK',
+      per: 'Per',
+      next: 'Next',
+      submit: 'Submit',
+    },
+    copy: {
+      message: {
+        success: 'COPY SUCCESS <(￣︶￣)↗[GO!]',
+        error: 'COPY ERROR இ௰இ',
+      },
+    },
+    action: {
+      'want-save': 'do you want save your input？',
+    },
   },
   ccc: {
     aaa: 'dddd',

@@ -1,31 +1,41 @@
 <template>
   <div class="edit-base-info">
     <div class="per-option">
-      <div class="option-brief">命令名称</div>
+      <div class="option-brief">{{$t('entities.command.commandName')}}</div>
       <div class="option-value-bar" >
-        <el-input placeholder="请输入内容" v-model="commit.commandName" clearable></el-input>
+        <el-input
+          :placeholder="$t('entities.command.name-input')"
+          v-model="commit.commandName" clearable>
+        </el-input>
       </div>
     </div>
     <div class="per-option">
-      <div class="option-brief">简述</div>
+      <div class="option-brief">{{$t('entities.command.briefDesc')}}</div>
       <div class="option-value-bar" >
-        <el-input placeholder="请输入内容" v-model="commit.briefDesc[currentLang]" clearable>
-          <el-tooltip slot="append" content="更多语言" placement="top">
+        <el-input
+          :placeholder="$t('entities.command.b-desc-input')"
+          v-model="commit.briefDesc[currentLang]" clearable
+        >
+          <el-tooltip slot="append" placement="top"
+            :content="$t('other.lang.moreLang')"
+          >
              <el-button  icon="el-icon-more" @click="multipLangBriefDescDialog = true"></el-button>
           </el-tooltip>
         </el-input>
       </div>
     </div>
     <div class="per-option">
-      <div class="option-brief">详细描述</div>
+      <div class="option-brief">{{$t('entities.command.description')}}</div>
       <div class="option-value-bar" >
         <el-input
           type="textarea"
           :autosize="{ minRows: 2, maxRows: 6}"
-          placeholder="请输入描述"
+          :placeholder="$t('entities.command.desc-input')"
           v-model="commit.description[currentLang]">
         </el-input>
-        <el-tooltip  content="更多语言" placement="top">
+        <el-tooltip placement="top"
+          :content="$t('other.lang.moreLang')"
+        >
           <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
         </el-tooltip>
       </div>
@@ -86,12 +96,14 @@ export default {
   data() {
     return {
       commit: null,
-      currentLang: 'zh',
       multipLangBriefDescDialog: false,
       multipLangDescDialog: false,
     };
   },
   computed: {
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
     // briefDesc: {
     //   get() {
     //     // 如果 briefDesc 对象都不是  那就给他初始化成对象

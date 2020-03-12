@@ -18,7 +18,9 @@
               <span style="margin: 0px 10px;" >{{item.value.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.value.description}}</span>
+              <span style="margin: 0px 10px;" >
+                {{ getCurrentLangDesc(item.value.description) }}
+              </span>
             </el-col>
           </el-row>
           <el-row class="row-aligned" v-else :gutter="20">
@@ -34,7 +36,7 @@
               <el-tag type="success" >{{splitExhibitKey}}</el-tag>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.value.description}}</span>
+              <span style="margin: 0px 10px;" >{{getCurrentLangDesc(item.value.description)}}</span>
             </el-col>
           </el-row>
           <el-row class="row-aligned" v-else :gutter="20">
@@ -101,7 +103,9 @@
               <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.oValue.description}}</span>
+              <span style="margin: 0px 10px;" >
+                {{ getCurrentLangDesc(item.oValue.description) }}
+              </span>
             </el-col>
           </el-row>
           <el-row class="row-aligned" v-else :gutter="20">
@@ -120,7 +124,9 @@
               <span style="margin: 0px 10px;" >{{item.oValue.briefName}}</span>
             </el-col>
             <el-col :span="16">
-              <span style="margin: 0px 10px;" >{{item.oValue.description}}</span>
+              <span style="margin: 0px 10px;" >
+                {{getCurrentLangDesc(item.oValue.description)}}
+              </span>
             </el-col>
           </el-row>
           <el-row class="row-aligned" v-else :gutter="20">
@@ -203,6 +209,9 @@ export default {
       if (this.item.type === 'params') return `参数${this.item.keyPath + 1}: `;
       return this.item.keyPath;
     },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
   },
   methods: {
     isObj(value) {
@@ -220,6 +229,9 @@ export default {
     getype(type) {
       return Object.keys(CommandOption.TYPE).filter(key => CommandOption.TYPE[key] === type)[0] || 'UNKNOW';
       // return CommandOption.TYPE.filter((_, value) => type === value).map(key => key);
+    },
+    getCurrentLangDesc(desc) {
+      return desc && desc[this.currentLang] ? desc[this.currentLang] : '';
     },
   },
   created() {

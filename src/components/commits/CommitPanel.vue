@@ -1,7 +1,6 @@
 <template>
   <div class="main-container">
     <div style="width: 100%;">
-      {{stepConfig}}
       <el-steps :active="stepConfig.active" :finish-status="stepConfig.finish">
         <el-step v-for="(step, index) in stepsInfos"
           :key="index" :status="step.status" :title="step.title"></el-step>
@@ -88,12 +87,12 @@
         v-show="hasPer" type="primary"
         @click="perStep"
         style="float: left;"
-        >上一步</el-button>
+        >{{$t('other.btn.per')}}</el-button>
       <el-button
         v-show="hasNext" type="primary"
         @click="nextStep"
         style="float: right;"
-        >下一步</el-button>
+        >{{$t('other.btn.next')}}</el-button>
       <!-- <el-button
         v-show="currentStep === procedure.PER_VIEW" type="primary"
         style="float: right;"
@@ -103,7 +102,7 @@
         v-show="currentStep === submitStep" type="primary"
         style="float: right;"
         @click="submitCmd"
-        >提交</el-button>
+        >{{$t('other.btn.submit')}}</el-button>
     </div>
     <!-- {{cmd}} -->
   </div>
@@ -111,9 +110,9 @@
 <script>
 import Command from '../../entities/Command';
 import CommandCommit from '../../entities/CommandCommit';
-import EditOptionInfo from './EditOptionInfo.vue';
 import EditBaseInfo from './EditBaseInfo.vue';
 import EditParamInfo from './EditParamInfo.vue';
+import EditOptionInfo from './EditOptionInfo.vue';
 import ConcludePanel from './ConcludePanel.vue';
 // import CommandPanel from '../command/CommandPanel.vue';
 import { wantNothing } from '../../api/fetch';
@@ -154,7 +153,7 @@ export default {
       //   active: 0,
       //   finish: 'success',
       // },
-      stepsInfos: [],
+      // stepsInfos: [],
       ccid: null,
       transitionName: 'fade',
     };
@@ -182,13 +181,13 @@ export default {
     },
     onCopy() {
       this.$notify({
-        title: '复制成功',
+        title: this.$t('other.copy.message.success'),
         type: 'success',
       });
     },
     onError() {
       this.$notify.error({
-        title: '复制失败！',
+        title: this.$t('other.copy.message.error'),
       });
     },
     gotoPerView() {
@@ -200,27 +199,27 @@ export default {
     reflashPage() {
       this.$router.go(0);
     },
-    initStep() {
-      return [{
-        status: '',
-        title: '基本信息',
-      }, {
-        status: '',
-        title: '参数',
-      }, {
-        status: '',
-        title: '可选项',
-      }, {
-      //   status: '',
-      //   title: '预览',
-      // }, {
-        status: '',
-        title: '修改项',
-      }, {
-        status: '',
-        title: '结果',
-      }];
-    },
+    // initStep() {
+    //   return [{
+    //     status: '',
+    //     title: this.$t('page.commitPanel.stepInfo.base'),
+    //   }, {
+    //     status: '',
+    //     title: this.$t('page.commitPanel.stepInfo.params'),
+    //   }, {
+    //     status: '',
+    //     title: this.$t('page.commitPanel.stepInfo.options'),
+    //   }, {
+    //   //   status: '',
+    //   //   title: '预览',
+    //   // }, {
+    //     status: '',
+    //     title: this.$t('page.commitPanel.stepInfo.conclude'),
+    //   }, {
+    //     status: '',
+    //     title: this.$t('page.commitPanel.stepInfo.result'),
+    //   }];
+    // },
   },
   computed: {
     hasNext() {
@@ -240,6 +239,27 @@ export default {
     shareUrl() {
       return `${window.location.href.replace(this.$route.path, '')}/commits/cmds/${this.ccid}`;
     },
+    stepsInfos() {
+      return [{
+        status: '',
+        title: this.$t('page.commitPanel.stepInfo.base'),
+      }, {
+        status: '',
+        title: this.$t('page.commitPanel.stepInfo.params'),
+      }, {
+        status: '',
+        title: this.$t('page.commitPanel.stepInfo.options'),
+      }, {
+      //   status: '',
+      //   title: '预览',
+      // }, {
+        status: '',
+        title: this.$t('page.commitPanel.stepInfo.conclude'),
+      }, {
+        status: '',
+        title: this.$t('page.commitPanel.stepInfo.result'),
+      }];
+    },
   },
   created() {
     this.currentStep = this.procedure.BASE_INFO;
@@ -247,7 +267,7 @@ export default {
     console.log(this.currentStep);
     console.log(this.procedure.BASE_INFO);
     console.log(this.currentStep === this.procedure.BASE_INFO);
-    this.stepsInfos = this.initStep();
+    // this.stepsInfos = this.initStep();
   },
 };
 </script>

@@ -1,4 +1,3 @@
-
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN';
 
 export default {
@@ -32,6 +31,74 @@ export default {
         multiple: '多行模式',
         snapshot: '创建快照',
       },
+    },
+    commitPanel: {
+      stepInfo: {
+        base: '基础信息',
+        params: '参数信息',
+        options: '选项信息',
+        conclude: '总览',
+        result: '结果',
+      },
+      editBaseInfo: {
+      },
+      editParams: {
+        'edit-title': '编辑参数',
+      },
+      editOption: {
+        'edit-title': '编辑可选项',
+        'repeat-enum': '重复的枚举值',
+      },
+    },
+  },
+  entities: {
+    command: {
+      commandName: '命令名称',
+      'name-input': '请输入命令名称',
+      briefDesc: '简述',
+      'b-desc-input': '请输入命令简述',
+      description: '详细描述',
+      'desc-input': '请输入命令完整描述',
+    },
+    param: {
+      description: '描述',
+      'desc-input': '请输入描述',
+    },
+    option: {
+      'brief-name': '简写',
+      'b-name-input': '请输入选项简称',
+      'full-name': '全称',
+      'full-name-input': '请输入完整命令',
+      description: '描述',
+      'desc-input': '请输入描述',
+      repeat: '重复',
+      type: '类型',
+      'choice-type': '请选择类型',
+      enum: '枚举值',
+      'enum-add': '新增枚举',
+      'enum-option': '',
+    },
+  },
+  other: {
+    lang: {
+      moreLang: '更多语言',
+      choiceLang: '请选择语言',
+    },
+    btn: {
+      cancel: '取 消',
+      ok: '确 定',
+      per: '上一步',
+      next: '下一步',
+      submit: '提交',
+    },
+    copy: {
+      message: {
+        success: '复制成功 <(￣︶￣)↗[GO!]',
+        error: '复制失败 இ௰இ',
+      },
+    },
+    action: {
+      'want-save': '要保存已做的修改的吗？',
     },
   },
   ccc: {

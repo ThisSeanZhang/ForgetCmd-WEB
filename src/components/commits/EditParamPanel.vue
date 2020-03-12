@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     center
-    title="添加参数"
     @open="cleanParam"
     :before-close="handleDrawerClose"
     :visible.sync="drawerVisible"
@@ -9,19 +8,20 @@
     direction="rtl"
     custom-class="params-drawer"
     size="50%">
+    <div slot="title">{{$t('page.commitPanel.editParams.edit-title')}}</div>
     <div class="params-drawer-content">
       <el-form :model="param" label-width="80px">
           <!-- <el-form-item label="参数名">
             <el-input v-model="param.paramName"></el-input>
           </el-form-item> -->
-          <el-form-item label="描述">
+          <el-form-item :label="$t('entities.param.description')">
             <el-input
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 6}"
-              placeholder="请输入描述"
+              :placeholder="$t('entities.param.desc-input')"
               v-model="param.description[currentLang]">
             </el-input>
-            <el-tooltip  content="更多语言" placement="top">
+            <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
               <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
             </el-tooltip>
           </el-form-item>
@@ -58,8 +58,8 @@
             size="small" @click="showInput">+ New Tag</el-button>
           </el-form-item> -->
           <el-form-item>
-            <el-button @click="drawerVisible = false">取消</el-button>
-            <el-button type="primary" @click="confirmParam">确定</el-button>
+            <el-button @click="drawerVisible = false">{{$t('other.btn.cancel')}}</el-button>
+            <el-button type="primary" @click="confirmParam">{{$t('other.btn.ok')}}</el-button>
           </el-form-item>
         </el-form>
     </div>
@@ -92,7 +92,6 @@ export default {
     return {
       param: new CmdParam({}),
       paramType: [],
-      currentLang: 'zh',
       multipLangDescDialog: false,
     };
   },
@@ -104,6 +103,9 @@ export default {
       set(vNew) {
         this.$emit('input', vNew);
       },
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   methods: {
@@ -120,7 +122,7 @@ export default {
         done();
         return;
       }
-      this.$confirm('要保存已经修改的吗？')
+      this.$confirm(this.$t('other.action.want-save'))
         .then(() => {
           this.confirmParam();
           done();

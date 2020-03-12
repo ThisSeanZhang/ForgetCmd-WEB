@@ -4,7 +4,6 @@ function initRules(rules) {
   if (!rules) return [];
   return typeof rules !== 'string' ? rules : rules.split(',');
 }
-const currentLang = 'zh';
 
 export default class CommandOption {
   constructor(option) {
@@ -12,7 +11,7 @@ export default class CommandOption {
     this.cid = option.cid;
     this.briefName = option.briefName;
     this.fullName = option.fullName;
-    this.description = option.description ? option.description : { [currentLang]: '' };
+    this.description = option.description ? option.description : {};
     this.frequency = option.frequency;
     this.selected = option.selected;
     this.type = option.type;
@@ -86,7 +85,7 @@ export default class CommandOption {
       || CommandOption.matchKey(JSON.stringify(this.description), key);
   }
 
-  getCurrentLangDesc() {
+  getCurrentLangDesc(currentLang) {
     return Object.prototype.hasOwnProperty.call(this.description, currentLang)
       ? this.description[currentLang]
       : '';

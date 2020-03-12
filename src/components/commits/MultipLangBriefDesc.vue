@@ -3,12 +3,14 @@
     <el-dialog
       center
       @open="cleanParam"
-      title="多语言"
+      :title="$t('other.lang.moreLang')"
       :visible.sync="dialogVisible"
       width="700px">
       <div class="each-param" v-for="(de, index) in desc" :key="index">
         <div class="param-switch">
-          <el-select v-model="de.lang" placeholder="请选择">
+          <el-select v-model="de.lang"
+            :placeholder="$t('other.lang.choiceLang')"
+          >
             <el-option
               v-for="lang in reaminLang"
               :key="lang"
@@ -24,7 +26,7 @@
         <div class="param-value">
           <el-input
             class="option-value"
-            placeholder="请输入内容"
+            :placeholder="$t('entities.command.b-desc-input')"
             v-model="de.value"
             @input="handleAdd()"
             clearable>
@@ -32,8 +34,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmParam">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{$t('other.btn.cancel')}}</el-button>
+        <el-button type="primary" @click="confirmParam">{{$t('other.btn.ok')}}</el-button>
       </span>
     </el-dialog>
   </div>

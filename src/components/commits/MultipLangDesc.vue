@@ -3,13 +3,15 @@
     <el-dialog
       center
       @open="cleanParam"
-      title="多语言"
+      :title="$t('other.lang.moreLang')"
       :visible.sync="dialogVisible"
       :append-to-body="appendToBody"
       width="700px">
       <div class="each-param" v-for="(de, index) in desc" :key="index">
         <div class="param-switch">
-          <el-select v-model="de.lang" placeholder="请选择" @change='handleAdd'>
+          <el-select v-model="de.lang" @change='handleAdd'
+            :placeholder="$t('other.lang.choiceLang')"
+          >
             <el-option
               v-for="lang in reaminLang"
               :key="lang"
@@ -27,7 +29,7 @@
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 6}"
             class="option-value"
-            placeholder="请输入内容"
+            :placeholder="$t('entities.command.desc-input')"
             v-model="de.value"
             @input="handleAdd()"
             >
@@ -35,8 +37,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmParam">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{$t('other.btn.cancel')}}</el-button>
+        <el-button type="primary" @click="confirmParam">{{$t('other.btn.ok')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -63,7 +65,6 @@ export default {
   data() {
     return {
       desc: [],
-      currentLang: 'zh',
       langs: ['zh', 'en', 'jp'],
     };
   },
@@ -83,6 +84,9 @@ export default {
     realParams() {
       return this.desc.filter(lang => StringUtils.nonEmptyString(lang.value)
         && StringUtils.nonEmptyString(lang.lang));
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   methods: {

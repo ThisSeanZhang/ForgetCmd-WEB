@@ -3,15 +3,13 @@ import Param from './Param';
 import CommandOption from './CommandOption';
 import Command from './Command';
 
-const currentLang = 'zh';
-
 export default class CommandCommit {
   constructor(commit) {
     this.ccid = commit.ccid;
     this.cid = commit.cid;
     this.commandName = commit.commandName ? commit.commandName : '';
-    this.briefDesc = commit.briefDesc ? commit.briefDesc : { [currentLang]: '' };
-    this.description = commit.description ? commit.description : { [currentLang]: '' };
+    this.briefDesc = commit.briefDesc ? commit.briefDesc : {};
+    this.description = commit.description ? commit.description : {};
     this.version = commit.version;
     this.platform = commit.platform;
     this.argNum = commit.argNum;

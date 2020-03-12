@@ -18,7 +18,7 @@
             <div>{{convertType(param.type)}}</div>
           </div> -->
           <div style="flex: 4;">
-            <div>{{param.getCurrentLangDesc()}}</div>
+            <div>{{param.getCurrentLangDesc(currentLang)}}</div>
           </div>
           <div class="per-operation" style="width: 80px;">
             <i @click="editParam(index)"
@@ -30,23 +30,6 @@
     </div>
     <!-- 底部空白填充 -->
     <div style="flex: 1;"></div>
-    <div class="per-delete-param" style="display: none">
-      <div style="flex: 2;">文件夹名称</div>
-      <div style="flex: 1;">STRING</div>
-      <div style="flex: 4;">指定文件夹</div>
-      <div class="per-operation" style="width: 80px;">
-        <el-popover
-          placement="top"
-          width="160">
-          <p>这是一段内容这是一段内容确定删除吗？</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
-          </div>
-          <i slot="reference" class="el-icon-refresh-right"></i>
-        </el-popover>
-      </div>
-    </div>
     <edit-param-panel v-model="paramDdrawerShow"
       :InParam="currentParam" v-on:updateParam="updateParam($event)" />
   </div>
@@ -81,6 +64,9 @@ export default {
       return this.params.length > 0 && this.editIndex !== undefined
         ? this.params[this.editIndex]
         : new CmdParam({ index: this.params.length });
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   methods: {

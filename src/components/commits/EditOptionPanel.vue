@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     center
-    title="添加可选参数"
     @open="cleanParam"
     :before-close="handleDrawerClose"
     :visible.sync="drawerVisible"
@@ -9,22 +8,27 @@
     direction="rtl"
     custom-class="params-drawer"
     size="50%">
+    <div slot="title">{{$t('page.commitPanel.editOption.edit-title')}}</div>
     <div class="params-drawer-content">
       <el-form :model="option" label-width="80px">
-        <el-form-item label="简写">
-          <el-input v-model="option.briefName"></el-input>
+        <el-form-item :label="$t('entities.option.brief-name')">
+          <el-input v-model="option.briefName"
+            :placeholder="$t('entities.option.b-name-input')">
+          </el-input>
         </el-form-item>
-        <el-form-item label="全称">
-          <el-input v-model="option.fullName"></el-input>
+        <el-form-item :label="$t('entities.option.full-name')">
+          <el-input v-model="option.fullName"
+            :placeholder="$t('entities.option.full-name-input')">
+          </el-input>
         </el-form-item>
-        <el-form-item label="描述">
+        <el-form-item :label="$t('entities.option.description')">
           <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 6}"
-            placeholder="请输入描述"
+            :placeholder="$t('entities.option.desc-input')"
             v-model="option.description[currentLang]">
           </el-input>
-          <el-tooltip  content="更多语言" placement="top">
+          <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
             <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
           </el-tooltip>
         </el-form-item>
@@ -36,11 +40,11 @@
             v-model="option.whenEnable"
             style="width: 100%;"></el-date-picker>
         </el-form-item> -->
-        <el-form-item label="允许重复">
+        <el-form-item :label="$t('entities.option.repeat')">
           <el-switch v-model="option.repeat"></el-switch>
         </el-form-item>
-        <el-form-item label="类型">
-          <el-select v-model="option.type" placeholder="请选择">
+        <el-form-item :label="$t('entities.option.type')">
+          <el-select v-model="option.type" :placeholder="$t('entities.option.choice-type')">
             <el-option
               v-for="item in optionType"
               :key="item.value"
@@ -49,7 +53,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="isEnum()" label="枚举值">
+        <el-form-item v-if="isEnum()" :label="$t('entities.option.enum')">
           <el-tag
             :key="tag"
             v-for="tag in enums.rules"
@@ -69,11 +73,11 @@
           >
           </el-input>
           <el-button v-else class="button-new-tag"
-          size="small" @click="showInput">+ New Tag</el-button>
+          size="small" @click="showInput">{{$t('entities.option.enum-add')}}</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="drawerVisible = false">取消</el-button>
-          <el-button type="primary" @click="confirmParam">确定</el-button>
+          <el-button @click="drawerVisible = false">{{$t('other.btn.cancel')}}</el-button>
+          <el-button type="primary" @click="confirmParam">{{$t('other.btn.ok')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -114,6 +118,9 @@ export default {
         this.$emit('input', vNew);
       },
     },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
   },
   data() {
     return {
@@ -125,7 +132,6 @@ export default {
         inputVisible: false,
       },
       multipLangDescDialog: false,
-      currentLang: 'zh',
     };
   },
   methods: {
@@ -155,7 +161,7 @@ export default {
         done();
         return;
       }
-      this.$confirm('要保存已经修改的吗？')
+      this.$confirm(this.$t('other.action.want-save'))
         .then(() => {
           this.confirmParam();
           done();
@@ -176,7 +182,7 @@ export default {
     handleInputConfirm() {
       if (this.enums.rules.indexOf(this.enums.inputValue) > -1) {
         this.$notify({
-          title: '重复的枚举值',
+          title: this.$t('page.commitPanel.editOption.repeat-enum'),
         });
         return;
       }
