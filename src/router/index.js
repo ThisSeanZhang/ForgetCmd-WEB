@@ -9,6 +9,7 @@ import SnapshotInject from '@/views/SnapshotInject.vue';
 import tempBaseView from '@/views/tempBaseView.vue';
 import ReviewCommit from '@/views/ReviewCommit.vue';
 import PaddingCommand from '@/views/PaddingCommand.vue';
+import ListCommandCommit from '@/views/commit/ListCommandCommit.vue';
 
 Vue.use(Router);
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/commits/create',
       name: 'create-commit',
       component: CreateCommit,
+    },
+    {
+      path: '/commits',
+      name: 'list-commit',
+      component: ListCommandCommit,
     },
     {
       path: '/cmd',

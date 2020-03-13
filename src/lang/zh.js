@@ -66,7 +66,7 @@ export default {
       'desc-input': '请输入描述',
     },
     option: {
-      'brief-name': '简写',
+      briefName: '简写',
       'b-name-input': '请输入选项简称',
       'full-name': '全称',
       'full-name-input': '请输入完整命令',
@@ -102,8 +102,10 @@ export default {
       'want-save': '要保存已做的修改的吗？',
     },
   },
-  ccc: {
-    aaa: '顶顶顶顶',
+  lang: {
+    zh: '中文',
+    en: '英文',
+    jp: '日文',
   },
   ele: { ...zhLocale }, // 或者用 Object.assign({ message: '你好' }, zhLocale)
 };

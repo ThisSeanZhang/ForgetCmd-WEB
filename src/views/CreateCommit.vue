@@ -31,7 +31,7 @@ export default {
       paramVal: [],
       optionVal: [],
       commit: Commit.CreateFackCommit(),
-      originCmd: new Command({ commandName: 'docker' }),
+      originCmd: new Command({ commandName: 'docker', params: [{ index: 0, description: { zh: 'aaaa' } }] }),
     };
   },
   computed: {

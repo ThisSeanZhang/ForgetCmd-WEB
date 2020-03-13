@@ -66,7 +66,7 @@ export default {
       'desc-input': 'Param Description',
     },
     option: {
-      'brief-name': 'Brief',
+      briefName: 'Brief',
       'b-name-input': 'Option Brief Name',
       'full-name': 'Full',
       'full-name-input': 'Option Full Name',
@@ -102,8 +102,10 @@ export default {
       'want-save': 'do you want save your input？',
     },
   },
-  ccc: {
-    aaa: 'dddd',
+  lang: {
+    zh: 'Chinese',
+    en: 'English',
+    jp: 'Japanese',
   },
   ele: { ...enLocale }, // 或者用 Object.assign({ message: 'hello' }, enLocale)
 };

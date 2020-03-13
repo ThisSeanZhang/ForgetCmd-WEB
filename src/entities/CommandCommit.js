@@ -88,7 +88,7 @@ export default class CommandCommit {
       new CommandOption({}),
     ];
     commit.params = [
-      new Param({ index: 0 }),
+      new Param({ index: 0, description: { zh: 'aaaa' } }),
       new Param({ index: 1 }),
       new Param({ index: 2 }),
       new Param({ index: 3 }),

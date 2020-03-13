@@ -11,7 +11,7 @@
     <div slot="title">{{$t('page.commitPanel.editOption.edit-title')}}</div>
     <div class="params-drawer-content">
       <el-form :model="option" label-width="80px">
-        <el-form-item :label="$t('entities.option.brief-name')">
+        <el-form-item :label="$t('entities.option.briefName')">
           <el-input v-model="option.briefName"
             :placeholder="$t('entities.option.b-name-input')">
           </el-input>

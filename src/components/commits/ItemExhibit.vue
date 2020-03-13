@@ -54,6 +54,9 @@
             <el-col :span="16"><span >{{item.value}}</span></el-col>
           </el-row>
         </div>
+        <span class="head-arrow">
+          <i v-if="valueIsObj" :class="isOpen ? 'el-icon-arrow-down' : 'el-icon-arrow-left'"></i>
+        </span>
       </div>
       <div v-if="isObj(item.value)">
         <el-collapse-transition >
@@ -84,7 +87,7 @@
       <div class="head-title">
         <el-row class="row-aligned" :gutter="20">
           <el-col :span="8">
-            <el-tag type='info'>{{splitExhibitKey}}:</el-tag>
+            <el-tag type='info'>{{splitExhibitKey}}</el-tag>
           </el-col>
           <el-col :span="8">
             <span>{{item.oValue}}</span>
@@ -204,13 +207,16 @@ export default {
       return true;
     },
     splitExhibitKey() {
-      if (this.item.type === 'base') return this.item.keyPath;
+      if (this.item.type === 'base') return this.getSubKeyDesc('entities.command', this.item.keyPath);
       const keys = String(this.item.keyPath).split('.');
       if (keys.length >= 2) {
         // TODO need lang map translate
-        let mainKey = keys.shift();
-        if (this.item.type === 'params') mainKey = `${this.$t('entities.param.index-name')} ${mainKey} : `;
-        return `${mainKey} ${keys.join('.')}`;
+        const mainKey = keys.shift();
+        if (this.item.type === 'params') {
+          // const lang = this.$t(`lang.${keys.pop()}`);
+          return `${this.$t('entities.param.index-name')} ${parseInt(mainKey, 10) + 1} ${this.getSubKeyDesc('entities.param', keys.join('.'))} `;
+        }
+        return `${mainKey} ${this.getSubKeyDesc('entities.option', keys.join('.'))}`;
       }
       if (this.item.type === 'params') return `${this.$t('entities.param.index-name')} ${this.item.keyPath + 1}: `;
       return this.item.keyPath;
@@ -241,8 +247,43 @@ export default {
       return desc && desc[this.currentLang] ? desc[this.currentLang] : '';
     },
     getLangKey(langKey) {
-      const remain = this.allLangs.filter(l => l.key === langKey);
-      return remain.length > 0 ? remain[0].desc : langKey;
+      // const remain = this.allLangs.filter(l => l.key === langKey);
+      // return remain.length > 0 ? remain[0].desc : langKey;
+      return this.$t(`lang.${langKey}`);
+    },
+    getBaseExhibitKey() {
+      const keys = String(this.item.keyPath).split('.');
+      let langDesc = '';
+      if (keys.length >= 2) {
+        const langKey = keys.pop();
+        langDesc = this.$t(`lang.${langKey}`);
+      }
+      const mainKey = keys.shift();
+      return `${this.$t(`entities.command.${mainKey}`)} ${langDesc}`;
+    },
+    getSubKeyDesc(i18Path, keyPath) {
+      const keys = String(keyPath).split('.');
+      let langDesc = '';
+      if (keys.length >= 2) {
+        const langKey = keys.pop();
+        langDesc = this.$t(`lang.${langKey}`);
+      }
+      const mainKey = keys.shift();
+      return `${this.$t(`${i18Path}.${mainKey}`)} ${langDesc}`;
+    },
+    getParamExhibitKey() {
+      if (this.item.type === 'base') return this.item.keyPath;
+      const keys = String(this.item.keyPath).split('.');
+      if (keys.length >= 2) {
+        // TODO need lang map translate
+        let mainKey = keys.shift();
+        if (this.item.type === 'params') mainKey = `${this.$t('entities.param.index-name')} ${mainKey} : `;
+        return `${mainKey} ${keys.join('.')}`;
+      }
+      if (this.item.type === 'params') return `${this.$t('entities.param.index-name')} ${this.item.keyPath + 1}: `;
+      return this.item.keyPath;
+    },
+    getOptionExhibitKey() {
     },
   },
   created() {
