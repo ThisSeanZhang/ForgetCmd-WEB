@@ -105,6 +105,10 @@ export default {
       }
       return '-';
     },
+    exhibitName(option) {
+      if (!option) return '';
+      return option.briefName && option.briefName !== '' ? option.briefName : option.fullName;
+    },
     dealValue(deal) {
       let allRows = [];
       allRows.push(this.cmd.commandName);
@@ -112,9 +116,9 @@ export default {
         .filter(option => option.selected)
         .map((option) => {
           if (option.isMultip()) {
-            return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${option.briefName} ${p.value}`);
+            return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${this.exhibitName(option)} ${p.value}`);
           }
-          return [`${this.buildHyphen(option)}${option.briefName} ${option.value}`];
+          return [`${this.buildHyphen(option)}${this.exhibitName(option)} ${option.value}`];
         })
         .reduce((a1, a2) => a1.concat(a2), []);
       // console.log(JSON.stringify(cmdOption));

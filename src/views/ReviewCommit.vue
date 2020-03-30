@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      添加命令
+      <CMDHeader></CMDHeader>
     </el-header>
     <el-main>
       <CommandPanel
@@ -10,7 +10,8 @@
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
-      <ItemConfirm @effectItems="effectInCmd($event)" />
+      <div v-if="items.length === 0"></div>
+      <ItemConfirm v-else :items="items" @effectItems="effectInCmd($event)" />
     </el-main>
     <el-footer>
     </el-footer>
@@ -18,14 +19,18 @@
 </template>
 <script>
 // import Commit from '../entities/CommandCommit';
+import { ajax, wantNothing } from '@/api/fetch';
 import Command from '../entities/Command';
 import CommandOption from '../entities/CommandOption';
 import ItemConfirm from '../components/commits/ItemConfirm.vue';
 import CommandPanel from '../components/command/CommandPanel.vue';
+import CMDHeader from '@/components/header/Header.vue';
+import CommitItem from '../entities/CommitItem';
+import Param from '../entities/Param';
 
 export default {
   name: 'review-commit',
-  components: { ItemConfirm, CommandPanel },
+  components: { ItemConfirm, CommandPanel, CMDHeader },
   data() {
     return {
       paramVal: [],
@@ -33,6 +38,11 @@ export default {
       // commit: Commit.CreateFackCommit(),
       cmd: new Command({}),
       effItems: [],
+      items: [],
+      loading: {
+        doing: false,
+        success: false,
+      },
     };
   },
   watch: {
@@ -64,6 +74,35 @@ export default {
     doTemp(inCmd, item) {
       if (item.type === 'options') {
         this.$set(inCmd, 'options', this.feedOption(inCmd, item));
+        // this.cmd.options = Object.values(optionMap);
+      }
+      if (item.type === 'base') {
+        this.$set(inCmd, item.keyPath, item.value);
+        // this.cmd.options = Object.values(optionMap);
+      }
+      if (item.type === 'params') {
+        let params = [];
+        if (item.action === 0) {
+          params = inCmd.params || [];
+          const p = [params.length, 0, new Param(item.value)];
+          for (let index = 0; index < params.length; index += 1) {
+            const param = params[index];
+            if (parseInt(param.keyPath, 10) === parseInt(item.keyPath, 10)) {
+              p[0] = index;
+              p[1] = 1;
+              break;
+            }
+            if (parseInt(param.keyPath, 10) > parseInt(item.keyPath, 10)) {
+              p[0] = index;
+              break;
+            }
+          }
+          params.splice(...p);
+        }
+        if (item.action === 2) {
+          params = inCmd.params.filter(i => parseInt(i.keyPath, 10) !== parseInt(item.keyPath, 10));
+        }
+        this.$set(inCmd, 'params', params);
         // this.cmd.options = Object.values(optionMap);
       }
       // console.log(item);
@@ -101,7 +140,7 @@ export default {
       if (item.action === 0) {
         const path = item.keyPath.split('.');
         if (path.length <= 1) {
-          optionMap[item.keyPath] = new CommandOption(JSON.parse(item.value));
+          optionMap[item.keyPath] = new CommandOption(item.value);
           return Object.values(optionMap);
         }
         if (!Object.keys(optionMap).includes(path[0])) {
@@ -118,8 +157,28 @@ export default {
       }
       return Object.values(optionMap);
     },
+    fetchCommitItems() {
+      const request = {
+        url: '/commits/items',
+        method: 'GET',
+        data: {
+          ccids: this.$route.params.ccids,
+        },
+      };
+      console.log(request);
+      ajax(request, this.loading).then((resp) => {
+        this.items = resp.data.data.map(item => new CommitItem({
+          ...item,
+          value: JSON.parse(item.value),
+          oValue: JSON.parse(item.ovalue),
+        }));
+        console.log(this.items);
+      }).catch(wantNothing);
+    },
   },
   created() {
+    console.log(this.$route.params.ccids);
+    this.fetchCommitItems();
     this.cmd.options.push({
       oid: 1,
       cid: 1,

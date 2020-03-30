@@ -78,6 +78,16 @@ export default {
       enum: '枚举值',
       'enum-add': '新增枚举',
       'enum-option': '',
+      rules: '',
+    },
+    commit: {
+      commandName: '命令名称',
+      'name-input': '请输入命令名称',
+      briefDesc: '简述',
+      'b-desc-input': '请输入命令简述',
+      description: '详细描述',
+      'desc-input': '请输入命令完整描述',
+      status: '状态',
     },
   },
   other: {
@@ -86,11 +96,13 @@ export default {
       choiceLang: '请选择语言',
     },
     btn: {
+      operate: '操作',
       cancel: '取 消',
       ok: '确 定',
       per: '上一步',
       next: '下一步',
       submit: '提交',
+      perview: '预 览',
     },
     copy: {
       message: {

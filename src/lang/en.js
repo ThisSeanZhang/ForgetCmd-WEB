@@ -78,6 +78,16 @@ export default {
       enum: 'Enum',
       'enum-add': 'NEW ENUM',
       'enum-option': '',
+      rules: '',
+    },
+    commit: {
+      commandName: 'CMD',
+      'name-input': 'Command Name',
+      briefDesc: 'Brief',
+      'b-desc-input': 'Command Brief Description',
+      description: 'DESC',
+      'desc-input': 'Command Description',
+      status: 'Status',
     },
   },
   other: {
@@ -86,11 +96,13 @@ export default {
       choiceLang: 'Choice Lang',
     },
     btn: {
+      operate: 'Operate',
       cancel: 'cancel',
       ok: 'OK',
       per: 'Per',
       next: 'Next',
       submit: 'Submit',
+      perview: 'Preview',
     },
     copy: {
       message: {

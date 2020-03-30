@@ -218,7 +218,7 @@ export default {
         }
         return `${mainKey} ${this.getSubKeyDesc('entities.option', keys.join('.'))}`;
       }
-      if (this.item.type === 'params') return `${this.$t('entities.param.index-name')} ${this.item.keyPath + 1}: `;
+      if (this.item.type === 'params') return `${this.$t('entities.param.index-name')} ${parseInt(this.item.keyPath, 10) + 1}: `;
       return this.item.keyPath;
     },
     currentLang() {

@@ -15,8 +15,8 @@ export default class CommandCommit {
     this.argNum = commit.argNum;
     this.whenDeprecated = commit.whenDeprecated;
     this.whenEnable = commit.whenEnable;
-    this.options = commit.options ? commit.options : [];
-    this.params = commit.params ? commit.params : [];
+    this.options = commit.options ? commit.options.map(op => new CommandOption(op)) : [];
+    this.params = commit.params ? commit.params.map(p => new Param(p)) : [];
     this.status = commit.status;
     this.items = commit.items;
   }

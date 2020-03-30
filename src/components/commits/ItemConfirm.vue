@@ -116,15 +116,16 @@ export default {
       return Object.keys(keyCount).filter(key => keyCount[key] > 1);
     },
     expandCreateDuplicateItem(items, keys) {
-      return items.filter(item => keys.includes(item.keyPath))
-        .map(item => item.expend())
-        .reduce((i1, i2) => i1.concat(i2));
+      const keyLists = items.filter(item => keys.includes(item.keyPath))
+        .map(item => item.expend());
+      return keyLists.length > 1 ? keyLists.reduce((i1, i2) => i1.concat(i2)) : [];
     },
   },
   created() {
     const keys = this.getCreateDuplicateKey(this.items);
     const expend = this.expandCreateDuplicateItem(this.items, keys);
     this.processedItems = this.items.filter(item => !keys.includes(item.keyPath)).concat(expend);
+    console.log(this.processedItems);
   },
 };
 </script>

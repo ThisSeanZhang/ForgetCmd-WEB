@@ -9,7 +9,7 @@ import SnapshotInject from '@/views/SnapshotInject.vue';
 import tempBaseView from '@/views/tempBaseView.vue';
 import ReviewCommit from '@/views/ReviewCommit.vue';
 import PaddingCommand from '@/views/PaddingCommand.vue';
-import ListCommandCommit from '@/views/commit/ListCommandCommit.vue';
+import ListCommit from '@/views/commit/ListCommit.vue';
 
 Vue.use(Router);
 
@@ -30,12 +30,12 @@ export default new Router({
       name: 'padding',
       component: PaddingCommand,
     },
-    {
+    { // 对存在的命令进行创建请求
       path: '/cmd/:cid/commits/create',
       name: 'create-commit',
       component: CreateCommit,
     },
-    {
+    { // 创建新命令的请求
       path: '/commits/create',
       name: 'create-commit',
       component: CreateCommit,
@@ -43,7 +43,12 @@ export default new Router({
     {
       path: '/commits',
       name: 'list-commit',
-      component: ListCommandCommit,
+      component: ListCommit,
+    },
+    {
+      path: '/commits/review/:ccids',
+      name: 'review-commit',
+      component: ReviewCommit,
     },
     {
       path: '/cmd',
@@ -54,11 +59,6 @@ export default new Router({
       path: '/cmds/:cid',
       name: 'command',
       component: Command,
-    },
-    {
-      path: '/commits/review',
-      name: 'review-commit',
-      component: ReviewCommit,
     },
     {
       path: '/commits/cmds',

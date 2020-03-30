@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import axios from 'axios';
 import { Message } from 'element-ui';
 // import store from '../store';
@@ -6,11 +7,13 @@ const TIME_OUT_MAX = 5000;
 
 const ajax = (option = {
   url: '', data: {}, isSilence: false, method: 'GET',
-}) => {
+}, loading = { doing: false, success: false }) => {
+  // set page loading === true
+  Vue.set(loading, 'doing', true);
   const opts = { method: option.method || 'GET', url: option.url };
   const query = {};
   Object.entries(option.data || {}).forEach(([key, value]) => {
-    if (value && value !== '') {
+    if (value !== null && value !== undefined && value !== '') {
       (query[key] = value);
     }
   });
@@ -22,10 +25,14 @@ const ajax = (option = {
     instance(opts)
       .then((res) => {
         resolve(res);
+        Vue.set(loading, 'doing', false);
+        Vue.set(loading, 'success', true);
       })
       .catch((error) => {
         // checkSession();
         reject(error);
+        Vue.set(loading, 'doing', false);
+        Vue.set(loading, 'success', false);
       });
   });
 };
