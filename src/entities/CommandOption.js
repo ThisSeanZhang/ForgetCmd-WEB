@@ -1,4 +1,5 @@
 import { ajax } from '../api/fetch';
+import strUtil from './StringUtils';
 
 function initRules(rules) {
   if (!rules) return [];
@@ -89,5 +90,26 @@ export default class CommandOption {
     return Object.prototype.hasOwnProperty.call(this.description, currentLang)
       ? this.description[currentLang]
       : '';
+  }
+
+  toData() {
+    return {
+      oid: this.oid,
+      description: strUtil.o2str(this.description, () => ''),
+      cid: this.cid,
+      briefName: this.briefName,
+      fullName: this.fullName,
+      frequency: this.frequency,
+      selected: this.selected,
+      type: this.type,
+      rules: strUtil.o2str(this.rules, () => ''),
+      ignore: this.ignore,
+      repeat: this.repeat,
+    };
+  }
+
+  static convertDatas(params) {
+    if (!params || params.length === 0) return [];
+    return params.map(p => p.toData());
   }
 }

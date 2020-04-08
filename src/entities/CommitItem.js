@@ -69,4 +69,22 @@ export default class CommitItem {
     return JSON.parse(json)
       .map(v => new CommitItem(v));
   }
+
+  toData() {
+    return {
+      description: JSON.stringify(this.description),
+      ciid: this.ciid,
+      type: this.type,
+      keyPath: this.keyPath,
+      oValue: JSON.stringify(this.oValue),
+      value: JSON.stringify(this.value),
+      ccid: this.ccid,
+      action: this.action,
+    };
+  }
+
+  static convertDatas(items) {
+    if (!items || items.length === 0) return [];
+    return items.map(p => p.toData());
+  }
 }

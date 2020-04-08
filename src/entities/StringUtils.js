@@ -32,8 +32,35 @@ function eq(str1, str2) {
   }
   return true;
 }
+
+function o2str(obj, func) {
+  try {
+    return JSON.stringify(obj);
+  } catch (error) {
+    if (func) {
+      return func(obj);
+    }
+    console.log(error);
+    throw error;
+  }
+}
+
+function parse(str, func) {
+  try {
+    return JSON.parse(str);
+  } catch (error) {
+    if (func) {
+      return func(str);
+    }
+    console.log(error);
+    throw error;
+  }
+}
+
 export default {
   isEmptyString,
   nonEmptyString,
   eq,
+  parse,
+  o2str,
 };

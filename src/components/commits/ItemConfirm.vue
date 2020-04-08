@@ -131,7 +131,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .item-wrapper{
-  width: 60%;
+  height: 100%;
+  width: 100%;
   display: flex;
   // flex-direction: column;
   // .item-alternative{

@@ -1,7 +1,9 @@
+import strUtil from './StringUtils';
 import { ajax } from '../api/fetch';
 import Param from './Param';
 import CommandOption from './CommandOption';
 import Command from './Command';
+import CommitItem from './CommitItem';
 
 export default class CommandCommit {
   constructor(commit) {
@@ -31,30 +33,31 @@ export default class CommandCommit {
 
   /* eslint no-param-reassign: ["error", { "props": false }] */
   static sendCommit(commit) {
-    const data = {
-      ...commit,
-      briefDesc: JSON.stringify(commit.briefDesc),
-      description: JSON.stringify(commit.description),
-      items: commit.items.map(item => ({
-        ...item,
-        value: JSON.stringify(item.value),
-        oValue: JSON.stringify(item.oValue),
-      })),
-    };
-    data.options = commit.options.map(option => ({
-      ...option,
-      rules: option.rules.join(','),
-    })).map(option => (delete option.value && option))
-      .map(option => (delete option.selected && option));
-    data.params = commit.params
-      .map(param => ({ ...param }))
-      .map(param => (delete param.value && param));
-    data.options = JSON.stringify(data.options);
-    data.params = JSON.stringify(data.params);
+    // const data = {
+    //   ...commit,
+    //   briefDesc: JSON.stringify(commit.briefDesc),
+    //   description: JSON.stringify(commit.description),
+    //   items: commit.items.map(item => ({
+    //     ...item,
+    //     value: JSON.stringify(item.value),
+    //     oValue: JSON.stringify(item.oValue),
+    //   })),
+    // };
+    // data.options = commit.options.map(option => ({
+    //   ...option,
+    //   rules: option.rules.join(','),
+    // })).map(option => (delete option.value && option))
+    //   .map(option => (delete option.selected && option));
+    // data.params = commit.params
+    //   .map(param => ({ ...param }))
+    //   .map(param => (delete param.value && param));
+
+    // data.options = JSON.stringify(data.options);
+    // data.params = JSON.stringify(data.params);
     const request = {
       method: 'POST',
       url: 'commits',
-      data,
+      data: commit.toData(),
     };
     return ajax(request);
   }
@@ -119,5 +122,28 @@ export default class CommandCommit {
       obj[op.fullName] = op;
     });
     return obj;
+  }
+
+  toData() {
+    return {
+      cid: this.cid,
+      commandName: this.commandName,
+      briefDesc: strUtil.o2str(this.briefDesc, () => ''),
+      description: strUtil.o2str(this.description, () => ''),
+      version: this.version,
+      platform: this.platform,
+      argNum: this.argNum,
+      whenDeprecated: this.whenDeprecated,
+      whenEnable: this.whenEnable,
+      frequency: this.frequency,
+      options: JSON.stringify(CommandOption.convertDatas(this.options)),
+      params: JSON.stringify(Param.convertDatas(this.params)),
+      items: CommitItem.convertDatas(this.items),
+    };
+  }
+
+  static convertDatas(cmds) {
+    if (!cmds || cmds.length === 0) return [];
+    return cmds.map(p => p.toData());
   }
 }

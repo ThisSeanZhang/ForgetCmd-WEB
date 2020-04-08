@@ -10,8 +10,13 @@
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
-      <div v-if="items.length === 0"></div>
-      <ItemConfirm v-else :items="items" @effectItems="effectInCmd($event)" />
+      <div style="width: 70%; height: 100%; display: flex; flex-direction: column;">
+        <div v-if="items.length === 0"></div>
+        <ItemConfirm v-else :items="items" @effectItems="effectInCmd($event)" />
+        <div style="display: flex; flex-direction: row-reverse; margin: 10px;">
+          <el-button @click="confirmCmd" type="primary">提交</el-button>
+        </div>
+      </div>
     </el-main>
     <el-footer>
     </el-footer>
@@ -61,8 +66,38 @@ export default {
       this.effItems.forEach(item => this.doTemp(tmpCmd, item));
       return tmpCmd;
     },
+    request() {
+      const ciids = this.effItems.map(i => i.ciid);
+      console.log(this.outCmd);
+      const { params, options, ...cmd } = { ...this.outCmd };
+      return {
+        url: '/cmds',
+        method: 'POST',
+        data: {
+          cmd: {
+            ...cmd,
+            briefDesc: JSON.stringify(cmd.briefDesc),
+            // description: JSON.stringify(cmd.description),
+          },
+          ciids,
+          params: Param.convertDatas(params),
+          options,
+          ccids: this.$route.params.ccids,
+        },
+      };
+    },
   },
   methods: {
+    confirmCmd() {
+      ajax(this.request, this.loading).then((resp) => {
+        this.items = resp.data.data.map(item => new CommitItem({
+          ...item,
+          value: JSON.parse(item.value),
+          oValue: JSON.parse(item.ovalue),
+        }));
+        console.log(this.items);
+      }).catch(wantNothing);
+    },
     upParamVal(paramVal) {
       this.paramVal = paramVal;
     },

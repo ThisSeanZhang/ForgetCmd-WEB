@@ -50,7 +50,11 @@ export default {
       return this.$t(`lang.${langKey}`);
     },
     sortOut() {
-      this.$router.push({ path: `/commits/review/${btoa(this.cmd.ccids)}` });
+      if (this.cmd.cid) {
+        this.$router.push({ path: `/cmd/${this.cmd.cid}/commits/review/${btoa(this.cmd.ccids)}` });
+      } else {
+        this.$router.push({ path: `/commits/review/${btoa(this.cmd.ccids)}` });
+      }
     },
   },
   created() {

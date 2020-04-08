@@ -37,13 +37,18 @@ export default new Router({
     },
     { // 创建新命令的请求
       path: '/commits/create',
-      name: 'create-commit',
+      name: 'create-commit-new',
       component: CreateCommit,
     },
     {
       path: '/commits',
       name: 'list-commit',
       component: ListCommit,
+    },
+    {
+      path: '/cmd/:cid/commits/review/:ccids',
+      name: 'cmd-review-commit',
+      component: ReviewCommit,
     },
     {
       path: '/commits/review/:ccids',

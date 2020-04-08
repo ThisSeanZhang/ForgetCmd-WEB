@@ -1,3 +1,4 @@
+import strUtil from './StringUtils';
 import { ajax } from '../api/fetch';
 import Param from './Param';
 import CommandOption from './CommandOption';
@@ -103,5 +104,28 @@ export default class Command {
 
   toSnap() {
     return { cid: this.cid, commandName: this.commandName, title: 'text' };
+  }
+
+  toData() {
+    return {
+      index: this.index,
+      cid: this.cid,
+      commandName: this.commandName,
+      briefDesc: strUtil.o2str(this.briefDesc, () => ''),
+      description: strUtil.o2str(this.description, () => ''),
+      version: this.version,
+      platform: this.platform,
+      argNum: this.argNum,
+      whenDeprecated: this.whenDeprecated,
+      whenEnable: this.whenEnable,
+      frequency: this.frequency,
+      options: CommandOption.convertDatas(this.options),
+      params: Param.convertDatas(this.params),
+    };
+  }
+
+  static convertDatas(cmds) {
+    if (!cmds || cmds.length === 0) return [];
+    return cmds.map(p => p.toData());
   }
 }

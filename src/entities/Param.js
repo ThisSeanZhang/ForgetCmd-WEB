@@ -20,4 +20,16 @@ export default class Param {
       ? this.description[currentLang]
       : '';
   }
+
+  toData() {
+    return {
+      index: this.index,
+      description: JSON.stringify(this.description),
+    };
+  }
+
+  static convertDatas(params) {
+    if (!params || params.length === 0) return [];
+    return params.map(p => p.toData());
+  }
 }
