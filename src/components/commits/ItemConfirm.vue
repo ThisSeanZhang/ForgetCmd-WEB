@@ -6,10 +6,12 @@
           :title="key" :name="key">
           <!-- <div>{{item}}</div> -->
           <div v-for="(value, index) in items" :key="index" class="per-item">
-            <ItemExhibit style="flex: 1;"  :item="value"  />
-            <el-tooltip class="item" effect="dark" content="移除" placement="top">
+            <el-tooltip
+              class="item" effect="dark" :content="$t('other.btn.remove')"
+              placement="top">
               <i @click="removeChoose(value.keyPath)" class='el-icon-caret-right'></i>
             </el-tooltip>
+            <ItemExhibit style="flex: 1;"  :item="value"  />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -26,7 +28,7 @@
     <el-scrollbar style="height: 100%; flex: 1;">
       <div class="item-alternative">
         <div v-for="(value, index) in alternativeItems" :key="index" class="per-item">
-          <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top">
+          <el-tooltip class="item" effect="dark" :content="$t('other.btn.inject')" placement="top">
             <i @click="addToChoose(value)" class='el-icon-caret-left'></i>
           </el-tooltip>
           <ItemExhibit style="flex: 1;" :item="value"  />

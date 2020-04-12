@@ -1,3 +1,5 @@
+import strUtil from './StringUtils';
+
 export default class CommitItem {
   constructor(item) {
     this.ciid = item.ciid;
@@ -86,5 +88,18 @@ export default class CommitItem {
   static convertDatas(items) {
     if (!items || items.length === 0) return [];
     return items.map(p => p.toData());
+  }
+
+  static convertObjs(objs) {
+    if (!objs || objs.length === 0) return [];
+    return objs.map(p => CommitItem.fromObj(p));
+  }
+
+  static fromObj(obj) {
+    return new CommitItem({
+      ...obj,
+      oValue: strUtil.parse(obj.oValue, () => ''),
+      value: strUtil.parse(obj.value, () => ''),
+    });
   }
 }

@@ -51,7 +51,9 @@ export default {
     paramDiff() {
       if (!this.compareParamLength || this.compareParamLength === 0) return [];
       return [...Array(this.compareParamLength).keys()]
-        .map(index => this.compareParam(index, this.cmd.params[index], this.commit.params[index]))
+        .map(index => this.compareParam(
+          index, this.cmd.params[index], { ...this.commit.params[index], index },
+        ))
         .reduce((list, c) => list.concat(c));
     },
     baseDiff() {

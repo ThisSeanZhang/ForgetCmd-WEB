@@ -1,5 +1,7 @@
 import { ajax } from '../api/fetch';
-
+/**
+ * 旧的
+ */
 function initRules(rules) {
   if (!rules) return [];
   return typeof rules !== 'string' ? rules : rules.split(',');

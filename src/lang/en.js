@@ -103,6 +103,8 @@ export default {
       next: 'Next',
       submit: 'Submit',
       perview: 'Preview',
+      remove: 'Remove',
+      inject: 'Inject',
     },
     copy: {
       message: {

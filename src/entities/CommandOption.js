@@ -112,4 +112,17 @@ export default class CommandOption {
     if (!params || params.length === 0) return [];
     return params.map(p => p.toData());
   }
+
+  static convertObjs(objs) {
+    if (!objs || objs.length === 0) return [];
+    return objs.map(p => CommandOption.fromObj(p));
+  }
+
+  static fromObj(obj) {
+    return new CommandOption({
+      ...obj,
+      description: strUtil.parse(obj.description, () => {}),
+      rules: strUtil.parse(obj.rules, () => []),
+    });
+  }
 }

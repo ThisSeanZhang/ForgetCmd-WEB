@@ -34,7 +34,7 @@
 </template>
 <script>
 import { ajax, wantNothing } from '@/api/fetch';
-import Commit from '@/entities/CommandCommit';
+import Commit from '../../entities/CommandCommit';
 
 export default {
   name: 'commits-table',
@@ -85,13 +85,7 @@ export default {
       // this.loading = true;
       ajax(this.request, this.loading).then((resp) => {
         console.log(resp.data.data);
-        this.commits = resp.data.data.map(commit => new Commit({
-          ...commit,
-          options: JSON.parse(commit.cmdOptions),
-          params: JSON.parse(commit.cmdParams),
-          briefDesc: JSON.parse(commit.briefDesc),
-          description: JSON.parse(commit.description),
-        }));
+        this.commits = resp.data.data.map(Commit.fromObj);
         // this.loading = false;
       }).catch(wantNothing);
     },

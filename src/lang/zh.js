@@ -103,6 +103,8 @@ export default {
       next: '下一步',
       submit: '提交',
       perview: '预 览',
+      remove: '移除',
+      inject: '添加',
     },
     copy: {
       message: {

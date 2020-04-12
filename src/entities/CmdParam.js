@@ -1,5 +1,5 @@
 import { ajax } from '../api/fetch';
-
+// 旧的
 export default class CmdParam {
   constructor(param) {
     this.cpid = param.cpid;

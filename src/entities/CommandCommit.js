@@ -76,17 +76,17 @@ export default class CommandCommit {
 
   static CreateFackCommit() {
     const commit = new CommandCommit({});
-    commit.commandName = 'docker run';
+    commit.commandName = 'podman run';
     commit.briefDesc = { zh: '' };
     commit.options = [
       new CommandOption({
-        oid: 1, cid: 1, briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,
+        briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,
       }),
       new CommandOption({
-        oid: 2, cid: 2, briefName: 'p', fullName: 'port', description: { zh: '容器映射端口' }, sort: 2, type: CommandOption.TYPE.MAP, repeat: true,
+        briefName: 'p', fullName: 'port', description: { zh: '容器映射端口' }, sort: 2, type: CommandOption.TYPE.MAP, repeat: true,
       }),
       new CommandOption({
-        oid: 3, cid: 3, briefName: 'a', fullName: 'a', description: { zh: 'aaa' }, sort: 2, type: CommandOption.TYPE.ENUM, rules: 'aaa,bbbb,ccc',
+        briefName: 'a', fullName: 'a', description: { zh: 'aaa' }, sort: 2, type: CommandOption.TYPE.ENUM, rules: 'aaa,bbbb,ccc',
       }),
       new CommandOption({}),
     ];
@@ -142,8 +142,14 @@ export default class CommandCommit {
     };
   }
 
-  static convertDatas(cmds) {
-    if (!cmds || cmds.length === 0) return [];
-    return cmds.map(p => p.toData());
+  static fromObj(obj) {
+    return new CommandCommit({
+      ...obj,
+      briefDesc: strUtil.parse(obj.briefDesc, () => {}),
+      description: strUtil.parse(obj.description, () => {}),
+      options: CommandOption.convertObjs(strUtil.parse(obj.options), () => []),
+      params: Param.convertObjs(strUtil.parse(obj.params), () => []),
+      rules: strUtil.parse(obj.rules, () => []),
+    });
   }
 }

@@ -14,7 +14,7 @@
         <div v-if="items.length === 0"></div>
         <ItemConfirm v-else :items="items" @effectItems="effectInCmd($event)" />
         <div style="display: flex; flex-direction: row-reverse; margin: 10px;">
-          <el-button @click="confirmCmd" type="primary">提交</el-button>
+          <el-button @click="confirmCmd" type="primary">{{$t('other.btn.submit')}}</el-button>
         </div>
       </div>
     </el-main>
@@ -69,18 +69,14 @@ export default {
     request() {
       const ciids = this.effItems.map(i => i.ciid);
       console.log(this.outCmd);
-      const { params, options, ...cmd } = { ...this.outCmd };
+      const { params, options, ...cmd } = { ...this.outCmd.toData() };
       return {
         url: '/cmds',
         method: 'POST',
         data: {
-          cmd: {
-            ...cmd,
-            briefDesc: JSON.stringify(cmd.briefDesc),
-            // description: JSON.stringify(cmd.description),
-          },
+          cmd,
           ciids,
-          params: Param.convertDatas(params),
+          params,
           options,
           ccids: this.$route.params.ccids,
         },
@@ -90,12 +86,7 @@ export default {
   methods: {
     confirmCmd() {
       ajax(this.request, this.loading).then((resp) => {
-        this.items = resp.data.data.map(item => new CommitItem({
-          ...item,
-          value: JSON.parse(item.value),
-          oValue: JSON.parse(item.ovalue),
-        }));
-        console.log(this.items);
+        console.log(resp.data.data);
       }).catch(wantNothing);
     },
     upParamVal(paramVal) {
@@ -112,32 +103,57 @@ export default {
         // this.cmd.options = Object.values(optionMap);
       }
       if (item.type === 'base') {
-        this.$set(inCmd, item.keyPath, item.value);
+        if (item.keyPath.includes('.')) {
+          this.editObject(inCmd, item);
+        } else {
+          this.$set(inCmd, item.keyPath, item.value);
+        }
         // this.cmd.options = Object.values(optionMap);
       }
       if (item.type === 'params') {
-        let params = [];
+        const paramMap = {};
+        (inCmd.params || []).forEach((p) => { paramMap[p.index] = p; });
+        console.log(paramMap);
+        const keys = item.keyPath.split('.');
+        const editParam = paramMap[keys[0]] || new Param({ ...item.value, index: keys[0] });
+        console.log(editParam);
+        // let params = [];
         if (item.action === 0) {
-          params = inCmd.params || [];
-          const p = [params.length, 0, new Param(item.value)];
-          for (let index = 0; index < params.length; index += 1) {
-            const param = params[index];
-            if (parseInt(param.keyPath, 10) === parseInt(item.keyPath, 10)) {
-              p[0] = index;
-              p[1] = 1;
-              break;
-            }
-            if (parseInt(param.keyPath, 10) > parseInt(item.keyPath, 10)) {
-              p[0] = index;
-              break;
-            }
+          if (keys.length > 1) {
+            this.editObject(editParam, item);
           }
-          params.splice(...p);
+          paramMap[keys[0]] = editParam;
+        }
+        if (item.action === 1) {
+          this.editObject(editParam, item);
+          paramMap[keys[0]] = editParam;
         }
         if (item.action === 2) {
-          params = inCmd.params.filter(i => parseInt(i.keyPath, 10) !== parseInt(item.keyPath, 10));
+          delete paramMap[keys[0]];
         }
-        this.$set(inCmd, 'params', params);
+        // if (item.action === 0) {
+        //   params = inCmd.params || [];
+        //   const p = [params.length, 0, new Param(item.value)];
+        //   for (let index = 0; index < params.length; index += 1) {
+        //     const param = params[index];
+        //     if (parseInt(param.keyPath, 10) === parseInt(item.keyPath, 10)) {
+        //       p[0] = index;
+        //       p[1] = 1;
+        //       break;
+        //     }
+        //     if (parseInt(param.keyPath, 10) > parseInt(item.keyPath, 10)) {
+        //       p[0] = index;
+        //       break;
+        //     }
+        //   }
+        //   params.splice(...p);
+        // }
+        // if (item.action === 2) {
+        //   params = inCmd.params
+        // .filter(i => parseInt(i.keyPath, 10) !== parseInt(item.keyPath, 10));
+        // }
+        // this.$set(inCmd, 'params', params);
+        this.$set(inCmd, 'params', Object.values(paramMap));
         // this.cmd.options = Object.values(optionMap);
       }
       // console.log(item);
@@ -152,6 +168,7 @@ export default {
       console.log(JSON.stringify(inObj));
       const keys = item.keyPath.split('.');
       const k = keys.pop();
+      if (item.type === 'params') keys.shift();
       const obj = this.getPathObject(inObj, keys);
       obj[k] = item.value;
       console.log(JSON.stringify(inObj));
@@ -202,11 +219,7 @@ export default {
       };
       console.log(request);
       ajax(request, this.loading).then((resp) => {
-        this.items = resp.data.data.map(item => new CommitItem({
-          ...item,
-          value: JSON.parse(item.value),
-          oValue: JSON.parse(item.ovalue),
-        }));
+        this.items = resp.data.data.map(CommitItem.fromObj);
         console.log(this.items);
       }).catch(wantNothing);
     },
