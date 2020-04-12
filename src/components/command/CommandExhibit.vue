@@ -64,6 +64,7 @@
 import { mapMutations } from 'vuex';
 import Command from '../../entities/Command';
 import Snapshot from '../../entities/Snapshot';
+import TimeUtils from '../../entities/TimeUtils';
 // import CmdParam from '../../entities/CmdParam';
 
 export default {
@@ -127,8 +128,11 @@ export default {
       return typeof deal === 'function' ? deal(allRows) : allRows;
     },
     craeteHistory() {
+      const createTime = new Date().getTime();
       this.newRecord({
         ...this.cmd.toSnap(),
+        title: TimeUtils.dateFormat('YYYY-MM-dd HH:mm:ss', createTime),
+        createTime,
         paramVal: this.params,
         optionVal: this.options,
       });

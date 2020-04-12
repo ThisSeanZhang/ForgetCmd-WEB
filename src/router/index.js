@@ -25,8 +25,8 @@ export default new Router({
         title: 'Forget? For Get!',
       },
     },
-    {
-      path: '/cmd/padding',
+    { // 填充命令
+      path: '/cmd/padding/:cid',
       name: 'padding',
       component: PaddingCommand,
     },

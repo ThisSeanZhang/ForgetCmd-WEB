@@ -128,4 +128,15 @@ export default class Command {
     if (!cmds || cmds.length === 0) return [];
     return cmds.map(p => p.toData());
   }
+
+  static fromObj(obj) {
+    return new Command({
+      ...obj,
+      briefDesc: strUtil.parse(obj.briefDesc, () => {}),
+      description: strUtil.parse(obj.description, () => {}),
+      options: CommandOption.convertObjs(obj.options),
+      params: Param.convertObjs(obj.params),
+      rules: strUtil.parse(obj.rules, () => []),
+    });
+  }
 }

@@ -3,6 +3,7 @@ import Vue from 'vue';
 // import { Notification } from 'element-ui';
 import { Message } from 'element-ui';
 import SnapShot from '../../entities/Snapshot';
+import StringUtils from '../../entities/StringUtils';
 
 // initial state
 const state = {
@@ -65,8 +66,11 @@ const mutations = {
     currentCmdHis.unshift(new SnapShot(snapshot));
     // console.log(state.cmdHistory[snapshot.commandName]);
     currentCmdHis.splice(10);
+    // 存入local Store
+    localStorage.setItem('SNAPSHOT_KEY', StringUtils.o2str(state.cmdHistory));
   },
   initRecord(state, recordStr) {
+    console.log(recordStr);
     Object.keys(recordStr).forEach((key) => {
       if (Object.prototype.toString.call(recordStr[key]) === '[object Array]') {
         // state.cmdHistory[key] = recordStr[key].map(snap => new SnapShot(snap));
@@ -84,6 +88,7 @@ const mutations = {
         showClose: true,
         message: '啊欧~删除失败<(＿　＿)>',
       });
+      return;
     }
     state.cmdHistory[commandName].splice(index, 1);
     // Notification.success({
@@ -94,6 +99,7 @@ const mutations = {
       showClose: true,
       message: '成功删除',
     });
+    localStorage.setItem('SNAPSHOT_KEY', StringUtils.o2str(state.cmdHistory));
   },
 };
 

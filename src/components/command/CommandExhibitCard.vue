@@ -146,8 +146,8 @@ export default {
     },
   },
   created() {
-    this.currentModel = this.exhibitModel.MULTLINE;
-    console.log(this.snap);
+    this.currentModel = this.exhibitModel.ONELINE;
+    // console.log(this.snap);
   },
 };
 </script>

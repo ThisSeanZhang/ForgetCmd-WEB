@@ -6,7 +6,7 @@
       :snap='snap'
       :index='index'
       v-on:delThis="removeByIndex({ commandName, index })"
-      v-for="(snap, index) in getCommandHis(commandName)" :key="index" />
+      v-for="(snap, index) in getCommandHis(commandName)" :key="snap.createTime" />
   </div>
 </template>
 <script>
