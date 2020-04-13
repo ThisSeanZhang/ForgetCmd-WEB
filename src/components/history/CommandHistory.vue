@@ -1,13 +1,16 @@
 <template>
-  <div style="width: 100%; padding: 10px;">
+  <!-- <div style="width: 100%; padding: 10px;"> -->
     <!-- {{JSON.stringify(getCommandHis(commandName))}} -->
     <!-- {{snaps[commandName]}} -->
+  <el-scrollbar style="width: 100%;">
     <CommandExhibitCard style="margin-bottom: 10px;"
       :snap='snap'
       :index='index'
+      v-on:restore="restore(index)"
       v-on:delThis="removeByIndex({ commandName, index })"
       v-for="(snap, index) in getCommandHis(commandName)" :key="snap.createTime" />
-  </div>
+  </el-scrollbar>
+  <!-- </div> -->
 </template>
 <script>
 // import Commit from '@/entities/CommandCommit';
@@ -34,6 +37,9 @@ export default {
       type: String,
       default: () => '',
     },
+    cid: {
+      type: String,
+    },
   },
   watch: {
     // commit: {
@@ -54,6 +60,12 @@ export default {
   methods: {
     upParamVal(paramVal) {
       this.paramVal = paramVal;
+    },
+    restore(index) {
+      const routeUrl = this.$router.resolve({
+        path: `/cmd/padding/${this.cid}/local-snap/${index}`,
+      });
+      window.open(routeUrl.href, '_blank');
     },
     ...mapActions('CommandHistory', ['removeByIndex']),
   },

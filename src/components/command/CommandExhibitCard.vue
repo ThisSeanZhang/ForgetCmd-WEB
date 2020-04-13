@@ -5,22 +5,26 @@
         <!-- 删除按钮 -->
           <el-popover
             placement="top"
-            width="160"
+            width="140"
             v-model="btn.deleteVisble">
-            <p>确定删除吗？</p>
+            <p>{{$t('other.delete.message.ask')}}</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="btn.deleteVisble = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="confirmDel()">确定</el-button>
+              <el-button size="mini" type="text" @click="btn.deleteVisble = false">
+                {{$t('other.btn.cancel')}}
+              </el-button>
+              <el-button type="primary" size="mini" @click="confirmDel()">
+                {{$t('other.btn.ok')}}
+              </el-button>
             </div>
             <el-tooltip class="" effect="dark"
-            content="删除" placement="top"
+            :content="$t('other.btn.remove')" placement="top"
             :disabled="btn.deleteVisble"
             slot="reference" >
               <i style="float: right; padding: 3px 3px" class="el-icon-close"></i>
           </el-tooltip>
         </el-popover>
         <!-- 复制按钮 -->
-        <el-tooltip class="" effect="dark" content="复制" placement="top">
+        <el-tooltip class="" effect="dark" :content="$t('other.btn.copy')" placement="top">
           <i style="float: right; padding: 3px 3px" class="el-icon-copy-document"
             v-clipboard:copy="dealValue(copyLine)"
             v-clipboard:success="onCopy"
@@ -35,8 +39,9 @@
           ></i>
         </el-tooltip>
         <!-- 恢复/查看快照按钮 -->
-        <el-tooltip class="" effect="dark" content="复原" placement="top">
-          <i style="float: right; padding: 3px 3px" class="el-icon-refresh-right"></i>
+        <el-tooltip class="" effect="dark" :content="$t('other.btn.restore')" placement="top">
+          <i @click="$emit('restore')"
+            style="float: right; padding: 3px 3px" class="el-icon-refresh-right"></i>
         </el-tooltip>
     </div>
     <div v-if="currentModel === exhibitModel.ONELINE">
@@ -79,8 +84,8 @@ export default {
   computed: {
     exhibitBtn() {
       return this.currentModel === this.exhibitModel.ONELINE
-        ? { icon: 'el-icon-document-remove', desc: '单行模式' }
-        : { icon: 'el-icon-document', desc: '多行模式' };
+        ? { icon: 'el-icon-document-remove', desc: this.$t('page.commandPanel.previewPanel.oneLine') }
+        : { icon: 'el-icon-document', desc: this.$t('page.commandPanel.previewPanel.multiple') };
     },
     options() {
       return this.snap.optionVal

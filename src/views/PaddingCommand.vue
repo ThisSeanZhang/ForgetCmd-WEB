@@ -17,6 +17,7 @@
       <CommandHistory
         v-if="cmdLoading.success"
         v-loading="cmdLoading.doing"
+        :cid="cid"
         :commandName="cmd.commandName" />
     </el-main>
     <el-footer>
@@ -25,12 +26,16 @@
 </template>
 <script>
 // import Commit from '../entities/CommandCommit';
+import { mapGetters } from 'vuex';
 import { ajax, wantNothing } from '@/api/fetch';
 import Command from '../entities/Command';
 import CommandPanel from '../components/command/CommandPanel.vue';
 import CommandHistory from '../components/history/CommandHistory.vue';
 import LoadPanel from '../components/common/LoadPanel.vue';
 import CMDHeader from '@/components/header/Header.vue';
+import StringUtils from '../entities/StringUtils';
+import Param from '../entities/Param';
+import CommandOption from '../entities/CommandOption';
 
 export default {
   name: 'padding-command',
@@ -43,6 +48,7 @@ export default {
       optionVal: [],
       cmd: new Command({}),
       cid: null,
+      snapIndex: null,
       cmdLoading: {
         doing: false,
         success: false,
@@ -61,6 +67,9 @@ export default {
     cid() {
       this.getCommandById();
     },
+    snapIndex() {
+      this.feedSnapVal();
+    },
   },
   computed: {
     request() {
@@ -78,19 +87,37 @@ export default {
       }
       ajax(this.request, this.cmdLoading).then((resp) => {
         this.cmd = Command.fromObj(resp.data.data);
+        // 不这样snap的command Name 拿不到
+        this.feedSnapVal();
       }).catch(wantNothing);
     },
     upParamVal(paramVal) {
       this.paramVal = paramVal;
     },
+    feedSnapVal() {
+      if (this.snapIndex !== null
+        && this.snapIndex !== undefined
+        && StringUtils.nonEmptyString(this.cmd.commandName)) {
+        const snap = this.getCommandHis()(this.cmd.commandName)[this.snapIndex];
+        if (snap) {
+          const copyOne = JSON.parse(JSON.stringify(snap));
+          console.log(copyOne);
+          this.paramVal = (copyOne.paramVal || []).map(p => new Param(p));
+          this.optionVal = (copyOne.optionVal || []).map(p => new CommandOption(p));
+        }
+      }
+    },
+    ...mapGetters('CommandHistory', ['getCommandHis']),
   },
   created() {
     // 根据路由获取
     this.getCommandById();
     this.cid = this.$route.params.cid;
+    this.snapIndex = this.$route.params.snapIndex;
   },
   beforeRouteUpdate(to, from, next) {
     this.cid = to.params.cid;
+    this.snapIndex = to.params.snapIndex;
     // console.log(to, from, next)
     next();
   },

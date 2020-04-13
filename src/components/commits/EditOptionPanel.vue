@@ -161,7 +161,7 @@ export default {
         done();
         return;
       }
-      this.$confirm(this.$t('other.action.want-save'))
+      this.$confirm(this.$t('other.leave.want-save'))
         .then(() => {
           this.confirmParam();
           done();

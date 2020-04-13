@@ -4,6 +4,8 @@ import Vue from 'vue';
 import { Message } from 'element-ui';
 import SnapShot from '../../entities/Snapshot';
 import StringUtils from '../../entities/StringUtils';
+// import CmdParam from '../../entities/CmdParam';
+// import CommandOption from '../../entities/CommandOption';
 
 // initial state
 const state = {
@@ -75,6 +77,11 @@ const mutations = {
       if (Object.prototype.toString.call(recordStr[key]) === '[object Array]') {
         // state.cmdHistory[key] = recordStr[key].map(snap => new SnapShot(snap));
         Vue.set(state.cmdHistory, key, recordStr[key].map(snap => new SnapShot(snap)));
+        // Vue.set(state.cmdHistory, key, recordStr[key].map(snap => new SnapShot({
+        //   ...snap,
+        //   paramVal: (snap.paramVal || []).map(p => new CmdParam(p)),
+        //   optionVal: (snap.optionVal || []).map(p => new CommandOption(p)),
+        // })));
       }
     });
   },

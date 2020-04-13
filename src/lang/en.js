@@ -26,7 +26,6 @@ export default {
         searchBar: 'brief or full or key word',
       },
       previewPanel: {
-        copy: 'copy',
         oneLine: 'one line mode',
         multiple: 'multiple line mode',
         snapshot: 'create snapshot',
@@ -105,6 +104,8 @@ export default {
       perview: 'Preview',
       remove: 'Remove',
       inject: 'Inject',
+      copy: 'Copy',
+      restore: 'Restore',
     },
     copy: {
       message: {
@@ -112,8 +113,13 @@ export default {
         error: 'COPY ERROR இ௰இ',
       },
     },
-    action: {
+    leave: {
       'want-save': 'do you want save your input？',
+    },
+    delete: {
+      message: {
+        ask: 'confirm to delete?',
+      },
     },
   },
   lang: {

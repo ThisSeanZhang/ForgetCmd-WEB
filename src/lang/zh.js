@@ -26,7 +26,6 @@ export default {
         searchBar: '选项名称或描述关键字',
       },
       previewPanel: {
-        copy: '复制',
         oneLine: '单行模式',
         multiple: '多行模式',
         snapshot: '创建快照',
@@ -105,6 +104,8 @@ export default {
       perview: '预 览',
       remove: '移除',
       inject: '添加',
+      copy: '复制',
+      restore: '恢复',
     },
     copy: {
       message: {
@@ -112,8 +113,13 @@ export default {
         error: '复制失败 இ௰இ',
       },
     },
-    action: {
+    leave: {
       'want-save': '要保存已做的修改的吗？',
+    },
+    delete: {
+      message: {
+        ask: '确定删除吗？',
+      },
     },
   },
   lang: {

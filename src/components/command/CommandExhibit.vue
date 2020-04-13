@@ -4,7 +4,7 @@
       <div>{{$t('page.commandPanel.preview')}}</div>
       <div>
         <el-tooltip effect="dark"
-          :content="$t('page.commandPanel.previewPanel.copy')" placement="top">
+          :content="$t('other.btn.copy')" placement="top">
           <el-button circle
           v-clipboard:copy="dealValue(copyLine)"
           v-clipboard:success="onCopy"
