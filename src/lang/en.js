@@ -15,6 +15,7 @@ export default {
       param: 'PARAMS',
       option: 'OPTIONS',
       preview: 'PREVIEW',
+      improve: 'Improve The Command',
       paramPanel: {
         'edit-title': 'Edit Params',
         add: 'add',

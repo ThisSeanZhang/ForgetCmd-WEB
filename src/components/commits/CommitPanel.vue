@@ -99,6 +99,7 @@
         @click="submitCmd"
         >提交</el-button> -->
       <el-button
+        :disabled="!canSubmit"
         v-show="currentStep === submitStep" type="primary"
         style="float: right;"
         @click="submitCmd"
@@ -222,6 +223,9 @@ export default {
     // },
   },
   computed: {
+    canSubmit() {
+      return this.commit.items && this.commit.items.length > 0;
+    },
     hasNext() {
       // return this.currentStep !== this.procedure.DONE
       //   && this.currentStep !== this.procedure.PER_VIEW;

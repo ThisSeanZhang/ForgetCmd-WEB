@@ -42,8 +42,10 @@ export default {
       const cOption = this.cmd.getOptionMap();
       const cOptionKeys = Object.keys(cOption);
       const ccOption = this.commit.getOptionMap();
-      return cOptionKeys
-        .concat(Object.keys(ccOption).filter(v => !cOptionKeys.includes(v)))
+      const allKeys = cOptionKeys
+        .concat(Object.keys(ccOption).filter(v => !cOptionKeys.includes(v))) || [];
+      if (allKeys.length === 0) return [];
+      return allKeys
         .map(key => this.compareOptions(key, cOption[key], ccOption[key]))
         .reduce((list, c) => list.concat(c));
     },
@@ -188,22 +190,22 @@ export default {
   mounted() {
   },
   created() {
-    this.cmd.options.push({
-      oid: 1,
-      cid: 1,
-      briefName: 'n',
-      fullName: 'name1',
-      description: { zh: '设值容器名称' },
-      rules: [],
-    });
-    this.tempCmd.options.push({
-      oid: 1,
-      cid: 1,
-      briefName: 'n',
-      fullName: 'name1',
-      description: { zh: '设值容器名称' },
-      rules: [],
-    });
+    // this.cmd.options.push({
+    //   oid: 1,
+    //   cid: 1,
+    //   briefName: 'n',
+    //   fullName: 'name1',
+    //   description: { zh: '设值容器名称' },
+    //   rules: [],
+    // });
+    // this.tempCmd.options.push({
+    //   oid: 1,
+    //   cid: 1,
+    //   briefName: 'n',
+    //   fullName: 'name1',
+    //   description: { zh: '设值容器名称' },
+    //   rules: [],
+    // });
   },
 };
 </script>

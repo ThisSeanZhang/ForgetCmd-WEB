@@ -7,6 +7,7 @@ function nonEmptyString(str) {
 const type = {
   object: str => JSON.stringify(str),
   string: str => str.trim(),
+  number: n => n,
 };
 function eq(str1, str2) {
   // 都为空 true

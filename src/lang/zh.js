@@ -15,6 +15,7 @@ export default {
       param: '命令参数',
       option: '命令参数',
       preview: '命令预览',
+      improve: '改进命令',
       paramPanel: {
         'edit-title': '编辑参数',
         add: '添加参数',

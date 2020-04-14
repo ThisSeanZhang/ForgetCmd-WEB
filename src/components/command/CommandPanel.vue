@@ -2,7 +2,7 @@
   <div class="cmd-panel">
     <div class="cmd-main">
       <div class="cmd-info">
-        <CommandInfo :cmd="inCmd" />
+        <CommandInfo :improve="improve" :cmd="inCmd" />
       </div>
       <el-scrollbar style="height: 90%;">
         <div>{{$t('page.commandPanel.param')}}:</div>
@@ -43,6 +43,10 @@ export default {
     optionVal: {
       type: Array,
       default: () => [],
+    },
+    improve: {
+      type: Boolean,
+      default: () => false,
     },
   },
   components: {

@@ -9,6 +9,7 @@
         v-loading="cmdLoading.doing"
         class="cmd-perview"
         :inCmd='cmd'
+        :improve="true"
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
