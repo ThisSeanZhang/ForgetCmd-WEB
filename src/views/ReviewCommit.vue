@@ -3,20 +3,36 @@
     <el-header>
       <CMDHeader></CMDHeader>
     </el-header>
-    <el-main>
+    <el-main
+      v-if="!commited"
+      v-loading="loading.doing"
+    >
       <CommandPanel
+        v-if="cmdLoading.success"
+        v-loading="cmdLoading.doing"
         class="cmd-perview"
         :inCmd='outCmd'
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
-      <div style="width: 70%; height: 100%; display: flex; flex-direction: column;">
+      <LoadPanel v-bind:loading="commitLoading"
+        v-else class="cmd-perview" v-bind:callBack="fetchCommitItems" />
+      <div
+        v-if="cmdLoading.success"
+        v-loading="commitLoading.doing"
+        style="width: 70%; height: 100%; display: flex; flex-direction: column;">
         <div v-if="items.length === 0"></div>
         <ItemConfirm v-else :items="items" @effectItems="effectInCmd($event)" />
         <div style="display: flex; flex-direction: row-reverse; margin: 10px;">
-          <el-button @click="confirmCmd" type="primary">{{$t('other.btn.submit')}}</el-button>
+          <el-button :disabled="!allowConfirm"
+            @click="confirmCmd" type="primary">{{$t('other.btn.submit')}}</el-button>
         </div>
       </div>
+      <LoadPanel v-bind:loading="commitLoading"
+      v-else class="cmd-perview" v-bind:callBack="fetchCommitItems" />
+    </el-main>
+    <el-main v-else>
+      提交成功
     </el-main>
     <el-footer>
     </el-footer>
@@ -24,7 +40,7 @@
 </template>
 <script>
 // import Commit from '../entities/CommandCommit';
-import { ajax, wantNothing } from '@/api/fetch';
+import { ajax, wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
 import CommandOption from '../entities/CommandOption';
 import ItemConfirm from '../components/commits/ItemConfirm.vue';
@@ -32,10 +48,16 @@ import CommandPanel from '../components/command/CommandPanel.vue';
 import CMDHeader from '@/components/header/Header.vue';
 import CommitItem from '../entities/CommitItem';
 import Param from '../entities/Param';
+import LoadPanel from '../components/common/LoadPanel.vue';
+import StringUtils from '../entities/StringUtils';
 
+// TODO version 从获取的cmd中获取
+// TODO 变更cid 时刷新页面内容
 export default {
   name: 'review-commit',
-  components: { ItemConfirm, CommandPanel, CMDHeader },
+  components: {
+    ItemConfirm, CommandPanel, CMDHeader, LoadPanel,
+  },
   data() {
     return {
       paramVal: [],
@@ -48,34 +70,62 @@ export default {
         doing: false,
         success: false,
       },
+      cmdLoading: {
+        doing: false,
+        success: false,
+      },
+      commitLoading: {
+        doing: false,
+        success: false,
+      },
+      cid: null,
+      ccids: null,
+      version: null,
+      commited: false,
     };
   },
   watch: {
-    // commit: {
-    //   handler(nval, oval) {
-    //     console.log(nval, oval);
-    //     this.cmd = this.commit.toCommand();
-    //     console.log(JSON.stringify(this.cmd));
-    //   },
-    //   deep: true,
-    // },
+    cid() {
+      this.getCommandById();
+      this.fetchCommitItems();
+    },
+    ccids() {
+      this.fetchCommitItems();
+    },
+    version() {
+      this.fetchCommitItems();
+    },
   },
   computed: {
+    allowConfirm() {
+      return StringUtils.nonEmptyString(this.outCmd.commandName) && this.effItems.length > 0;
+    },
     outCmd() {
       const tmpCmd = this.cmd.deepCopy();
       this.effItems.forEach(item => this.doTemp(tmpCmd, item));
       return tmpCmd;
     },
+    notNewCmd() {
+      return this.cid && this.version !== null && this.version !== undefined;
+    },
     request() {
-      const ciids = this.effItems.map(i => i.ciid);
-      console.log(this.outCmd);
+      // const ciids = this.effItems.map(i => i.ciid);
+      const usedIdMap = {};
+      this.effItems.forEach((item) => {
+        if (usedIdMap[item.ccid]) {
+          usedIdMap[item.ccid].push(item.ciid);
+        } else {
+          usedIdMap[item.ccid] = [item.ciid];
+        }
+      });
       const { params, options, ...cmd } = { ...this.outCmd.toData() };
       return {
         url: '/cmds',
         method: 'POST',
         data: {
           cmd,
-          ciids,
+          // ciids,
+          usedIdMap,
           params,
           options,
           ccids: this.$route.params.ccids,
@@ -85,8 +135,8 @@ export default {
   },
   methods: {
     confirmCmd() {
-      ajax(this.request, this.loading).then((resp) => {
-        console.log(resp.data.data);
+      ajax(this.request, this.loading).then(() => {
+        this.commited = true;
       }).catch(wantNothing);
     },
     upParamVal(paramVal) {
@@ -210,31 +260,50 @@ export default {
       return Object.values(optionMap);
     },
     fetchCommitItems() {
+      if (!this.ccids && !this.notNewCmd) {
+        this.commitLoading.success = true;
+        return;
+      }
       const request = {
         url: '/commits/items',
         method: 'GET',
         data: {
-          ccids: this.$route.params.ccids,
+          ccids: this.ccids,
+          cid: this.cid,
+          version: this.version,
         },
       };
       console.log(request);
-      ajax(request, this.loading).then((resp) => {
+      ajax(request, this.commitLoading).then((resp) => {
         this.items = resp.data.data.map(CommitItem.fromObj);
         console.log(this.items);
       }).catch(wantNothing);
     },
+    getCommandById() {
+      if (!this.cid) {
+        this.cmdLoading.success = true;
+        return;
+      }
+      const request = {
+        method: 'GET',
+        url: `cmds/${this.cid}`,
+      };
+      ajax(request, this.cmdLoading).then((resp) => {
+        this.cmd = Command.fromObj(resp.data.data);
+      }).catch(wantNothing);
+    },
   },
   created() {
-    console.log(this.$route.params.ccids);
-    this.fetchCommitItems();
-    this.cmd.options.push({
-      oid: 1,
-      cid: 1,
-      briefName: 'n',
-      fullName: 'name1',
-      description: { zh: '设值容器名称' },
-      rules: [],
-    });
+    this.ccids = this.$route.params.ccids;
+    this.cid = this.$route.params.cid;
+    this.version = this.$route.params.version;
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.cid = to.params.cid;
+    this.ccids = to.params.ccids;
+    this.version = to.params.version;
+    // console.log(to, from, next)
+    next();
   },
 };
 </script>

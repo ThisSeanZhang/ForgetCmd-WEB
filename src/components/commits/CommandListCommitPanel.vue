@@ -50,11 +50,14 @@ export default {
       return this.$t(`lang.${langKey}`);
     },
     sortOut() {
+      let path;
       if (this.cmd.cid) {
-        this.$router.push({ path: `/cmd/${this.cmd.cid}/commits/review/${btoa(this.cmd.ccids)}` });
+        path = `/commits/cmd/${this.cmd.cid}/ver/${this.cmd.version}/review`;
       } else {
-        this.$router.push({ path: `/commits/review/${btoa(this.cmd.ccids)}` });
+        path = `/commits/${btoa(this.cmd.ccids)}/review`;
       }
+      const routeUrl = this.$router.resolve({ path });
+      window.open(routeUrl.href, '_blank');
     },
   },
   created() {

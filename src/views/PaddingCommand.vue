@@ -111,10 +111,10 @@ export default {
     ...mapGetters('CommandHistory', ['getCommandHis']),
   },
   created() {
-    // 根据路由获取
-    this.getCommandById();
     this.cid = this.$route.params.cid;
     this.snapIndex = this.$route.params.snapIndex;
+    // 根据路由获取
+    // this.getCommandById();
   },
   beforeRouteUpdate(to, from, next) {
     this.cid = to.params.cid;

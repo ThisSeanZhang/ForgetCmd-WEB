@@ -51,12 +51,12 @@ export default new Router({
       component: ListCommit,
     },
     {
-      path: '/cmd/:cid/commits/review/:ccids',
+      path: '/commits/cmd/:cid/ver/:version/review',
       name: 'cmd-review-commit',
       component: ReviewCommit,
     },
     {
-      path: '/commits/review/:ccids',
+      path: '/commits/:ccids/review',
       name: 'review-commit',
       component: ReviewCommit,
     },

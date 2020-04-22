@@ -39,7 +39,7 @@ export default {
       paramVal: [],
       optionVal: [],
       commit: Commit.CreateFackCommit(),
-      originCmd: new Command({ commandName: 'docker', params: [{ index: 0, description: { zh: 'aaaa' } }] }),
+      originCmd: new Command({}),
       cid: null,
       loading: {
         doing: false,
@@ -69,20 +69,20 @@ export default {
     },
     getCommandById() {
       if (!this.cid) {
-        this.loading.success = false;
+        this.loading.success = true;
         return;
       }
       ajax(this.request, this.loading).then((resp) => {
         this.originCmd = Command.fromObj(resp.data.data);
-        console.log(this.originCmd);
+        // console.log(this.originCmd);
         this.commit = new Commit(JSON.parse(JSON.stringify(this.originCmd)));
-        console.log(this.commit);
+        // console.log(this.commit);
       }).catch(wantNothing);
     },
   },
   created() {
     // TODO 如果有ID的话需要获取相比较的cmd， commit 也要使用cmd进行初始化
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
     this.cid = this.$route.params.cid;
   },
   beforeRouteUpdate(to, from, next) {

@@ -99,7 +99,7 @@ export default class Command {
   }
 
   deepCopy() {
-    return new Command(JSON.parse(JSON.stringify(this)));
+    return Command.fromObj(JSON.parse(JSON.stringify(this.toData())));
   }
 
   toSnap() {

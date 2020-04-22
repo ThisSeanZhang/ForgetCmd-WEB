@@ -12,7 +12,7 @@ export default class CommandCommit {
     this.commandName = commit.commandName ? commit.commandName : '';
     this.briefDesc = commit.briefDesc ? commit.briefDesc : {};
     this.description = commit.description ? commit.description : {};
-    this.version = commit.version;
+    this.version = commit.version || 0;
     this.platform = commit.platform;
     this.argNum = commit.argNum;
     this.whenDeprecated = commit.whenDeprecated;
@@ -125,6 +125,10 @@ export default class CommandCommit {
   }
 
   toData() {
+    this.items.forEach((item) => {
+      item.cid = this.cid;
+      item.version = this.version;
+    });
     return {
       cid: this.cid,
       commandName: this.commandName,

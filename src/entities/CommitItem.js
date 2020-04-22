@@ -10,6 +10,8 @@ export default class CommitItem {
     this.value = item.value; // 变更后的值
     this.ccid = item.ccid; // 所属的命令提交
     this.action = item.action;
+    this.cid = item.cid;
+    this.version = item.version || 0;
   }
 
   static ACTION = {
@@ -82,6 +84,8 @@ export default class CommitItem {
       value: JSON.stringify(this.value),
       ccid: this.ccid,
       action: this.action,
+      cid: this.cid,
+      version: this.version,
     };
   }
 

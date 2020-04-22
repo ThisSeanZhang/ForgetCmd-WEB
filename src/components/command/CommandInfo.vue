@@ -7,7 +7,7 @@
         何时弃用:<span>{{cmd.whenDeprecated ? cmd.whenDeprecated : '未弃用'}}</span> -->
         <el-tooltip v-if="improve" class="item"
           effect="dark" :content="$t('page.commandPanel.improve')" placement="top">
-          <i class="el-icon-cpu"></i>
+          <i @click="toBuildCommit" class="el-icon-cpu"></i>
         </el-tooltip>
       </div>
     </div>
