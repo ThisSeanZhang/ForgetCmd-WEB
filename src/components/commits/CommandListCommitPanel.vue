@@ -52,7 +52,7 @@ export default {
     sortOut() {
       let path;
       if (this.cmd.cid) {
-        path = `/commits/cmd/${this.cmd.cid}/ver/${this.cmd.version}/review`;
+        path = `/commits/cmd/${this.cmd.cid}/review`;
       } else {
         path = `/commits/${btoa(this.cmd.ccids)}/review`;
       }

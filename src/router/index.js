@@ -51,7 +51,7 @@ export default new Router({
       component: ListCommit,
     },
     {
-      path: '/commits/cmd/:cid/ver/:version/review',
+      path: '/commits/cmd/:cid/review',
       name: 'cmd-review-commit',
       component: ReviewCommit,
     },

@@ -29,6 +29,7 @@ import CommandPanel from '../components/command/CommandPanel.vue';
 import CMDHeader from '@/components/header/Header.vue';
 import LoadPanel from '../components/common/LoadPanel.vue';
 
+// 直接修改不会刷新页面
 export default {
   name: 'create-commit',
   components: {

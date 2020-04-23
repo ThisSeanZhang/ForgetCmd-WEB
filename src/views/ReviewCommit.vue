@@ -4,7 +4,7 @@
       <CMDHeader></CMDHeader>
     </el-header>
     <el-main
-      v-if="!commited"
+      v-if="!commited && cmdLoading.success"
       v-loading="loading.doing"
     >
       <CommandPanel
@@ -17,8 +17,9 @@
         v-on:upParamVal="upParamVal($event)" />
       <LoadPanel v-bind:loading="commitLoading"
         v-else class="cmd-perview" v-bind:callBack="fetchCommitItems" />
+
       <div
-        v-if="cmdLoading.success"
+        v-if="commitLoading.success"
         v-loading="commitLoading.doing"
         style="width: 70%; height: 100%; display: flex; flex-direction: column;">
         <div v-if="items.length === 0"></div>
@@ -29,10 +30,14 @@
         </div>
       </div>
       <LoadPanel v-bind:loading="commitLoading"
-      v-else class="cmd-perview" v-bind:callBack="fetchCommitItems" />
+      v-else  v-bind:callBack="fetchCommitItems" />
     </el-main>
+    <!-- 当页面提交成功或者没有东西展示时呈现的 -->
     <el-main v-else>
-      提交成功
+      <!-- 提交成功 -->
+      <div v-if="cmdLoading.success">提交成功</div>
+      <!-- 没有相应资源 -->
+      <div v-else>找不到相关资源</div>
     </el-main>
     <el-footer>
     </el-footer>
@@ -51,7 +56,6 @@ import Param from '../entities/Param';
 import LoadPanel from '../components/common/LoadPanel.vue';
 import StringUtils from '../entities/StringUtils';
 
-// TODO version 从获取的cmd中获取
 // TODO 变更cid 时刷新页面内容
 export default {
   name: 'review-commit',
@@ -78,8 +82,8 @@ export default {
         doing: false,
         success: false,
       },
-      cid: null,
-      ccids: null,
+      // cid: null,
+      // ccids: null,
       version: null,
       commited: false,
     };
@@ -87,16 +91,18 @@ export default {
   watch: {
     cid() {
       this.getCommandById();
-      this.fetchCommitItems();
     },
     ccids() {
       this.fetchCommitItems();
     },
-    version() {
-      this.fetchCommitItems();
-    },
   },
   computed: {
+    cid() {
+      return this.$route.params.cid;
+    },
+    ccids() {
+      return this.$route.params.ccids;
+    },
     allowConfirm() {
       return StringUtils.nonEmptyString(this.outCmd.commandName) && this.effItems.length > 0;
     },
@@ -143,7 +149,7 @@ export default {
       this.paramVal = paramVal;
     },
     effectInCmd(items) {
-      console.log(items);
+      // console.log(items);
       this.effItems = items;
       // items.forEach(item => this.doTemp(this.cmd, item));
     },
@@ -163,11 +169,10 @@ export default {
       if (item.type === 'params') {
         const paramMap = {};
         (inCmd.params || []).forEach((p) => { paramMap[p.index] = p; });
-        console.log(paramMap);
+        // console.log(paramMap);
         const keys = item.keyPath.split('.');
         const editParam = paramMap[keys[0]] || new Param({ ...item.value, index: keys[0] });
-        console.log(editParam);
-        // let params = [];
+        // console.log(editParam);
         if (item.action === 0) {
           if (keys.length > 1) {
             this.editObject(editParam, item);
@@ -181,37 +186,9 @@ export default {
         if (item.action === 2) {
           delete paramMap[keys[0]];
         }
-        // if (item.action === 0) {
-        //   params = inCmd.params || [];
-        //   const p = [params.length, 0, new Param(item.value)];
-        //   for (let index = 0; index < params.length; index += 1) {
-        //     const param = params[index];
-        //     if (parseInt(param.keyPath, 10) === parseInt(item.keyPath, 10)) {
-        //       p[0] = index;
-        //       p[1] = 1;
-        //       break;
-        //     }
-        //     if (parseInt(param.keyPath, 10) > parseInt(item.keyPath, 10)) {
-        //       p[0] = index;
-        //       break;
-        //     }
-        //   }
-        //   params.splice(...p);
-        // }
-        // if (item.action === 2) {
-        //   params = inCmd.params
-        // .filter(i => parseInt(i.keyPath, 10) !== parseInt(item.keyPath, 10));
-        // }
-        // this.$set(inCmd, 'params', params);
         this.$set(inCmd, 'params', Object.values(paramMap));
-        // this.cmd.options = Object.values(optionMap);
       }
-      // console.log(item);
-      // const keys = item.key.split('.');
-      // const k = keys.pop();
-      // const obj = this.getPathObject(this.tempCmd, keys);
-      // obj[k] = '测试';
-      console.log(inCmd);
+      // console.log(inCmd);
     },
     editObject(inObj, item) {
       console.log(item);
@@ -281,6 +258,7 @@ export default {
     },
     getCommandById() {
       if (!this.cid) {
+        this.cmd = new Command({});
         this.cmdLoading.success = true;
         return;
       }
@@ -290,21 +268,22 @@ export default {
       };
       ajax(request, this.cmdLoading).then((resp) => {
         this.cmd = Command.fromObj(resp.data.data);
+        this.version = this.cmd.version;
+        this.fetchCommitItems();
       }).catch(wantNothing);
     },
   },
   created() {
-    this.ccids = this.$route.params.ccids;
-    this.cid = this.$route.params.cid;
-    this.version = this.$route.params.version;
+    this.getCommandById();
+    this.fetchCommitItems();
   },
-  beforeRouteUpdate(to, from, next) {
-    this.cid = to.params.cid;
-    this.ccids = to.params.ccids;
-    this.version = to.params.version;
-    // console.log(to, from, next)
-    next();
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log('触发beforeRouteUpdate');
+  //   this.cid = to.params.cid;
+  //   this.ccids = to.params.ccids;
+  //   // console.log(to, from, next)
+  //   next();
+  // },
 };
 </script>
 <style lang="scss" scoped>
