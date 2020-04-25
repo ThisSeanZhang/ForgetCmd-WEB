@@ -70,7 +70,8 @@ export default {
   },
   methods: {
     compaerBase(ob1, ob2) {
-      const compareKey = ['commandName'];
+      // 修改命令不修改命令名称
+      const compareKey = StringUtils.isEmptyString(this.cmd.commandName) ? ['commandName'] : [];
       const baseItems = compareKey.filter(key => !StringUtils.eq(ob1[key], ob2[key]))
         .map(key => new CommitItem({
           type: 'base', action: 1, keyPath: key, oValue: ob1[key], value: ob2[key],

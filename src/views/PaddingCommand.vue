@@ -1,7 +1,9 @@
 <template>
   <el-container>
     <el-header>
-      <CMDHeader></CMDHeader>
+      <CMDHeader :searchBar="true"
+        v-on:currentSelect="hendleSelectCmd($event)"
+      ></CMDHeader>
     </el-header>
     <el-main>
       <CommandPanel
@@ -81,6 +83,9 @@ export default {
     },
   },
   methods: {
+    hendleSelectCmd(cid) {
+      this.$router.push(`/cmd/padding/${cid}`);
+    },
     getCommandById() {
       if (!this.cid) {
         this.cmdLoading.success = false;

@@ -2,8 +2,8 @@
   <div class="header">
     <div class="left-bar">
       <div>logo</div>
-      <div v-if="searchBar">
-        <SelectSearchBar v-on:currentSelect="emit('currentSelect', $event)"/>
+      <div v-if="searchBar" class="header-search-bar" >
+        <SelectSearchBar v-on:currentSelect="$emit('currentSelect', $event)"/>
       </div>
     </div>
     <div class="right-bar">
@@ -63,14 +63,21 @@ export default {
 }
 .left-bar{
   display: flex;
+  align-items: center;
+  width: 50%;
 }
 .right-bar{
   display: flex;
+  align-items: center;
   .lang-change{
     margin: 0px 10px;
   }
   .user-info {
     margin: 0px 10px;
   }
+}
+.header-search-bar{
+  flex: 1;
+  padding-left: 10px;
 }
 </style>

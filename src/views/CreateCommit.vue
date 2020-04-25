@@ -3,7 +3,9 @@
     <el-header>
       <CMDHeader></CMDHeader>
     </el-header>
-    <el-main>
+    <el-main
+      v-loading="loading.doing"
+    >
       <CommandPanel
         v-if="loading.success && !loading.doing"
         class="cmd-perview"
@@ -41,7 +43,6 @@ export default {
       optionVal: [],
       commit: Commit.CreateFackCommit(),
       originCmd: new Command({}),
-      cid: null,
       loading: {
         doing: false,
         success: false,
@@ -54,6 +55,9 @@ export default {
     },
   },
   computed: {
+    cid() {
+      return this.$route.params.cid;
+    },
     cmd() {
       return this.commit.toCommand();
     },
@@ -70,7 +74,14 @@ export default {
     },
     getCommandById() {
       if (!this.cid) {
-        this.loading.success = true;
+        this.loading.success = false;
+        this.loading.doing = true;
+        this.originCmd = new Command({});
+        this.commit = new Commit({});
+        setTimeout(() => {
+          this.loading.success = true;
+          this.loading.doing = false;
+        }, 5);
         return;
       }
       ajax(this.request, this.loading).then((resp) => {
@@ -84,12 +95,13 @@ export default {
   created() {
     // TODO 如果有ID的话需要获取相比较的cmd， commit 也要使用cmd进行初始化
     // console.log(this.$route.params);
-    this.cid = this.$route.params.cid;
+    // this.cid = this.$route.params.cid;
+    this.getCommandById();
   },
-  beforeRouteUpdate(to, from, next) {
-    this.cid = to.params.cid;
-    next();
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   this.cid = to.params.cid;
+  //   next();
+  // },
 };
 </script>
 <style lang="scss" scoped>

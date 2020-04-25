@@ -21,7 +21,7 @@ export default {
   components: { SelectSearchBar, CMDHeader },
   methods: {
     hendleSelectCmd(cid) {
-      this.$router.push(`/cmds/${cid}`);
+      this.$router.push(`/cmd/padding/${cid}`);
     },
   },
 };

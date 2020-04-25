@@ -1,7 +1,9 @@
 <template>
   <el-container>
     <el-header>
-      <div class="search-bar"><SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/></div>
+      <div class="search-bar">
+        <SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/>
+      </div>
     </el-header>
     <el-main v-if="cmdSuccessLoad">
       <div class="cmd-info">
