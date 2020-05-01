@@ -10,7 +10,14 @@ import tempBaseView from '@/views/tempBaseView.vue';
 import ReviewCommit from '@/views/ReviewCommit.vue';
 import PaddingCommand from '@/views/PaddingCommand.vue';
 import ListCommit from '@/views/commit/ListCommit.vue';
+import DeveloperRouter from './DeveloperRouter';
+import AdminRouter from './AdminRouter';
 
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch(err => err);
+};
 Vue.use(Router);
 
 export default new Router({
@@ -85,5 +92,7 @@ export default new Router({
       name: 'snapshots-inject',
       component: SnapshotInject,
     },
+    ...DeveloperRouter,
+    ...AdminRouter,
   ],
 });
