@@ -107,6 +107,8 @@ export default {
       inject: 'Inject',
       copy: 'Copy',
       restore: 'Restore',
+      pause: 'Pause',
+      'jump-to-padding': 'To Padding',
     },
     copy: {
       message: {
@@ -120,6 +122,11 @@ export default {
     delete: {
       message: {
         ask: 'confirm to delete?',
+      },
+    },
+    pause: {
+      message: {
+        ask: 'confirm to pause?',
       },
     },
   },

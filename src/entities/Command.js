@@ -19,6 +19,7 @@ export default class Command {
     this.frequency = cmd.frequency;
     this.options = cmd.options ? cmd.options : [];
     this.params = cmd.params ? cmd.params : [];
+    this.status = cmd.status;
   }
 
   static findByCid(cid) {
@@ -121,6 +122,7 @@ export default class Command {
       frequency: this.frequency,
       options: CommandOption.convertDatas(this.options),
       params: Param.convertDatas(this.params),
+      status: this.status,
     };
   }
 

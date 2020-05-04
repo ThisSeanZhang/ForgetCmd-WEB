@@ -5,7 +5,7 @@
   </el-header>
   <el-container>
     <el-aside>
-      <el-menu default-active="1-4-1" class="el-menu-vertical-demo"
+      <el-menu :default-active="defaultActive" class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose" :collapse="isCollapse"
       >
@@ -13,11 +13,11 @@
           <i class="el-icon-location"></i>
           <span slot="title">快照</span>
         </el-menu-item> -->
-        <el-menu-item index="2" @click="toPath('commits')">
+        <el-menu-item index="0" @click="toPath('commits')">
           <i class="el-icon-menu"></i>
           <span slot="title">改进历史</span>
         </el-menu-item>
-        <el-menu-item index="3" @click="toPath('commands')">
+        <el-menu-item index="1" @click="toPath('commands')">
           <i class="el-icon-document"></i>
           <span slot="title">命令管理</span>
         </el-menu-item>
@@ -57,6 +57,11 @@ export default {
     routeKey() {
       return `admin-manage${new Date().getTime()}`;
     },
+    defaultActive() {
+      const path = this.$route.path.split('/');
+      const index = ['commits', 'commands'].indexOf(path[path.length - 1]);
+      return index > -1 ? String(index) : '0';
+    },
   },
   methods: {
     handleOpen() {},
@@ -64,6 +69,9 @@ export default {
     toPath(model) {
       this.$router.push({ path: `/admin/${model}` }, () => {}, this.flash);
     },
+  },
+  created() {
+    console.log(this.$route);
   },
 };
 </script>

@@ -42,7 +42,7 @@ export default {
         method: 'GET',
       };
       ajax(request, this.loading).then((resp) => {
-        this.cmds = resp.data.data.map(cmd => new Command(cmd));
+        this.cmds = resp.data.data.map(Command.fromObj);
       }).catch(wantNothing);
     },
   },

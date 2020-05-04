@@ -1,7 +1,9 @@
 <template>
   <div class="command-table">
     <el-scrollbar class="command-table-scrollbar">
-      <CommandTableItem v-for="(cmd, index) in cmds"  :cmd="cmd" :key="index" />
+      <CommandTableItem v-for="(cmd, index) in cmds"
+      v-on:updateCmd="updateCmd($event, index)"
+      :cmd="cmd" :key="index" />
       <!-- <el-table
         :data="showList"
         stripe
@@ -47,6 +49,9 @@ export default {
   computed: {
   },
   methods: {
+    updateCmd(cmd, index) {
+      this.cmds.splice(index, 1, cmd);
+    },
   },
   created() {
   },

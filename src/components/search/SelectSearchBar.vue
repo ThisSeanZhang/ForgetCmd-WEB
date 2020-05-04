@@ -18,7 +18,7 @@
       :value="item.cid">
       <div class="select-result-option">
         <span>{{item.commandName}}</span>
-        <span>{{item.briefDesc}}</span>
+        <span>{{item.briefDesc[currentLang]}}</span>
       </div>
     </el-option>
   </el-select>
@@ -27,6 +27,7 @@
 // import {
 //   value as Wapper, watch, onMounted,
 // } from 'vue-function-api';
+import { mapGetters } from 'vuex';
 import { ajax, wantNothing } from '../../api/fetch';
 
 export default {
@@ -53,7 +54,10 @@ export default {
         ajax(request).then((resp) => {
           this.loading = false;
           console.log(resp.data);
-          this.options = resp.data.data;
+          this.options = resp.data.data.map(cmd => ({
+            ...cmd,
+            briefDesc: JSON.parse(cmd.briefDesc),
+          }));
         }).catch((error) => {
           this.loading = false;
           wantNothing(error);
@@ -71,6 +75,12 @@ export default {
       this.$emit('currentSelect', item);
       // this.$router.push(`/cmds/${item}`);
     },
+  },
+  computed: {
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
+    ...mapGetters('Language', ['allLangs']),
   },
 };
 </script>

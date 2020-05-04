@@ -18,7 +18,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="user-info">用户信息/登录</div>
+      <!-- <div class="user-info">用户信息/登录</div> -->
     </div>
   </div>
 </template>

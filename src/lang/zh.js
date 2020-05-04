@@ -107,6 +107,8 @@ export default {
       inject: '添加',
       copy: '复制',
       restore: '恢复',
+      pause: '暂停',
+      'jump-to-padding': '跳转至填充界面',
     },
     copy: {
       message: {
@@ -120,6 +122,11 @@ export default {
     delete: {
       message: {
         ask: '确定删除吗？',
+      },
+    },
+    pause: {
+      message: {
+        ask: '暂停使用?',
       },
     },
   },
