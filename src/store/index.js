@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import CommandHistory from './modules/CommandHistory';
 import Language from './modules/Language';
 import myPlugin from './LocalStoreageInitPlugin';
+import UserInfo from './modules/UserInfo';
 // import products from './modules/products'
 
 Vue.use(Vuex);
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   modules: {
     CommandHistory,
     Language,
+    UserInfo,
   },
   strict: debug,
   plugins: [myPlugin],

@@ -18,17 +18,35 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <!-- <div class="user-info">用户信息/登录</div> -->
+      <div class="user-info">
+          <div v-if="signed">
+            <el-button @click="logOut" type="info" >
+              退出<i class="el-icon-d-arrow-right"></i>
+            </el-button>
+          </div>
+          <div v-else>
+            <el-button @click.stop="SignInVisible = true" type="warning">
+              登入<i class="el-icon-back"></i>
+            </el-button>
+          </div>
+        <el-dialog :show-close='false' width='395px' custom-class="loginPanel"
+        :visible.sync="SignInVisible">
+          <div class="loginPanel-body"></div>
+          <account-main v-on:login:success='SignInVisible = false' ></account-main>
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { ajax } from '../../api/fetch';
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
+import AccountMain from '../developer/AccountMain.vue';
 
 export default {
   name: 'cmd-header',
-  components: { SelectSearchBar },
+  components: { SelectSearchBar, AccountMain },
   props: {
     searchBar: {
       type: Boolean,
@@ -38,6 +56,7 @@ export default {
   data() {
     return {
       currentLang: null,
+      SignInVisible: false,
     };
   },
   methods: {
@@ -45,10 +64,28 @@ export default {
       this.$i18n.locale = value;
       this.upadteLang(value);
     },
+    logOut() {
+      const request = {
+        method: 'DELETE',
+        url: `/sessions/${this.did}`,
+      };
+      ajax(request)
+        .then(() => {
+          this.$message('退出成功');
+          this.delUserInfo();
+          this.$router.push('/');
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$message('退出失败');
+        });
+    },
     ...mapMutations('Language', ['upadteLang']),
+    ...mapActions('UserInfo', ['delUserInfo']),
   },
   computed: {
     ...mapGetters('Language', ['allLangs', 'lang', 'langDesc']),
+    ...mapGetters('UserInfo', ['signed', 'nickName', 'did']),
   },
   created() {
     this.currentLang = this.lang;
@@ -80,4 +117,11 @@ export default {
   flex: 1;
   padding-left: 10px;
 }
+
+.loginPanel{
+    border-radius: 5px!important;
+    .loginPanel-body{
+      height: 305px;
+    }
+  }
 </style>
