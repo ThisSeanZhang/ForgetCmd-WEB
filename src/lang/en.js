@@ -50,6 +50,14 @@ export default {
         'repeat-enum': 'Repeat ENUM',
       },
     },
+    signIn: {
+      'name-or-email': 'nick name or email',
+      'please-input-name-or-email': 'please input name or email',
+      'limit-length-4-6': 'length limit 4-6 char',
+      pass: 'password here',
+      'please-input-pass': 'please input password',
+      'rember-me': 'Rember Me',
+    },
   },
   entities: {
     command: {
@@ -109,6 +117,9 @@ export default {
       restore: 'Restore',
       pause: 'Pause',
       'jump-to-padding': 'To Padding',
+      'sign-in': 'Sign In',
+      'sign-out': 'Sign out',
+      'sign-up': 'Sign Up',
     },
     copy: {
       message: {

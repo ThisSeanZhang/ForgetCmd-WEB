@@ -4,17 +4,18 @@
     ref="loginForm"  label-width="80px">
       <el-form-item prop="nameOrEmail" >
         <el-input v-model="loginform.nameOrEmail" @focus="clearLogError"
-        placeholder="昵称或者邮件地址"></el-input>
+        :placeholder="$t('page.signIn.name-or-email')"></el-input>
       </el-form-item>
       <el-form-item prop="pass" >
         <el-input v-model="loginform.pass" @focus="clearLogError"
-        placeholder="密码" type="password"></el-input>
+        :placeholder="$t('page.signIn.pass')" type="password"></el-input>
       </el-form-item>
       <el-form-item v-if="false">
-        记住我 &nbsp;&nbsp;&nbsp;<el-switch v-model="loginform.remeberme"></el-switch>
+        {{$t('page.signIn.rember-me')}} &nbsp;&nbsp;&nbsp;
+        <el-switch v-model="loginform.remeberme"></el-switch>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="developerLogin">登录</el-button>
+        <el-button type="primary" @click="developerLogin">{{$t('other.btn.sign-in')}}</el-button>
       </el-form-item>
     </el-form>
     <!-- <div class="forget"><span>忘记密码</span> </div> -->
@@ -48,14 +49,14 @@ export default {
       loginPass: true,
       rules: {
         nameOrEmail: [
-          { required: true, message: '请输入昵称', trigger: 'blur' },
+          { required: true, message: this.$t('page.signIn.please-input-name-or-email'), trigger: 'blur' },
           {
-            min: 1, max: 16, message: '长度在 4 到 16 个字符', trigger: 'blur',
+            min: 1, max: 16, message: this.$t('page.signIn.limit-length-4-6'), trigger: 'blur',
           },
           { validator: chepass },
         ],
         pass: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: true, message: this.$t('page.signIn.please-input-pass'), trigger: 'blur' },
           { validator: chepass },
         ],
       },

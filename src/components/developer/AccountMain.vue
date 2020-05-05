@@ -1,8 +1,12 @@
 <template>
   <div class="form_box">
     <div class="from_head">
-      <div @click="changePanel('login')" :class="{ active: readyLogin }">登入</div>
-      <div @click="changePanel('register')" :class="{ active: !readyLogin }">  注册</div>
+      <div @click="changePanel('login')" :class="{ active: readyLogin }">
+        {{$t('other.btn.sign-in')}}
+      </div>
+      <div @click="changePanel('register')" :class="{ active: !readyLogin }">
+        {{$t('other.btn.sign-up')}}
+      </div>
     </div>
     <transition name="fade" >
       <keep-alive>

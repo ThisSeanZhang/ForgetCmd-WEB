@@ -50,6 +50,14 @@ export default {
         'repeat-enum': '重复的枚举值',
       },
     },
+    signIn: {
+      'name-or-email': '昵称或邮件地址',
+      'please-input-name-or-email': '请输入邮件地址',
+      'limit-length-4-6': '长度限制4至6个字符',
+      pass: '密码',
+      'please-input-pass': '请输入密码',
+      'rember-me': '记住我',
+    },
   },
   entities: {
     command: {
@@ -109,6 +117,9 @@ export default {
       restore: '恢复',
       pause: '暂停',
       'jump-to-padding': '跳转至填充界面',
+      'sign-in': '登入',
+      'sign-out': '退出',
+      'sign-up': '注册',
     },
     copy: {
       message: {

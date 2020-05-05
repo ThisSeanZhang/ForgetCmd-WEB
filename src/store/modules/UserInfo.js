@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 const state = {
   did: null,
   nickName: null,
@@ -26,10 +28,16 @@ const mutations = {
     state.admin = info.admin;
     // 存入浏览器
     if (info.did === null) {
-      sessionStorage.removeItem('did');
+      localStorage.removeItem('DEVELOPER');
     } else {
-      sessionStorage.did = info.did;
+      localStorage.setItem('DEVELOPER', JSON.stringify(state));
     }
+  },
+  initDeveloper(state, devStr) {
+    const developer = JSON.parse(devStr);
+    Object.keys(developer || {}).forEach((key) => {
+      Vue.set(state, key, developer[key] || null);
+    });
   },
 };
 

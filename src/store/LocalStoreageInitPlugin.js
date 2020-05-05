@@ -28,12 +28,17 @@ function updateSnap(snaps) {
 const LOCAL_LANG_KEY = 'LANG_KEY';
 const LANG_INIT = 'Language/initLang';
 
+// developer
+const DEVELOPER_KEY = 'DEVELOPER';
+const DEVELOPER_INIT = 'UserInfo/initDeveloper';
+
 export default (store) => {
   // Called when store is initialized
   console.log('my plugin start');
   // store.dispatch(SNAPSHOT_HIS_INIT, getSnaps());
   store.commit(SNAPSHOT_HIS_INIT, getSnaps());
   store.commit(LANG_INIT, localStorage.getItem(LOCAL_LANG_KEY));
+  store.commit(DEVELOPER_INIT, localStorage.getItem(DEVELOPER_KEY));
   store.subscribe((mutation, state) => {
     if (mutation.type === snapHisUpadate) {
       updateSnap(state[SNAPSHOT_STATE_KEY]);

@@ -21,18 +21,19 @@
       <div class="user-info">
           <div v-if="signed">
             <el-button @click="logOut" type="info" >
-              退出<i class="el-icon-d-arrow-right"></i>
+              {{$t('other.btn.sign-out')}}<i class="el-icon-d-arrow-right"></i>
             </el-button>
           </div>
           <div v-else>
             <el-button @click.stop="SignInVisible = true" type="warning">
-              登入<i class="el-icon-back"></i>
+              {{$t('other.btn.sign-in')}}<i class="el-icon-back"></i>
             </el-button>
           </div>
         <el-dialog :show-close='false' width='395px' custom-class="loginPanel"
         :visible.sync="SignInVisible">
           <div class="loginPanel-body"></div>
-          <account-main v-on:login:success='SignInVisible = false' ></account-main>
+          <account-main v-if="SignInVisible" v-on:login:success='SignInVisible = false' >
+          </account-main>
         </el-dialog>
       </div>
     </div>
