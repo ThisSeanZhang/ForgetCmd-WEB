@@ -81,6 +81,7 @@ export default {
             loding.close();
           }).catch((error) => {
             this.whenErrorMessage(error, () => {
+              console.log('login fail');
               this.$message.warning('用户名或密码错误(●ˇ∀ˇ●)');
               this.loginPass = false;
               this.$refs.loginForm.validateField(['developerNameOrEmail', 'pass']);
@@ -96,7 +97,7 @@ export default {
     },
     whenErrorMessage(error, dowhat) {
       if (error.response) {
-        if (error.response.status === 404) {
+        if ([404, 400].includes(error.response.status)) {
           dowhat();
         }
       } else if (error.request) {

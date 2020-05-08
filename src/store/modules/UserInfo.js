@@ -28,9 +28,9 @@ const mutations = {
     state.admin = info.admin;
     // 存入浏览器
     if (info.did === null) {
-      localStorage.removeItem('DEVELOPER');
+      sessionStorage.removeItem('DEVELOPER');
     } else {
-      localStorage.setItem('DEVELOPER', JSON.stringify(state));
+      sessionStorage.setItem('DEVELOPER', JSON.stringify(state));
     }
   },
   initDeveloper(state, devStr) {

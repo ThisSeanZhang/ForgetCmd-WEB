@@ -12,6 +12,7 @@ import PaddingCommand from '@/views/PaddingCommand.vue';
 import ListCommit from '@/views/commit/ListCommit.vue';
 import DeveloperRouter from './DeveloperRouter';
 import AdminRouter from './AdminRouter';
+import NotFound from '../views/base/NotFound.vue';
 
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
@@ -21,7 +22,7 @@ Router.prototype.push = function push(location, onResolve, onReject) {
 Vue.use(Router);
 
 export default new Router({
-  // mode: 'history',
+  mode: 'history',
   // base: process.env.BASE_URL,
   routes: [
     {
@@ -92,6 +93,7 @@ export default new Router({
       name: 'snapshots-inject',
       component: SnapshotInject,
     },
+    { path: '*', component: NotFound },
     ...DeveloperRouter,
     ...AdminRouter,
   ],

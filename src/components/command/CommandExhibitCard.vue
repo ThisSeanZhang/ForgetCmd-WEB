@@ -94,7 +94,7 @@ export default {
     },
     params() {
       return this.snap.paramVal
-        // .filter(param => param.selected)
+        .filter(param => param.selected)
         .map(param => new CmdParam(param));
     },
   },

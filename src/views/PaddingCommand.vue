@@ -135,7 +135,7 @@ export default {
 }
 .el-main {
   display: flex;
-  overflow: visible;
+  overflow: hidden;
 }
 .commit {
   width: 50%;

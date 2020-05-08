@@ -12,8 +12,9 @@ export default {
   name: 'app',
   created() {
     const isPro = Object.is(process.env.NODE_ENV, 'development');
-    const baseUrl = isPro ? 'api' : '/';
+    const baseUrl = isPro ? '/test' : '/api';
     axios.defaults.baseURL = baseUrl;
+    console.log(this.$router);
   },
 };
 </script>
@@ -25,6 +26,10 @@ export default {
   scrollbar-width: none;
   display: flex;
   width: 100%;
+}
+.el-scrollbar__wrap{
+  overflow-x: hidden!important;
+  margin-bottom: 0px!important;
 }
 .el-dialog__wrapper::-webkit-scrollbar {display:none}
 .el-scrollbar__wrap::-webkit-scrollbar {display:none}
