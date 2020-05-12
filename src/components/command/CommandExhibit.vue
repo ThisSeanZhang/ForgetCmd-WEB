@@ -63,7 +63,8 @@
 <script>
 import { mapMutations } from 'vuex';
 import Command from '../../entities/Command';
-import Snapshot from '../../entities/Snapshot';
+// import Snapshot from '../../entities/Snapshot';
+import SnapApi from '../../api/SnapShotApi';
 import TimeUtils from '../../entities/TimeUtils';
 // import CmdParam from '../../entities/CmdParam';
 
@@ -98,7 +99,7 @@ export default {
   },
   methods: {
     createSnapshot() {
-      Snapshot.createSnapshot(this.cmd);
+      SnapApi.createSnapshot(this.cmd);
     },
     buildHyphen(option) {
       if (option.briefName === option.fullName) {

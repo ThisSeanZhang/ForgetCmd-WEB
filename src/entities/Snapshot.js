@@ -1,5 +1,3 @@
-import { ajax } from '../api/fetch';
-
 export default class Snapshot {
   constructor(snap) {
     // this.snapId = snap.snapId;
@@ -24,27 +22,6 @@ export default class Snapshot {
     this.version = snap.version;
     this.commandName = snap.commandName;
     this.createTime = snap.createTime;
-  }
-
-  static createSnapshot(cmd) {
-    const request = {
-      method: 'POST',
-      url: 'snapshots',
-      data: {
-        title: cmd.commandName,
-        config: JSON.stringify(cmd),
-        cid: cmd.cid,
-      },
-    };
-    return ajax(request);
-  }
-
-  static findBySid(sid) {
-    const request = {
-      method: 'GET',
-      url: `snapshots/${sid}`,
-    };
-    return ajax(request);
   }
 
   dealValue(deal) {

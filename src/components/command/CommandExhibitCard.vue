@@ -58,6 +58,7 @@
 import Snapshot from '../../entities/Snapshot';
 import CommandOption from '../../entities/CommandOption';
 import CmdParam from '../../entities/CmdParam';
+import SnapApi from '../../api/SnapShotApi';
 
 export default {
   name: 'command-exhibit-card',
@@ -100,7 +101,7 @@ export default {
   },
   methods: {
     createSnapshot() {
-      Snapshot.createSnapshot(this.cmd);
+      SnapApi.createSnapshot(this.cmd);
     },
     buildHyphen(option) {
       if (option.briefName === option.fullName) {

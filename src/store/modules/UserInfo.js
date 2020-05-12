@@ -1,11 +1,15 @@
 import Vue from 'vue';
+// import { Notification } from 'element-ui';
 
+const COOKIE_KEEP = 1000 * 20;
+let timeOutKey = null;
 const state = {
   did: null,
   nickName: null,
   email: null,
   admin: false,
   signed: false,
+  expTime: null,
 };
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 const getters = {
@@ -29,8 +33,12 @@ const mutations = {
     // 存入浏览器
     if (info.did === null) {
       sessionStorage.removeItem('DEVELOPER');
+      clearTimeout(timeOutKey);
     } else {
       sessionStorage.setItem('DEVELOPER', JSON.stringify(state));
+      timeOutKey = setTimeout(() => {
+        console.log('check online');
+      }, COOKIE_KEEP);
     }
   },
   initDeveloper(state, devStr) {
@@ -57,6 +65,9 @@ const actions = {
       signed: false,
       admin: false,
     });
+  },
+  updateExpTime({ commit }) {
+    
   },
 };
 export default {
