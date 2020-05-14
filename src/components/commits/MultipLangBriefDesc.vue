@@ -19,10 +19,6 @@
             </el-option>
           </el-select>
         </div>
-        <div class="param-del">
-          <el-button type="danger" icon="el-icon-delete" circle
-          @click="handleRemove(index)"></el-button>
-        </div>
         <div class="param-value">
           <el-input
             class="option-value"
@@ -31,6 +27,10 @@
             @input="handleAdd()"
             clearable>
           </el-input>
+        </div>
+        <div class="param-del">
+          <el-button type="danger" icon="el-icon-delete" circle
+          @click="handleRemove(index)"></el-button>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -120,19 +120,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .param-switch{
-  float: left;
-  line-height: 40px;
-  padding: 0px 10px;
+  width: 130px;
+  margin: 0px 10px;
 }
 .param-value{
-  margin-left: 60px;
-  margin-right: 60px;
+  flex: 1;
 }
 .param-del{
   float: right;
   padding: 0px 10px;
 }
 .each-param{
+  display: flex;
   padding-bottom: 5px;
 }
 </style>

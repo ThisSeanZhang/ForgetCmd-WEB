@@ -22,15 +22,17 @@
           </el-input>
         </el-form-item>
         <el-form-item :label="$t('entities.option.description')">
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 6}"
-            :placeholder="$t('entities.option.desc-input')"
-            v-model="option.description[currentLang]">
-          </el-input>
-          <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
-            <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
-          </el-tooltip>
+          <div style="display:flex;">
+            <el-input
+              type="textarea"
+              :autosize="{ minRows: 2, maxRows: 6}"
+              :placeholder="$t('entities.option.desc-input')"
+              v-model="option.description[currentLang]">
+            </el-input>
+            <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
+              <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
+            </el-tooltip>
+          </div>
         </el-form-item>
         <!-- <el-form-item label="启用时间">
           <el-date-picker type="date"
@@ -125,7 +127,7 @@ export default {
   data() {
     return {
       option: new Option({}),
-      optionType: [{ key: 0, value: 'NONE' }, { key: 2, value: 'ENUM' }],
+      optionType: Option.types(),
       enums: {
         rules: [],
         inputValue: '',

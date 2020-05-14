@@ -1,13 +1,22 @@
 <template>
   <div>
-    <div v-if="option.isType(optionType.ENUM)" class="option-enum" >
+    <div v-if="option.isType(optionType.ENUM)" class="option-base option-enum" >
       <el-radio-group v-model="optionArg">
         <el-radio-button v-for="s in option.rules" :key="s" :label="s">
         </el-radio-button>
       </el-radio-group>
     </div>
-    <div v-else-if="option.isType(optionType.MAP)" class="option-none" >
-      <el-form :inline="true" class="demo-form-inline">
+    <div v-else-if="option.isType(optionType.MAP)" class="option-base option-none" >
+      <div style="flex: 1;">
+        <el-input :value="mapForm.key"
+          @input="mapForm = { key: $event, value: mapForm.value }" placeholder="key"></el-input>
+      </div>
+      <span style="margin: 0px 5px;">:</span>
+      <div style="flex: 1;">
+        <el-input :value="mapForm.value"
+          @input="mapForm = { key: mapForm.key, value: $event }" placeholder="value"></el-input>
+      </div>
+      <!-- <el-form :inline="true" class="demo-form-inline">
         <el-form-item >
           <el-input :value="mapForm.key"
           @input="mapForm = { key: $event, value: mapForm.value }" placeholder="key"></el-input>
@@ -17,10 +26,10 @@
           <el-input :value="mapForm.value"
           @input="mapForm = { key: mapForm.key, value: $event }" placeholder="value"></el-input>
         </el-form-item>
-      </el-form>
+      </el-form> -->
     </div>
-    <div v-else-if="option.isType(optionType.NONE)" class="option-none" >无参数可填</div>
-    <div class="option-input" v-else>
+    <div v-else-if="option.isType(optionType.NONE)" class="option-base option-none" >无参数可填</div>
+    <div class="option-base option-input" v-else>
       <el-input
         class="option-value"
         placeholder="请输入内容"
@@ -122,6 +131,10 @@ export default {
 .option-enum{
   line-height: 40px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.option-base{
   display: flex;
   justify-content: center;
 }

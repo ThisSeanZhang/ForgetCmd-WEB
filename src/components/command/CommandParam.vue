@@ -1,35 +1,26 @@
 <template>
-  <div>
-    <div style="display: inline-block;" v-for="(param, index) in exhibitParam" :key="param.index" >
-      <el-popover
-        placement="top"
-        trigger="hover"
-        :disabled="!param.selected || param.descIndex >= paramDef.length"
-        :content="getDefSesc(param.descIndex)">
-        <el-tag
-          slot="reference"
-          closable
-          @close="handleClose(index)"
-          @click="changeSelect(index)"
-          :type="param.selected ? 'success': 'info'" >
-          {{param.value}}
-        </el-tag>
-      </el-popover>
-    </div>
-    <!-- <div v-for="(para, index) in comp_paras" :key="'list-'+index">
-      <el-popover
-        placement="top"
-        trigger="hover"
-        :content="para.value">
-        <el-tag
-          slot="reference"
-          closable
-          @click="oneclick"
-          type="info">
-          {{para.value}}
-        </el-tag>
-      </el-popover>
-    </div> -->
+  <div style="display: flex;">
+    <!-- <div style="flex: 1;"> -->
+    <el-scrollbar style="height: 80px;">
+      <div style="display: inline-block;" v-for="(param, index) in exhibitParam"
+      :key="param.index" >
+        <el-popover
+          placement="top"
+          trigger="hover"
+          :disabled="!param.selected || param.descIndex >= paramDef.length"
+          :content="getDefSesc(param.descIndex)">
+          <el-tag
+            slot="reference"
+            closable
+            @close="handleClose(index)"
+            @click="changeSelect(index)"
+            :type="param.selected ? 'success': 'info'" >
+            {{param.value}}
+          </el-tag>
+        </el-popover>
+      </div>
+    <!-- </div> -->
+    </el-scrollbar>
     <el-button size="small" icon="el-icon-set-up" @click="paramDrawShow = true" ></el-button>
   <ParamsListPanel
     v-model="paramDrawShow"

@@ -1,5 +1,5 @@
 function isEmptyString(str) {
-  return str === undefined || str === null || str === '';
+  return str === undefined || str === null || str.trim() === '';
 }
 function nonEmptyString(str) {
   return !isEmptyString(str);

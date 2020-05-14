@@ -4,15 +4,19 @@
       <div class="cmd-info">
         <CommandInfo :improve="improve" :cmd="inCmd" />
       </div>
-      <el-scrollbar style="height: 90%;">
+      <!-- <el-scrollbar style="height: 90%;"> -->
+      <div class="cmd-param">
         <div>{{$t('page.commandPanel.param')}}:</div>
         <CommandParam
           :paramDef="inCmd.params"
           :paramVal="paramVal"
           v-on:upParamVal="upParamVal($event)" />
+      </div>
+      <div class="cmd-option">
         <div>{{$t('page.commandPanel.option')}}:</div>
         <OptionPanel :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
-      </el-scrollbar>
+      </div>
+      <!-- </el-scrollbar> -->
     </div>
     <CommandExhibit class="cmd-exhibit" :cmd="inCmd" :options="optionVal" :params="paramVal" />
   </div>
@@ -79,6 +83,14 @@ export default {
 }
 .cmd-main{
   height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+.cmd-param{
+  min-height: 101px;
+}
+.cmd-option{
+  flex: 1;
 }
 .cmd-exhibit{
   height: 30%;

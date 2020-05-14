@@ -13,7 +13,7 @@
     @click='handleIconClick'>
   </i> -->
   <template slot-scope='{ item }'>
-    <div class='name'>
+    <div :class="isNotRepeatAndSelected(item.fullName) ? 'name repeat-warn' : 'name'">
       <div>
         {{ optionKey(item) }}
       </div>
@@ -53,10 +53,15 @@ export default {
     },
   },
   methods: {
+    isNotRepeatAndSelected(fullName) {
+      return this.limitOption.includes(fullName);
+    },
     querySearch(queryString, cb) {
-      const results = queryString
-        ? this.optionDef.filter(option => option.searchKey(queryString))
-        : this.optionDef;
+      let results = this.optionDef;
+      // let results = this.optionDef.filter(e => !this.limitOption.includes(e.fullName));
+      if (StringUtils.nonEmptyString(queryString)) {
+        results = results.filter(option => option.searchKey(queryString));
+      }
       // 调用 callback 返回建议列表的数据
       cb(results);
     },
@@ -91,14 +96,17 @@ export default {
 .my-autocomplete {
   li {
     line-height: normal;
-    padding: 7px;
-
     .name {
+      margin: 0px -20px;
+      padding: 0px 20px;
       text-overflow: ellipsis;
       overflow: hidden;
       display: flex;
       justify-content: space-between;
     }
   }
+}
+.repeat-warn{
+  background-color: lightpink;
 }
 </style>

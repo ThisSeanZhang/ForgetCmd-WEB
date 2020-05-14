@@ -4,6 +4,7 @@
       :optionDef="optionDef"
       :limitOption="limitOption"
       v-on:addOption="addOption($event)"></OptionSearchBar>
+    <el-scrollbar style="height: 90%;">
     <div v-for="(option, index) in optionVal" :key="index">
       <el-popover
         placement="right"
@@ -14,6 +15,7 @@
         <div class="per-option" slot="reference">
           <div class="option-brief">
             <div>{{option.showName()}}</div>
+            <div  v-if="!option.sameBriefAndFull()">({{option.fullName}})</div>
           </div>
           <div class="option-switch">
             <el-switch
@@ -21,9 +23,7 @@
               active-color="#13ce66">
             </el-switch>
           </div>
-          <div class="option-value-bar" >
-            <OptionParam :option="option" v-model="option.value" />
-          </div>
+          <OptionParam class="option-value-bar" :option="option" v-model="option.value" />
           <div class="option-operation">
             <el-tooltip class="item" effect="dark"
               :content="$t('page.commandPanel.optionPanel.ignore')" placement="top">
@@ -37,6 +37,7 @@
         </div>
       </el-popover>
     </div>
+    </el-scrollbar>
     <MultipParam v-model="optionParamDialog"
       :option="dialogOption" v-on:updateParam="updateParam($event)"
     />
@@ -122,6 +123,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   width: 80px;
   min-height: 40px;
   // text-align: right;
@@ -140,9 +142,9 @@ export default {
 
 .option-switch{
   // margin-left: 80px;
-  float: left;
-  line-height: 40px;
+  display: flex;
   padding: 0px 10px;
+  align-items: center;
 }
 .per-option{
   display: flex;

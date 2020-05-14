@@ -20,12 +20,17 @@ export default class CommandOption {
     this.value = this.initValue(option.value);
     // 使用的时候是否忽略类型
     this.ignore = option.ignore;
-    // 是否能重复添加
-    this.repeat = option.repeat;
+    // 是否能重复选择
+    this.repeat = option.repeat === true;
   }
 
   static TYPE = {
     NONE: 0, NUMBER: 1, ENUM: 2, STRING: 3, MAP: 4,
+  }
+
+  static types() {
+    return Object.keys(CommandOption.TYPE)
+      .map(key => ({ key: CommandOption.TYPE[key], value: key }));
   }
 
   initValue(value) {
@@ -42,10 +47,13 @@ export default class CommandOption {
   }
 
   showName() {
-    if (this.briefName === this.fullName) {
-      return this.fullName;
-    }
-    return `${this.briefName} (${this.fullName})`;
+    return this.briefName || this.fullName;
+  }
+
+  sameBriefAndFull() {
+    return strUtil.isEmptyString(this.briefName)
+      || strUtil.isEmptyString(this.fullName)
+      || this.briefName === this.fullName;
   }
 
   isMultip() {

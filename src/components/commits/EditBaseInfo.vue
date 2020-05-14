@@ -36,7 +36,8 @@
         <el-tooltip placement="top"
           :content="$t('other.lang.moreLang')"
         >
-          <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
+          <el-button class="textarea-btn" @click="multipLangDescDialog = true" icon="el-icon-more">
+          </el-button>
         </el-tooltip>
       </div>
     </div>
@@ -166,5 +167,17 @@ export default {
 }
 .option-value-bar{
   margin-left: 80px;
+  display: flex;
+  .el-textarea{
+    .el-textarea__inner {
+      border-top-right-radius: 0!important;
+      border-bottom-right-radius: 0!important;
+    }
+  }
+  .textarea-btn{
+    background-color: #F5F7FA;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }
 </style>

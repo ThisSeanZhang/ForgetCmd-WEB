@@ -15,15 +15,17 @@
             <el-input v-model="param.paramName"></el-input>
           </el-form-item> -->
           <el-form-item :label="$t('entities.param.description')">
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 6}"
-              :placeholder="$t('entities.param.desc-input')"
-              v-model="param.description[currentLang]">
-            </el-input>
-            <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
-              <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
-            </el-tooltip>
+            <div style="display:flex;">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 6}"
+                :placeholder="$t('entities.param.desc-input')"
+                v-model="param.description[currentLang]">
+              </el-input>
+              <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
+                <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
+              </el-tooltip>
+            </div>
           </el-form-item>
           <!-- <el-form-item label="类型">
             <el-select v-model="param.type" placeholder="请选择">
