@@ -14,7 +14,8 @@
       </div>
       <div class="cmd-option">
         <div>{{$t('page.commandPanel.option')}}:</div>
-        <OptionPanel :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
+        <OptionPanel style="height: calc(100% - 21px);"
+        :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
       </div>
       <!-- </el-scrollbar> -->
     </div>
@@ -87,10 +88,12 @@ export default {
   flex-direction: column;
 }
 .cmd-param{
-  min-height: 101px;
+  height: 69px;
+  height: max(69px, 18%);
 }
 .cmd-option{
-  flex: 1;
+  height: calc(90% - 69px);
+  height: calc(90% - max(69px, 18%));
 }
 .cmd-exhibit{
   height: 30%;

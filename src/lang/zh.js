@@ -47,7 +47,7 @@ export default {
       },
       editOption: {
         'edit-title': '编辑可选项',
-        'repeat-enum': '重复的枚举值',
+        'duplicate-enum': '重复的枚举值',
       },
     },
     signIn: {
@@ -80,7 +80,7 @@ export default {
       'full-name-input': '请输入完整命令',
       description: '描述',
       'desc-input': '请输入描述',
-      repeat: '重复',
+      duplicate: '重复',
       type: '类型',
       'choice-type': '请选择类型',
       enum: '枚举值',

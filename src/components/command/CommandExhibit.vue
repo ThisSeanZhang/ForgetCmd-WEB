@@ -48,7 +48,7 @@
         <span v-if="index !== params.length - 1">&nbsp;\</span>
       </div>
     </div> -->
-    <el-scrollbar>
+    <el-scrollbar style="height: calc(100% - 44px);">
       <div v-if="currentModel === exhibitModel.ONELINE">
           {{dealValue(oneLine)}}
       </div>

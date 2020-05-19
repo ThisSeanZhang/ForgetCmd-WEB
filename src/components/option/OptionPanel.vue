@@ -4,7 +4,7 @@
       :optionDef="optionDef"
       :limitOption="limitOption"
       v-on:addOption="addOption($event)"></OptionSearchBar>
-    <el-scrollbar style="height: 90%;">
+    <el-scrollbar style="height: calc(100% - 40px);">
     <div v-for="(option, index) in optionVal" :key="index">
       <el-popover
         placement="right"
@@ -80,7 +80,7 @@ export default {
       return this.$i18n.locale || 'zh';
     },
     limitOption() {
-      return this.optionVal.filter(op => !op.repeat).map(op => op.fullName);
+      return this.optionVal.filter(op => !op.duplicate).map(op => op.fullName);
     },
   },
   methods: {

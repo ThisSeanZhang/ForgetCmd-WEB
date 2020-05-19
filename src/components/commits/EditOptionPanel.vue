@@ -42,8 +42,8 @@
             v-model="option.whenEnable"
             style="width: 100%;"></el-date-picker>
         </el-form-item> -->
-        <el-form-item :label="$t('entities.option.repeat')">
-          <el-switch v-model="option.repeat"></el-switch>
+        <el-form-item :label="$t('entities.option.duplicate')">
+          <el-switch v-model="option.duplicate"></el-switch>
         </el-form-item>
         <el-form-item :label="$t('entities.option.type')">
           <el-select v-model="option.type" :placeholder="$t('entities.option.choice-type')">
@@ -184,7 +184,7 @@ export default {
     handleInputConfirm() {
       if (this.enums.rules.indexOf(this.enums.inputValue) > -1) {
         this.$notify({
-          title: this.$t('page.commitPanel.editOption.repeat-enum'),
+          title: this.$t('page.commitPanel.editOption.duplicate-enum'),
         });
         return;
       }

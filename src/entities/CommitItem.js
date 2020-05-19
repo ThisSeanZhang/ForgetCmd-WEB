@@ -19,7 +19,7 @@ export default class CommitItem {
   }
 
   static COMPARE_KEY = {
-    OPTION: ['briefName', 'type', 'rules', 'repeat'],
+    OPTION: ['briefName', 'type', 'rules', 'duplicate'],
     PARAM: ['sort', 'paramName', 'required', 'type'],
   }
 

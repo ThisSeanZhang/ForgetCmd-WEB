@@ -83,7 +83,7 @@ export default class CommandCommit {
         briefName: 'n', fullName: 'name', description: { zh: '设值容器名称' }, sort: 1,
       }),
       new CommandOption({
-        briefName: 'p', fullName: 'port', description: { zh: '容器映射端口' }, sort: 2, type: CommandOption.TYPE.MAP, repeat: true,
+        briefName: 'p', fullName: 'port', description: { zh: '容器映射端口' }, sort: 2, type: CommandOption.TYPE.MAP, duplicate: true,
       }),
       new CommandOption({
         briefName: 'a', fullName: 'a', description: { zh: 'aaa' }, sort: 2, type: CommandOption.TYPE.ENUM, rules: 'aaa,bbbb,ccc',

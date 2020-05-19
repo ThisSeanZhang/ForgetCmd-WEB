@@ -108,12 +108,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.el-main, .el-container {
+.el-container {
   height: 100%;
 }
 .el-main {
   display: flex;
   overflow: visible;
+  height: calc(100% - 120px);
   .item-list{
     flex: 1;
   }

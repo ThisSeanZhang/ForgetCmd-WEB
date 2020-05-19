@@ -21,7 +21,7 @@ export default class CommandOption {
     // 使用的时候是否忽略类型
     this.ignore = option.ignore;
     // 是否能重复选择
-    this.repeat = option.repeat === true;
+    this.duplicate = option.duplicate === true;
   }
 
   static TYPE = {
@@ -112,7 +112,7 @@ export default class CommandOption {
       type: this.type,
       rules: strUtil.o2str(this.rules, () => ''),
       ignore: this.ignore,
-      repeat: this.repeat,
+      duplicate: this.duplicate,
     };
   }
 

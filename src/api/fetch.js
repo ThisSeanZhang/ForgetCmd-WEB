@@ -11,7 +11,7 @@ function checkSession() {
   }
   const request = {
     methods: 'GET',
-    url: `/session/${store.state.UserInfo.did}`,
+    url: `/sessions/${store.state.UserInfo.did}`,
   };
   const sender = axios.create({
     timeout: TIME_OUT_MAX,
@@ -21,10 +21,8 @@ function checkSession() {
     .then((resp) => {
       store.dispatch('UserInfo/setUserInfo', resp.data.data);
     })
-    .catch((error) => {
-      console.log(error);
-      Message('登入信息已经过期了,访问非公开信息需要重新登陆哦');
-      store.dispatch('UserInfo/delUserInfo');
+    .catch(() => {
+      store.dispatch('UserInfo/removeSignedUser');
     });
 }
 
@@ -50,6 +48,7 @@ const ajax = (option = {
         resolve(res);
         Vue.set(loading, 'doing', false);
         Vue.set(loading, 'success', true);
+        store.dispatch('UserInfo/updateExpTime');
       })
       .catch((error) => {
         checkSession();

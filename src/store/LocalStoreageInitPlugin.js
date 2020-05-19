@@ -38,7 +38,7 @@ export default (store) => {
   // store.dispatch(SNAPSHOT_HIS_INIT, getSnaps());
   store.commit(SNAPSHOT_HIS_INIT, getSnaps());
   store.commit(LANG_INIT, localStorage.getItem(LOCAL_LANG_KEY));
-  store.commit(DEVELOPER_INIT, sessionStorage.getItem(DEVELOPER_KEY));
+  store.commit(DEVELOPER_INIT, localStorage.getItem(DEVELOPER_KEY));
   store.subscribe((mutation, state) => {
     if (mutation.type === snapHisUpadate) {
       updateSnap(state[SNAPSHOT_STATE_KEY]);

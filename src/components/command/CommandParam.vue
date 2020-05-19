@@ -1,7 +1,7 @@
 <template>
-  <div style="display: flex;">
+  <div style="display: flex;justify-content: space-between;height: calc(100% - 21px);">
     <!-- <div style="flex: 1;"> -->
-    <el-scrollbar style="height: 80px;">
+    <el-scrollbar style="100%">
       <div style="display: inline-block;" v-for="(param, index) in exhibitParam"
       :key="param.index" >
         <el-popover

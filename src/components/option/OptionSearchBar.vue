@@ -13,7 +13,7 @@
     @click='handleIconClick'>
   </i> -->
   <template slot-scope='{ item }'>
-    <div :class="isNotRepeatAndSelected(item.fullName) ? 'name repeat-warn' : 'name'">
+    <div :class="isNotRepeatAndSelected(item.fullName) ? 'name duplicate-warn' : 'name'">
       <div>
         {{ optionKey(item) }}
       </div>
@@ -106,7 +106,7 @@ export default {
     }
   }
 }
-.repeat-warn{
+.duplicate-warn{
   background-color: lightpink;
 }
 </style>

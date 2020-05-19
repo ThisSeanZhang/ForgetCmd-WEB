@@ -1,8 +1,18 @@
 import Vue from 'vue';
+import { Message } from 'element-ui';
 // import { Notification } from 'element-ui';
 
 const COOKIE_KEEP = 1000 * 20;
 let timeOutKey = null;
+const emptyUser = {
+  did: null,
+  nickName: null,
+  email: null,
+  defaultProject: null,
+  defaultFolder: null,
+  signed: false,
+  admin: false,
+};
 const state = {
   did: null,
   nickName: null,
@@ -32,13 +42,15 @@ const mutations = {
     state.admin = info.admin;
     // 存入浏览器
     if (info.did === null) {
-      sessionStorage.removeItem('DEVELOPER');
+      localStorage.removeItem('DEVELOPER');
       clearTimeout(timeOutKey);
     } else {
-      sessionStorage.setItem('DEVELOPER', JSON.stringify(state));
+      state.expTime = new Date().getTime() + COOKIE_KEEP;
       timeOutKey = setTimeout(() => {
-        console.log('check online');
+        Object.keys(emptyUser).forEach(key => Vue.set(state, key, emptyUser[key]));
+        // commit('FLASH_THE_INFO', emptyUser);
       }, COOKIE_KEEP);
+      localStorage.setItem('DEVELOPER', JSON.stringify(state));
     }
   },
   initDeveloper(state, devStr) {
@@ -50,24 +62,25 @@ const mutations = {
 };
 
 const actions = {
+  updateExpTime({ commit, state }) {
+    if (!state.signed) return;
+    clearTimeout(timeOutKey);
+    timeOutKey = setTimeout(() => {
+      commit('FLASH_THE_INFO', emptyUser);
+    }, COOKIE_KEEP);
+  },
   setUserInfo({ commit }, userInfo) {
     if (userInfo) {
       commit('FLASH_THE_INFO', { ...userInfo, signed: true });
     }
   },
   delUserInfo({ commit }) {
-    commit('FLASH_THE_INFO', {
-      did: null,
-      nickName: null,
-      email: null,
-      defaultProject: null,
-      defaultFolder: null,
-      signed: false,
-      admin: false,
-    });
+    commit('FLASH_THE_INFO', emptyUser);
   },
-  updateExpTime({ commit }) {
-    
+  removeSignedUser({ state, commit }) {
+    if (!state.signed) return;
+    commit('FLASH_THE_INFO', emptyUser);
+    Message('登入信息已经过期了,访问非公开信息需要重新登陆哦');
   },
 };
 export default {

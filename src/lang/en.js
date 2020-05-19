@@ -47,7 +47,7 @@ export default {
       },
       editOption: {
         'edit-title': 'Edit Option',
-        'repeat-enum': 'Repeat ENUM',
+        'duplicate-enum': 'Repeat ENUM',
       },
     },
     signIn: {
@@ -80,7 +80,7 @@ export default {
       'full-name-input': 'Option Full Name',
       description: 'DESC',
       'desc-input': 'Option Description',
-      repeat: 'Repeat',
+      duplicate: 'Repeat',
       type: 'Type',
       'choice-type': 'Choice Type',
       enum: 'Enum',
