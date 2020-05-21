@@ -9,7 +9,7 @@ function getSnaps() {
   try {
     return snapStr
       ? JSON.parse(snapStr)
-      : { 'docker run': [{ title: 'snap1' }, { title: 'snap2' }] };
+      : {};
     // : {};
   } catch {
     return {};
