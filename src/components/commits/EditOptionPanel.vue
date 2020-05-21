@@ -105,7 +105,7 @@ export default {
     },
     InOption: {
       type: Option,
-      default: () => new Option({}),
+      default: () => new Option({ type: 0 }),
     },
     existName: {
       type: Array,
@@ -126,7 +126,7 @@ export default {
   },
   data() {
     return {
-      option: new Option({}),
+      option: new Option({ }),
       optionType: Option.types(),
       enums: {
         rules: [],

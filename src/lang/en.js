@@ -87,6 +87,9 @@ export default {
       'enum-add': 'NEW ENUM',
       'enum-option': '',
       rules: '',
+      types: {
+        NONE: 'NONE', NUMBER: 'NUMBER', ENUM: 'ENUM', STRING: 'STRING', MAP: 'MAP',
+      },
     },
     commit: {
       commandName: 'CMD',

@@ -90,11 +90,11 @@
             <el-tag type='info'>{{splitExhibitKey}}</el-tag>
           </el-col>
           <el-col :span="8">
-            <span>{{item.oValue}}</span>
+            <span>{{translateEditValue(item.keyPath, item.oValue)}}</span>
           </el-col>
           <el-col :span="1">=></el-col>
           <el-col :span="7">
-            <span>{{item.value}}</span>
+            <span>{{translateEditValue(item.keyPath, item.value)}}</span>
           </el-col>
         </el-row>
       </div>
@@ -240,8 +240,14 @@ export default {
       return type === '[object Object]';
     },
     getype(type) {
-      return Object.keys(CommandOption.TYPE).filter(key => CommandOption.TYPE[key] === type)[0] || 'UNKNOW';
+      const typeKey = Object.keys(CommandOption.TYPE)
+        .filter(key => CommandOption.TYPE[key] === type)[0] || 'NONE';
+      return this.$t(`entities.option.types.${typeKey}`);
       // return CommandOption.TYPE.filter((_, value) => type === value).map(key => key);
+    },
+    translateEditValue(key, value) {
+      const lastKey = (key || '.').split('.').pop();
+      return ['type'].includes(lastKey) ? this.getype(value) : value;
     },
     getCurrentLangDesc(desc) {
       return desc && desc[this.currentLang] ? desc[this.currentLang] : '';

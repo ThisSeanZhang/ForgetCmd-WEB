@@ -87,6 +87,9 @@ export default {
       'enum-add': '新增枚举',
       'enum-option': '',
       rules: '',
+      types: {
+        NONE: '无', NUMBER: '数字', ENUM: '枚举', STRING: '字符串', MAP: '键值对',
+      },
     },
     commit: {
       commandName: '命令名称',

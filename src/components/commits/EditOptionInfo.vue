@@ -51,7 +51,7 @@ export default {
     currentOption() {
       return this.options.length > 0 && this.editIndex !== undefined
         ? this.options[this.editIndex]
-        : new CommandOption({});
+        : new CommandOption({ type: 0 });
     },
     currentLang() {
       return this.$i18n.locale || 'zh';
