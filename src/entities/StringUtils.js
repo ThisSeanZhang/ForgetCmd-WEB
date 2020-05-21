@@ -1,5 +1,5 @@
 function isEmptyString(str) {
-  return str === undefined || str === null || str.trim() === '';
+  return str === undefined || str === null || String(str).trim() === '';
 }
 function nonEmptyString(str) {
   return !isEmptyString(str);
@@ -7,7 +7,8 @@ function nonEmptyString(str) {
 const type = {
   object: str => JSON.stringify(str),
   string: str => str.trim(),
-  number: n => n,
+  number: n => String(n),
+  boolean: n => String(n),
 };
 function eq(str1, str2) {
   // 都为空 true

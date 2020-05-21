@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Message } from 'element-ui';
 // import { Notification } from 'element-ui';
 
-const COOKIE_KEEP = 1000 * 20;
+const COOKIE_KEEP = 1000 * 60 * 60 * 7;
 let timeOutKey = null;
 const emptyUser = {
   did: null,

@@ -28,7 +28,7 @@
 <script>
 import ListUtils from '../../entities/ListUtils';
 import EditOptionPanel from './EditOptionPanel.vue';
-import Option from '../../entities/CommandOption';
+import CommandOption from '../../entities/CommandOption';
 // import { wantNothing } from '../../api/fetch';
 
 export default {
@@ -45,14 +45,13 @@ export default {
       options: null,
       optionDdrawerShow: false,
       editIndex: undefined,
-      paramTypeEnum: [],
     };
   },
   computed: {
     currentOption() {
       return this.options.length > 0 && this.editIndex !== undefined
         ? this.options[this.editIndex]
-        : new Option({});
+        : new CommandOption({});
     },
     currentLang() {
       return this.$i18n.locale || 'zh';
@@ -60,9 +59,8 @@ export default {
   },
   methods: {
     convertType(key) {
-      // console.log(this.paramTypeEnum.filter(p => p.key === key));
-      const typeList = this.paramTypeEnum.filter(p => p.key === key);
-      return typeList.length > 0 ? typeList[0].value : 'UNDEFINED';
+      const typeList = CommandOption.types().filter(p => p.key === key);
+      return typeList.length > 0 ? typeList[0].value : 'STRING';
     },
     isEmptyList(options) {
       return ListUtils.isEmptyList(options);
@@ -72,10 +70,10 @@ export default {
       this.optionDdrawerShow = true;
     },
     updateOption(option) {
-      console.log(`commit option ${JSON.stringify(option)}`);
+      // console.log(`commit option ${JSON.stringify(option)}`);
       if (this.editIndex !== undefined) {
         this.options.splice(this.editIndex, 1, option);
-        console.log(`commit option ${JSON.stringify(this.options)}`);
+        // console.log(`commit option ${JSON.stringify(this.options)}`);
       } else {
         this.options.push(option);
       }
@@ -86,10 +84,7 @@ export default {
   },
   created() {
     this.options = this.value;
-    console.log(`传入的Option${this.options}`);
-    // Option.loadType().then((resp) => {
-    //   this.paramTypeEnum = resp.data.data;
-    // }).catch(wantNothing);
+    // console.log(`传入的Option${this.options}`);
   },
 };
 </script>

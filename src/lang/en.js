@@ -81,7 +81,7 @@ export default {
       description: 'DESC',
       'desc-input': 'Option Description',
       duplicate: 'Repeat',
-      type: 'Type',
+      type: 'TYPE',
       'choice-type': 'Choice Type',
       enum: 'Enum',
       'enum-add': 'NEW ENUM',

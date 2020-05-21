@@ -298,6 +298,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
+  overflow: hidden;
 }
 .page-container{
   position: relative;
