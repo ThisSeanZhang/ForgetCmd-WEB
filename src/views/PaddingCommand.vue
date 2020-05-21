@@ -12,6 +12,7 @@
         class="cmd-perview"
         :inCmd='cmd'
         :improve="true"
+        :createHist="true"
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />

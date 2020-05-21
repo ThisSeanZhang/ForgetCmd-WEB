@@ -19,7 +19,9 @@
       </div>
       <!-- </el-scrollbar> -->
     </div>
-    <CommandExhibit class="cmd-exhibit" :cmd="inCmd" :options="optionVal" :params="paramVal" />
+    <CommandExhibit class="cmd-exhibit" :cmd="inCmd"
+    :createHist="createHist"
+    :options="optionVal" :params="paramVal" />
   </div>
 </template>
 <script>
@@ -50,6 +52,10 @@ export default {
       default: () => [],
     },
     improve: {
+      type: Boolean,
+      default: () => false,
+    },
+    createHist: {
       type: Boolean,
       default: () => false,
     },

@@ -82,6 +82,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    createHist: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data() {
     return {
@@ -129,6 +133,7 @@ export default {
       return typeof deal === 'function' ? deal(allRows) : allRows;
     },
     craeteHistory() {
+      if (!this.createHist) return;
       const createTime = new Date().getTime();
       this.newRecord({
         ...this.cmd.toSnap(),
