@@ -136,6 +136,8 @@ export default {
     delete: {
       message: {
         ask: '确定删除吗？',
+        success: '删除成功 ( •̀ ω •́ )y',
+        fail: '啊欧~删除失败 <(＿ ＿)>',
       },
     },
     pause: {

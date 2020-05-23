@@ -1,7 +1,7 @@
 // import storage from 'store';
 import Vue from 'vue';
 // import { Notification } from 'element-ui';
-import { Message } from 'element-ui';
+// import { Message } from 'element-ui';
 import SnapShot from '../../entities/Snapshot';
 import StringUtils from '../../entities/StringUtils';
 // import CmdParam from '../../entities/CmdParam';
@@ -86,27 +86,36 @@ const mutations = {
     });
   },
   removeByIndex(state, { commandName, index }) {
-    if (typeof index !== 'number') {
-      // Notification.info({
-      //   title: '出错了',
-      //   message: '啊欧~删除失败<(＿＿)>',
+    return new Promise((resolve, reject) => {
+      if (typeof index !== 'number') {
+        // Notification.info({
+        //   title: '出错了',
+        //   message: '啊欧~删除失败<(＿＿)>',
+        // });
+        // Message.info({
+        //   showClose: true,
+        //   message: '啊欧~删除失败<(＿ ＿)>',
+        // });
+        reject();
+        return;
+      }
+      try {
+        state.cmdHistory[commandName].splice(index, 1);
+        localStorage.setItem('SNAPSHOT_KEY', StringUtils.o2str(state.cmdHistory));
+        resolve();
+      } catch {
+        reject();
+      }
+      // Notification.success({
+      //   title: '成功',
+      //   message: '这是一条成功的提示消息',
       // });
-      Message.info({
-        showClose: true,
-        message: '啊欧~删除失败<(＿　＿)>',
-      });
-      return;
-    }
-    state.cmdHistory[commandName].splice(index, 1);
-    // Notification.success({
-    //   title: '成功',
-    //   message: '这是一条成功的提示消息',
-    // });
-    Message.success({
-      showClose: true,
-      message: '成功删除',
+      // console.log(i18n.t('page.commandPanel.param'));
+      // Message.success({
+      //   showClose: true,
+      //   message: '成功删除',
+      // });
     });
-    localStorage.setItem('SNAPSHOT_KEY', StringUtils.o2str(state.cmdHistory));
   },
 };
 

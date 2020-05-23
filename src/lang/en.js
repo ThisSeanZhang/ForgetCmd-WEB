@@ -136,6 +136,8 @@ export default {
     delete: {
       message: {
         ask: 'confirm to delete?',
+        success: 'YES I DELETE IT ( •̀ ω •́ )y',
+        fail: 'a-ha~ DELETE FAIL <(＿ ＿)>',
       },
     },
     pause: {

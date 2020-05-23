@@ -7,7 +7,7 @@
       :snap='snap'
       :index='index'
       v-on:restore="restore(index)"
-      v-on:delThis="removeByIndex({ commandName, index })"
+      v-on:delThis="delHis({ commandName, index })"
       v-for="(snap, index) in getCommandHis(commandName)" :key="snap.createTime" />
   </el-scrollbar>
   <!-- </div> -->
@@ -58,6 +58,17 @@ export default {
     ...mapGetters('CommandHistory', ['snaps', 'getCommandHis']),
   },
   methods: {
+    delHis(obj) {
+      this.removeByIndex(obj)
+        .then(() => this.$message.success({
+          showClose: true,
+          message: this.$t('other.delete.message.success'),
+        }))
+        .catch(() => this.$message.info({
+          showClose: true,
+          message: this.$t('other.delete.message.fail'),
+        }));
+    },
     upParamVal(paramVal) {
       this.paramVal = paramVal;
     },
