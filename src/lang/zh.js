@@ -127,7 +127,7 @@ export default {
     copy: {
       message: {
         success: '复制成功 <(￣︶￣)↗[GO!]',
-        error: '复制失败 இ௰இ',
+        fail: '复制失败 இ௰இ',
       },
     },
     leave: {
@@ -142,6 +142,9 @@ export default {
       message: {
         ask: '暂停使用?',
       },
+    },
+    input: {
+      message: '输入点什么',
     },
   },
   lang: {

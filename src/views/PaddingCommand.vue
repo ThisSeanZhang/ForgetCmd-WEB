@@ -7,6 +7,7 @@
     </el-header>
     <el-main>
       <CommandPanel
+        style="margin: 0px 5px"
         v-if="cmdLoading.success"
         v-loading="cmdLoading.doing"
         class="cmd-perview"

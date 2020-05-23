@@ -28,11 +28,11 @@
         </el-form-item>
       </el-form> -->
     </div>
-    <div v-else-if="option.isType(optionType.NONE)" class="option-base option-none" >无参数可填</div>
+    <div v-else-if="option.isType(optionType.NONE)" class="option-base option-none" ></div>
     <div class="option-base option-input" v-else>
       <el-input
         class="option-value"
-        placeholder="请输入内容"
+        :placeholder="$t('other.input.message')"
         v-model="optionArg"
         clearable>
       </el-input>

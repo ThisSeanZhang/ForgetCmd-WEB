@@ -126,12 +126,12 @@ export default {
     },
     copy: {
       message: {
-        success: 'COPY SUCCESS <(￣︶￣)↗[GO!]',
-        error: 'COPY ERROR இ௰இ',
+        success: 'SUCCESS <(￣︶￣)↗[GO!]',
+        fail: 'ERROR இ௰இ',
       },
     },
     leave: {
-      'want-save': 'do you want save your input？',
+      'want-save': 'do you want save your input?',
     },
     delete: {
       message: {
@@ -142,6 +142,9 @@ export default {
       message: {
         ask: 'confirm to pause?',
       },
+    },
+    input: {
+      message: 'input some thing',
     },
   },
   lang: {

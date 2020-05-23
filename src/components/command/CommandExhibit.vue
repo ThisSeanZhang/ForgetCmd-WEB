@@ -157,13 +157,15 @@ export default {
     onCopy() {
       this.craeteHistory();
       this.$notify({
-        title: '复制成功',
+        title: this.$t('other.copy.message.success'),
         type: 'success',
+        // position: 'top-left',
       });
     },
     onError() {
       this.$notify.error({
-        title: '复制失败！',
+        title: this.$t('other.copy.message.fail'),
+        // position: 'top-left',
       });
     },
     ...mapMutations('CommandHistory', ['newRecord']),

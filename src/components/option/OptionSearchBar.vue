@@ -75,9 +75,9 @@ export default {
       //   });
       //   return;
       // }
-      this.$emit('addOption', new Option(item));
-      console.log(this.state);
-      console.log(JSON.stringify(item));
+      this.$emit('addOption', new Option({ ...item, selected: true }));
+      // console.log(this.state);
+      // console.log(JSON.stringify(item));
     },
     description(description) {
       return description && description[this.currentLang] ? description[this.currentLang] : '';

@@ -100,9 +100,9 @@
         >提交</el-button> -->
       <el-button
         :disabled="!canSubmit"
-        v-show="currentStep === submitStep" type="primary"
+        v-if="currentStep === submitStep" type="primary"
         style="float: right;"
-        @click="submitCmd"
+        @click.once="submitCmd"
         >{{$t('other.btn.submit')}}</el-button>
     </div>
     <!-- {{cmd}} -->
