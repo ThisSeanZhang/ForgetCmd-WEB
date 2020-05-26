@@ -5,7 +5,6 @@ import Command from '@/views/Command.vue';
 import CreateCommit from '@/views/CreateCommit.vue';
 import WaitVerifyCmdLog from '@/views/WaitVerifyCmdLog.vue';
 import PerViewCommand from '@/views/PerViewCommand.vue';
-import SnapshotInject from '@/views/SnapshotInject.vue';
 import tempBaseView from '@/views/tempBaseView.vue';
 import ReviewCommit from '@/views/ReviewCommit.vue';
 import PaddingCommand from '@/views/PaddingCommand.vue';
@@ -87,11 +86,6 @@ export default new Router({
       path: '/commits/cmds/:cid',
       name: 'per-view',
       component: PerViewCommand,
-    },
-    {
-      path: '/snapshots/:sid/inject',
-      name: 'snapshots-inject',
-      component: SnapshotInject,
     },
     { path: '*', component: NotFound },
     ...DeveloperRouter,

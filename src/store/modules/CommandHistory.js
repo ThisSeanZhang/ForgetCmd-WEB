@@ -1,11 +1,6 @@
-// import storage from 'store';
 import Vue from 'vue';
-// import { Notification } from 'element-ui';
-// import { Message } from 'element-ui';
 import SnapShot from '../../entities/Snapshot';
 import StringUtils from '../../entities/StringUtils';
-// import CmdParam from '../../entities/CmdParam';
-// import CommandOption from '../../entities/CommandOption';
 
 // initial state
 const state = {

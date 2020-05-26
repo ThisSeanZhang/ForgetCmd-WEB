@@ -90,5 +90,6 @@ export default {
 }
 .el-main{
   display: flex;
+  height: 100%;
 }
 </style>

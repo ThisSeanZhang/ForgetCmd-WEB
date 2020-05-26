@@ -27,6 +27,8 @@ import { wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
 import CmdParam from '../entities/CmdParam';
 import Option from '../entities/Option';
+import OptionApi from '../api/OptionApi';
+import ParamApi from '../api/ParamApi';
 
 export default {
   name: 'command',
@@ -61,11 +63,11 @@ export default {
         this.cmdSuccessLoad = false;
         wantNothing(error);
       });
-      CmdParam.findByCid(cid).then((resp) => {
+      ParamApi.findByCid(cid).then((resp) => {
         this.params = resp.data.data.map(param => new CmdParam(param));
         // console.log(this.params);
       }).catch(wantNothing);
-      Option.findByCid(cid).then((resp) => {
+      OptionApi.findByCid(cid).then((resp) => {
         this.options = resp.data.data.map(param => new Option(param));
         // console.log(resp.data);
       }).catch(wantNothing);

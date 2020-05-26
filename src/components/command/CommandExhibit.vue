@@ -58,18 +58,20 @@
         </div>
       </div>
     </el-scrollbar>
+    <SnapshotPanel :inSnap="snap" v-model="snapCreateDialogVisible" />
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 import Command from '../../entities/Command';
-// import Snapshot from '../../entities/Snapshot';
-import SnapApi from '../../api/SnapShotApi';
 import TimeUtils from '../../entities/TimeUtils';
+import SnapshotPanel from '../snap/SnapshotPanel.vue';
+import Snapshot from '../../entities/Snapshot';
 // import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'command-exhibit',
+  components: { SnapshotPanel },
   props: {
     cmd: {
       type: Command,
@@ -92,18 +94,31 @@ export default {
       allRows: [],
       exhibitModel: { ONELINE: Symbol('one line'), MULTLINE: Symbol('Multip line') },
       currentModel: null,
+      snapCreateDialogVisible: false,
     };
   },
   computed: {
+    snap() {
+      const { commandName, cid } = { ...this.cmd };
+      return new Snapshot({
+        cid,
+        paramVal: this.params,
+        optionVal: this.options,
+        commandName,
+        did: this.did,
+      });
+    },
     exhibitBtn() {
       return this.currentModel === this.exhibitModel.ONELINE
         ? { icon: 'el-icon-document-remove', desc: this.$t('page.commandPanel.previewPanel.oneLine') }
         : { icon: 'el-icon-document', desc: this.$t('page.commandPanel.previewPanel.multiple') };
     },
+    ...mapGetters('UserInfo', ['did']),
   },
   methods: {
     createSnapshot() {
-      SnapApi.createSnapshot(this.cmd);
+      this.snapCreateDialogVisible = true;
+      // SnapApi.createSnapshot(this.cmd);
     },
     buildHyphen(option) {
       if (option.briefName === option.fullName) {

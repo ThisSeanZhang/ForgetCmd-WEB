@@ -1,18 +1,17 @@
 import { ajax } from './fetch';
 
 export default {
-  createSnapshot(snap) {
+  findByCid(cid) {
     const request = {
-      method: 'POST',
-      url: 'snapshots',
-      data: snap,
+      method: 'GET',
+      url: `cmds/${cid}/params`,
     };
     return ajax(request);
   },
-  findBySid(sid) {
+  loadType() {
     const request = {
       method: 'GET',
-      url: `snapshots/${sid}`,
+      url: 'params/types',
     };
     return ajax(request);
   },

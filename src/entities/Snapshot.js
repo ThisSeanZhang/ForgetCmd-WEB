@@ -1,3 +1,6 @@
+import CommandOption from './CommandOption';
+import CmdParam from './Param';
+
 export default class Snapshot {
   constructor(snap) {
     // this.snapId = snap.snapId;
@@ -8,20 +11,22 @@ export default class Snapshot {
     // this.allowCopy = snap.allowCopy;
     // this.did = snap.did;
 
-    this.snapId = snap.snapId;
+    this.snapId = snap.snapId;// 存储的是snap的id
     this.type = snap.type; // 快照类型 cmd commit
-    this.ccid = snap.ccid; // 如果是Commit的快照 存储的是snap的id
+    this.ccid = snap.ccid; // 如果是Commit的快照
     this.cid = snap.cid; // command id
     this.title = snap.title;
     this.paramVal = Object.prototype.toString.call(snap.paramVal) === '[object Array]' ? snap.paramVal : [];
     this.optionVal = Object.prototype.toString.call(snap.optionVal) === '[object Array]' ? snap.optionVal : [];
-    this.share = snap.share;
+    this.share = snap.share === true;
     this.shareCode = snap.shareCode;
-    this.allowCopy = snap.allowCopy;
+    this.allowCopy = snap.allowCopy === true;
     this.did = snap.did; // 开发者ID
     this.version = snap.version;
     this.commandName = snap.commandName;
     this.createTime = snap.createTime;
+    this.desc = snap.desc;
+    this.did = snap.did;
   }
 
   dealValue(deal) {
@@ -60,5 +65,25 @@ export default class Snapshot {
       return '--';
     }
     return '-';
+  }
+
+  toData() {
+    return {
+      snapId: this.snapId,
+      type: this.type,
+      ccid: this.ccid,
+      cid: this.cid,
+      title: this.title,
+      paramVal: JSON.stringify(CmdParam.convertDatas(this.paramVal)),
+      optionVal: JSON.stringify(CommandOption.convertDatas(this.optionVal)),
+      share: this.share,
+      shareCode: this.shareCode,
+      allowCopy: this.allowCopy,
+      did: this.did,
+      version: this.version,
+      commandName: this.commandName,
+      createTime: this.createTime,
+      desc: this.desc,
+    };
   }
 }

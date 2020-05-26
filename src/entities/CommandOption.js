@@ -1,4 +1,3 @@
-import { ajax } from '../api/fetch';
 import strUtil from './StringUtils';
 
 function initRules(rules) {
@@ -62,22 +61,6 @@ export default class CommandOption {
 
   isType(inType) {
     return this.ignore ? false : this.type % (2 ** 14) === inType;
-  }
-
-  static findByCid(cid) {
-    const request = {
-      method: 'GET',
-      url: `cmds/${cid}/options`,
-    };
-    return ajax(request);
-  }
-
-  static loadType() {
-    const request = {
-      method: 'GET',
-      url: 'options/types',
-    };
-    return ajax(request);
   }
 
   deepCopy() {

@@ -21,7 +21,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import CommitsTable from '@/components/commits/CommitsTable.vue';
+import CommitsTable from './CommitsTable.vue';
 
 export default {
   name: 'command-list-commit',
