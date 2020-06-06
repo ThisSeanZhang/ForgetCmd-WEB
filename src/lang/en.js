@@ -58,6 +58,9 @@ export default {
       'please-input-pass': 'please input password',
       'rember-me': 'Rember Me',
     },
+    createSnap: {
+      title: 'CREATE SNAPSHOT',
+    },
   },
   entities: {
     command: {
@@ -99,6 +102,13 @@ export default {
       description: 'DESC',
       'desc-input': 'Command Description',
       status: 'Status',
+    },
+    snap: {
+      title: 'Title',
+      share: 'Share',
+      'share-code': 'Code',
+      copy: 'Copy',
+      remark: 'Remark',
     },
   },
   other: {
@@ -147,6 +157,13 @@ export default {
     },
     input: {
       message: 'input some thing',
+    },
+    str: {
+      LIMIT_LENGTH_1_20: 'Length Limit 1-20',
+      LIMIT_LENGTH_4_10: 'Length Limit 1-20',
+      JUST_ALLOW_NORMAL_WORD: 'Special symbols allowed: -,_, ,',
+      NOT_BLANK_START: 'Not begin with space',
+      NOT_EMPTY: 'Not empty',
     },
   },
   lang: {

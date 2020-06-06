@@ -58,6 +58,9 @@ export default {
       'please-input-pass': '请输入密码',
       'rember-me': '记住我',
     },
+    createSnap: {
+      title: '创建快照',
+    },
   },
   entities: {
     command: {
@@ -99,6 +102,13 @@ export default {
       description: '详细描述',
       'desc-input': '请输入命令完整描述',
       status: '状态',
+    },
+    snap: {
+      title: '标题',
+      share: '分享',
+      'share-code': '密码',
+      copy: '允许复制',
+      remark: '备注',
     },
   },
   other: {
@@ -147,6 +157,13 @@ export default {
     },
     input: {
       message: '输入点什么',
+    },
+    str: {
+      LIMIT_LENGTH_1_20: '长度限制在1,20之间',
+      LIMIT_LENGTH_4_10: '长度限制在4,10之间',
+      JUST_ALLOW_NORMAL_WORD: '仅“-,_, ”为允许的特殊符号',
+      NOT_BLANK_START: '不允许空格开头',
+      NOT_EMPTY: '不允许为空',
     },
   },
   lang: {

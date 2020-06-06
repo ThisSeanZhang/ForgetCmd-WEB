@@ -4,7 +4,7 @@ export default {
   createSnapshot(snap) {
     const request = {
       method: 'POST',
-      url: 'snapshots',
+      url: '/snapshots',
       data: snap,
     };
     return ajax(request);
@@ -12,7 +12,7 @@ export default {
   findBySid(sid) {
     const request = {
       method: 'GET',
-      url: `snapshots/${sid}`,
+      url: `/snapshots/${sid}`,
     };
     return ajax(request);
   },
