@@ -87,6 +87,7 @@ export default {
   },
   created() {
     this.fetchCommandsInfo();
+    this.$emit('flash', this.fetchCommandsInfo);
   },
 };
 </script>

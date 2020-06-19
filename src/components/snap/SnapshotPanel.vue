@@ -1,7 +1,7 @@
 <template>
 <el-dialog
   @open="onOpen"
-  :title="$t('page.createSnap.title')"
+  :title="title"
   :visible.sync="dialogVisible"
   width="500px">
   <div >
@@ -60,7 +60,11 @@
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">{{$t('other.btn.cancel')}}</el-button>
     <el-button type="primary" :disabled="!allPass"
+    v-if="!edit"
     @click="createSnap">{{$t('other.btn.ok')}}</el-button>
+    <el-button type="primary" :disabled="!allPass"
+    v-else
+    @click="submitSnap">{{$t('other.btn.submit')}}</el-button>
   </span>
 </el-dialog>
 </template>
@@ -81,6 +85,10 @@ export default {
     inSnap: {
       type: Snapshot,
       default: () => new Snapshot({}),
+    },
+    edit: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data() {
@@ -115,6 +123,9 @@ export default {
     allPass() {
       return Object.values(this.status).filter(e => !e).length === 0;
     },
+    title() {
+      return this.$t(this.edit ? 'page.snapPanel.editTitle' : 'page.snapPanel.createTitle');
+    },
   },
   methods: {
     onOpen() {
@@ -126,6 +137,7 @@ export default {
           this.dialogVisible = false;
         });
     },
+    submitSnap() {},
   },
 };
 </script>

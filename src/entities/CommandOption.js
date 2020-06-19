@@ -83,7 +83,7 @@ export default class CommandOption {
       : '';
   }
 
-  toData() {
+  toData(value = false) {
     return {
       oid: this.oid,
       description: strUtil.o2str(this.description, () => ''),
@@ -96,12 +96,13 @@ export default class CommandOption {
       rules: strUtil.o2str(this.rules, () => ''),
       ignore: this.ignore,
       duplicate: this.duplicate,
+      value: value ? this.value : null,
     };
   }
 
-  static convertDatas(params) {
+  static convertDatas(params, value = false) {
     if (!params || params.length === 0) return [];
-    return params.map(p => p.toData());
+    return params.map(p => p.toData(value));
   }
 
   static convertObjs(objs) {

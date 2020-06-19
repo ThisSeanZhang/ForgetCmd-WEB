@@ -1,5 +1,6 @@
 import CommandOption from './CommandOption';
 import CmdParam from './Param';
+import strUtil from './StringUtils';
 
 export default class Snapshot {
   constructor(snap) {
@@ -27,6 +28,7 @@ export default class Snapshot {
     this.createTime = snap.createTime;
     this.desc = snap.desc;
     this.did = snap.did;
+    this.location = snap.location;
   }
 
   dealValue(deal) {
@@ -74,8 +76,8 @@ export default class Snapshot {
       ccid: this.ccid,
       cid: this.cid,
       title: this.title,
-      paramVal: JSON.stringify(CmdParam.convertDatas(this.paramVal)),
-      optionVal: JSON.stringify(CommandOption.convertDatas(this.optionVal)),
+      paramVal: JSON.stringify(CmdParam.convertDatas(this.paramVal, true)),
+      optionVal: JSON.stringify(CommandOption.convertDatas(this.optionVal, true)),
       share: this.share,
       shareCode: this.shareCode,
       allowCopy: this.allowCopy,
@@ -84,6 +86,15 @@ export default class Snapshot {
       commandName: this.commandName,
       createTime: this.createTime,
       desc: this.desc,
+      location: this.location,
     };
+  }
+
+  static fromObj(obj) {
+    return new Snapshot({
+      ...obj,
+      optionVal: CommandOption.convertObjs(strUtil.parse(obj.optionVal), () => []),
+      paramVal: CmdParam.convertObjs(strUtil.parse(obj.paramVal), () => []),
+    });
   }
 }

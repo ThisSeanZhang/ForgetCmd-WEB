@@ -41,6 +41,8 @@ import CMDHeader from '@/components/header/Header.vue';
 import StringUtils from '../entities/StringUtils';
 import Param from '../entities/Param';
 import CommandOption from '../entities/CommandOption';
+import SnapshotApi from '../api/SnapShotApi';
+import Snapshot from '../entities/Snapshot';
 
 export default {
   name: 'padding-command',
@@ -53,7 +55,8 @@ export default {
       optionVal: [],
       cmd: new Command({}),
       cid: null,
-      snapIndex: null,
+      snapId: null,
+      location: null,
       cmdLoading: {
         doing: false,
         success: false,
@@ -72,9 +75,9 @@ export default {
     cid() {
       this.getCommandById();
     },
-    snapIndex() {
-      this.feedSnapVal();
-    },
+    // location() {
+    //   this.getSnap();
+    // },
   },
   computed: {
     request() {
@@ -82,6 +85,15 @@ export default {
         method: 'GET',
         url: `cmds/${this.cid}`,
       };
+    },
+    computedTitle() {
+      const title = {
+        'local-browser': '本地浏览器快照',
+        'online-remote': '远程快照',
+      };
+      return title[this.location]
+        ? title[this.location]
+        : '填充命令';
     },
   },
   methods: {
@@ -96,17 +108,37 @@ export default {
       ajax(this.request, this.cmdLoading).then((resp) => {
         this.cmd = Command.fromObj(resp.data.data);
         // 不这样snap的command Name 拿不到
-        this.feedSnapVal();
+        this.getSnap();
       }).catch(wantNothing);
     },
     upParamVal(paramVal) {
       this.paramVal = paramVal;
     },
-    feedSnapVal() {
-      if (this.snapIndex !== null
-        && this.snapIndex !== undefined
+    getSnap() {
+      const getFunc = {
+        'local-browser': this.getLocalSnap,
+        'online-remote': this.getRemoteSnap,
+      };
+
+      if (typeof getFunc[this.location] === 'function') {
+        getFunc[this.location]();
+      }
+    },
+    getRemoteSnap() {
+      console.log('online-remote');
+      SnapshotApi.findBySid(this.snapId).then((resp) => {
+        console.log(resp);
+        const snap = Snapshot.fromObj(resp.data.data);
+        this.paramVal = snap.paramVal;
+        this.optionVal = snap.optionVal;
+      });
+    },
+    getLocalSnap() {
+      console.log('get Snap');
+      if (this.snapId !== null
+        && this.snapId !== undefined
         && StringUtils.nonEmptyString(this.cmd.commandName)) {
-        const snap = this.getCommandHis()(this.cmd.commandName)[this.snapIndex];
+        const snap = this.getCommandHis()(this.cmd.commandName)[this.snapId];
         if (snap) {
           const copyOne = JSON.parse(JSON.stringify(snap));
           console.log(copyOne);
@@ -119,16 +151,20 @@ export default {
   },
   created() {
     this.cid = this.$route.params.cid;
-    this.snapIndex = this.$route.params.snapIndex;
+    this.snapId = this.$route.params.snapId;
+    this.location = this.$route.params.location;
+    document.title = this.computedTitle;
+    console.log('create');
     // 根据路由获取
     // this.getCommandById();
   },
-  beforeRouteUpdate(to, from, next) {
-    this.cid = to.params.cid;
-    this.snapIndex = to.params.snapIndex;
-    // console.log(to, from, next)
-    next();
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   this.cid = to.params.cid;
+  //   this.snapIndex = to.params.snapIndex;
+  //   // console.log(to, from, next)
+  //   console.log('do');
+  //   next();
+  // },
 };
 </script>
 <style lang="scss" scoped>

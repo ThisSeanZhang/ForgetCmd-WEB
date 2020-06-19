@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container" v-loading="submitLoading.doing">
     <div style="width: 100%;">
       <el-steps :active="stepConfig.active" :finish-status="stepConfig.finish">
         <el-step v-for="(step, index) in stepsInfos"
@@ -102,7 +102,7 @@
         :disabled="!canSubmit"
         v-if="currentStep === submitStep" type="primary"
         style="float: right;"
-        @click.once="submitCmd"
+        @click="submitCmd"
         >{{$t('other.btn.submit')}}</el-button>
     </div>
     <!-- {{cmd}} -->
@@ -117,6 +117,7 @@ import EditOptionInfo from './EditOptionInfo.vue';
 import ConcludePanel from './ConcludePanel.vue';
 // import CommandPanel from '../command/CommandPanel.vue';
 import { wantNothing } from '../../api/fetch';
+import CommitAPI from '../../api/CommitAPI';
 
 export default {
   name: 'commit',
@@ -157,11 +158,15 @@ export default {
       // stepsInfos: [],
       ccid: null,
       transitionName: 'fade',
+      submitLoading: {
+        doing: false,
+        success: false,
+      },
     };
   },
   methods: {
     submitCmd() {
-      CommandCommit.sendCommit(this.commit).then((resp) => {
+      CommitAPI.sendCommit(this.commit, this.submitLoading).then((resp) => {
         console.log(JSON.stringify(resp));
         this.ccid = resp.data.data.ccid;
         this.$message('添加成功');
@@ -224,7 +229,7 @@ export default {
   },
   computed: {
     canSubmit() {
-      return this.commit.items && this.commit.items.length > 0;
+      return this.commit.items && this.commit.items.length > 0 && !this.submitLoading.doing;
     },
     hasNext() {
       // return this.currentStep !== this.procedure.DONE

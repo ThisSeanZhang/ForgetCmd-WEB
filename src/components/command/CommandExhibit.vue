@@ -67,6 +67,7 @@ import Command from '../../entities/Command';
 import TimeUtils from '../../entities/TimeUtils';
 import SnapshotPanel from '../snap/SnapshotPanel.vue';
 import Snapshot from '../../entities/Snapshot';
+import StringUtils from '../../entities/StringUtils';
 // import CmdParam from '../../entities/CmdParam';
 
 export default {
@@ -124,6 +125,9 @@ export default {
       if (option.briefName === option.fullName) {
         return '--';
       }
+      if (StringUtils.isEmptyString(option.briefName)) {
+        return '--';
+      }
       return '-';
     },
     exhibitName(option) {
@@ -153,6 +157,7 @@ export default {
       this.newRecord({
         ...this.cmd.toSnap(),
         title: TimeUtils.dateFormat('YYYY-MM-dd HH:mm:ss', createTime),
+        location: 'local-browser',
         createTime,
         paramVal: this.params,
         optionVal: this.options,

@@ -37,9 +37,14 @@ export default new Router({
       name: 'padding',
       component: PaddingCommand,
     },
-    { // 从某个本地快照复原 填充命令
-      path: '/cmd/padding/:cid/local-snap/:snapIndex',
-      name: 'local-snap-padding',
+    // { // 从某个本地快照复原 填充命令
+    //   path: '/cmd/padding/:cid/local-snap/:snapIndex',
+    //   name: 'local-snap-padding',
+    //   component: PaddingCommand,
+    // },
+    { // 从某个快照复原 填充命令
+      path: '/cmd/padding/:cid/:location/:snapId',
+      name: 'snap-padding',
       component: PaddingCommand,
     },
     { // 对存在的命令进行创建请求

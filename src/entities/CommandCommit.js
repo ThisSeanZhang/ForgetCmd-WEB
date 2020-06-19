@@ -32,35 +32,6 @@ export default class CommandCommit {
   }
 
   /* eslint no-param-reassign: ["error", { "props": false }] */
-  static sendCommit(commit) {
-    // const data = {
-    //   ...commit,
-    //   briefDesc: JSON.stringify(commit.briefDesc),
-    //   description: JSON.stringify(commit.description),
-    //   items: commit.items.map(item => ({
-    //     ...item,
-    //     value: JSON.stringify(item.value),
-    //     oValue: JSON.stringify(item.oValue),
-    //   })),
-    // };
-    // data.options = commit.options.map(option => ({
-    //   ...option,
-    //   rules: option.rules.join(','),
-    // })).map(option => (delete option.value && option))
-    //   .map(option => (delete option.selected && option));
-    // data.params = commit.params
-    //   .map(param => ({ ...param }))
-    //   .map(param => (delete param.value && param));
-
-    // data.options = JSON.stringify(data.options);
-    // data.params = JSON.stringify(data.params);
-    const request = {
-      method: 'POST',
-      url: 'commits',
-      data: commit.toData(),
-    };
-    return ajax(request);
-  }
 
   static findLogCid(cid) {
     const request = {

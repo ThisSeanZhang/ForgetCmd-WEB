@@ -58,8 +58,9 @@ export default {
       'please-input-pass': 'please input password',
       'rember-me': 'Rember Me',
     },
-    createSnap: {
-      title: 'CREATE SNAPSHOT',
+    snapPanel: {
+      createTitle: 'CREATE SNAPSHOT',
+      editTitle: 'EDIT SNAPSHOT',
     },
   },
   entities: {
@@ -129,6 +130,7 @@ export default {
       copy: 'Copy',
       restore: 'Restore',
       pause: 'Pause',
+      edit: 'Edit',
       'jump-to-padding': 'To Padding',
       'sign-in': 'Sign In',
       'sign-out': 'Sign out',

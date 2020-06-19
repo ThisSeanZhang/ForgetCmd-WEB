@@ -6,7 +6,7 @@
     <CommandExhibitCard style="margin-bottom: 10px;"
       :snap='snap'
       :index='index'
-      v-on:restore="restore(index)"
+      v-on:restore="restore(snap)"
       v-on:delThis="delHis({ commandName, index })"
       v-for="(snap, index) in getCommandHis(commandName)" :key="snap.createTime" />
   </el-scrollbar>
@@ -72,9 +72,9 @@ export default {
     upParamVal(paramVal) {
       this.paramVal = paramVal;
     },
-    restore(index) {
+    restore(snap) {
       const routeUrl = this.$router.resolve({
-        path: `/cmd/padding/${this.cid}/local-snap/${index}`,
+        path: `/cmd/padding/${this.cid}/${snap.location}/${snap.snapId}`,
       });
       window.open(routeUrl.href, '_blank');
     },

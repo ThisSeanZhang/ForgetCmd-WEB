@@ -2,6 +2,7 @@
 import AdminManage from '../views/admin/AdminManage.vue';
 import AdminCommitHistory from '../views/admin/AdminCommitHistory.vue';
 import AdminCommand from '../views/admin/AdminCommand.vue';
+import AdminSnap from '../views/admin/AdminSnap.vue';
 
 export default [
   { // 用户个人页面
@@ -17,10 +18,10 @@ export default [
         path: 'commands',
         component: AdminCommand,
       },
-      // {
-      //   path: 'commits',
-      //   component: DeveloperCommitHistory
-      // },
+      {
+        path: 'snapshouts',
+        component: AdminSnap,
+      },
     ],
   },
 ];

@@ -22,16 +22,17 @@ export default class Param {
       : '';
   }
 
-  toData() {
+  toData(value = false) {
     return {
       index: this.index,
       description: JSON.stringify(this.description),
+      value: value ? this.value : null,
     };
   }
 
-  static convertDatas(params) {
+  static convertDatas(params, value = false) {
     if (!params || params.length === 0) return [];
-    return params.map(p => p.toData());
+    return params.map(p => p.toData(value));
   }
 
   static convertObjs(objs) {

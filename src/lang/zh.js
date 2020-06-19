@@ -58,8 +58,9 @@ export default {
       'please-input-pass': '请输入密码',
       'rember-me': '记住我',
     },
-    createSnap: {
-      title: '创建快照',
+    snapPanel: {
+      createTitle: '创建快照',
+      editTitle: '编辑快照',
     },
   },
   entities: {
@@ -129,6 +130,7 @@ export default {
       copy: '复制',
       restore: '恢复',
       pause: '暂停',
+      edit: '编辑',
       'jump-to-padding': '跳转至填充界面',
       'sign-in': '登入',
       'sign-out': '退出',

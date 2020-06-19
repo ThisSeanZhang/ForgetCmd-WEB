@@ -43,6 +43,11 @@
           <i @click="$emit('restore')"
             style="float: right; padding: 3px 3px" class="el-icon-refresh-right"></i>
         </el-tooltip>
+        <!-- 编辑快照按钮 -->
+        <el-tooltip class="" effect="dark" :content="$t('other.btn.edit')" placement="top">
+          <i @click="editDialogVisible = true"
+            style="float: right; padding: 3px 3px" class="el-icon-edit"></i>
+        </el-tooltip>
     </div>
     <div v-if="currentModel === exhibitModel.ONELINE">
         {{dealValue(oneLine)}}
@@ -52,6 +57,7 @@
         {{line}}
       </div>
     </div>
+    <SnapshotPanel :edit="true" :inSnap="snap" v-model="editDialogVisible" />
   </el-card>
 </template>
 <script>
@@ -59,9 +65,11 @@ import Snapshot from '../../entities/Snapshot';
 import CommandOption from '../../entities/CommandOption';
 import CmdParam from '../../entities/CmdParam';
 import SnapApi from '../../api/SnapShotApi';
+import SnapshotPanel from '../snap/SnapshotPanel.vue';
 
 export default {
   name: 'command-exhibit-card',
+  components: { SnapshotPanel },
   props: {
     snap: {
       type: Snapshot,
@@ -77,6 +85,7 @@ export default {
       allRows: [],
       exhibitModel: { ONELINE: Symbol('one line'), MULTLINE: Symbol('Multip line') },
       currentModel: null,
+      editDialogVisible: false,
       btn: {
         deleteVisiable: false,
       },
@@ -97,6 +106,9 @@ export default {
       return this.snap.paramVal
         .filter(param => param.selected)
         .map(param => new CmdParam(param));
+    },
+    canEditBtn() {
+      return this.snap.location !== 'local-browser';
     },
   },
   methods: {

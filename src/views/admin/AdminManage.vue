@@ -21,11 +21,11 @@
           <i class="el-icon-document"></i>
           <span slot="title">命令管理</span>
         </el-menu-item>
-        <!-- <el-menu-item index="4" @click="toPath('snapshout')">
+        <el-menu-item index="2" @click="toPath('snapshouts')">
           <i class="el-icon-setting"></i>
           <span slot="title">快照管理</span>
         </el-menu-item>
-        <el-menu-item index="5" @click="toPath('setting')">
+        <!-- <el-menu-item index="5" @click="toPath('setting')">
           <i class="el-icon-setting"></i>
           <span slot="title">用户</span>
         </el-menu-item>
@@ -59,7 +59,7 @@ export default {
     },
     defaultActive() {
       const path = this.$route.path.split('/');
-      const index = ['commits', 'commands'].indexOf(path[path.length - 1]);
+      const index = ['commits', 'commands', 'snapshouts'].indexOf(path[path.length - 1]);
       return index > -1 ? String(index) : '0';
     },
   },

@@ -63,6 +63,10 @@ const mutations = {
     currentCmdHis.unshift(new SnapShot(snapshot));
     // console.log(state.cmdHistory[snapshot.commandName]);
     currentCmdHis.splice(10);
+    // 分配ID
+    currentCmdHis.forEach((snap, index) => {
+      snap.snapId = index;
+    });
     // 存入local Store
     localStorage.setItem('SNAPSHOT_KEY', StringUtils.o2str(state.cmdHistory));
   },
