@@ -6,6 +6,7 @@
           <el-popover
             placement="top"
             width="140"
+            v-if="exhibitOperator.delete"
             v-model="btn.deleteVisble">
             <p>{{$t('other.delete.message.ask')}}</p>
             <div style="text-align: right; margin: 0">
@@ -20,7 +21,9 @@
             :content="$t('other.btn.remove')" placement="top"
             :disabled="btn.deleteVisble"
             slot="reference" >
-              <i style="float: right; padding: 3px 3px" class="el-icon-close"></i>
+              <i style="float: right; padding: 3px 3px"
+              v-if="exhibitOperator.delete"
+              class="el-icon-close"></i>
           </el-tooltip>
         </el-popover>
         <!-- 复制按钮 -->
@@ -46,6 +49,7 @@
         <!-- 编辑快照按钮 -->
         <el-tooltip class="" effect="dark" :content="$t('other.btn.edit')" placement="top">
           <i @click="editDialogVisible = true"
+            v-if="exhibitOperator.edit"
             style="float: right; padding: 3px 3px" class="el-icon-edit"></i>
         </el-tooltip>
     </div>
@@ -61,6 +65,7 @@
   </el-card>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import Snapshot from '../../entities/Snapshot';
 import CommandOption from '../../entities/CommandOption';
 import CmdParam from '../../entities/CmdParam';
@@ -107,8 +112,21 @@ export default {
         .filter(param => param.selected)
         .map(param => new CmdParam(param));
     },
-    canEditBtn() {
-      return this.snap.location !== 'local-browser';
+    ...mapGetters('UserInfo', ['did', 'admin']),
+    exhibitOperator() {
+      const btns = {
+        delete: false,
+        edit: false,
+      };
+      if (this.admin || this.did === this.snap.did) {
+        btns.delete = true;
+        btns.edit = true;
+      }
+      if (this.snap.location === 'local-browser') {
+        btns.delete = true;
+        btns.edit = false;
+      }
+      return btns;
     },
   },
   methods: {

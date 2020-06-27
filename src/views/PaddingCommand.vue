@@ -19,11 +19,27 @@
         v-on:upParamVal="upParamVal($event)" />
       <LoadPanel v-bind:loading="cmdLoading"
         v-else class="cmd-perview" v-bind:callBack="getCommandById" />
-      <CommandHistory
+      <SideOfPaddingCommand
+        v-if="cmdLoading.success"
+        v-loading="cmdLoading.doing"
+        :cid="cid"
+        :location="location"
+        :snap="snap"
+      />
+      <!-- <div style="height: 100%;
+    overflow: hidden;
+    width: 100%;">
+        <CommandHistory
         v-if="cmdLoading.success"
         v-loading="cmdLoading.doing"
         :cid="cid"
         :commandName="cmd.commandName" />
+      <RemoteSnaps
+        v-if="cmdLoading.success"
+        v-loading="cmdLoading.doing"
+        :cid="cid"
+        :commandName="cmd.commandName" />
+      </div> -->
     </el-main>
     <el-footer>
     </el-footer>
@@ -35,7 +51,9 @@ import { mapGetters } from 'vuex';
 import { ajax, wantNothing } from '@/api/fetch';
 import Command from '../entities/Command';
 import CommandPanel from '../components/command/CommandPanel.vue';
-import CommandHistory from '../components/history/CommandHistory.vue';
+// import CommandHistory from '../components/history/CommandHistory.vue';
+// import RemoteSnaps from '../components/snap/RemoteSnaps.vue';
+import SideOfPaddingCommand from './SideOfPaddingCommand.vue';
 import LoadPanel from '../components/common/LoadPanel.vue';
 import CMDHeader from '@/components/header/Header.vue';
 import StringUtils from '../entities/StringUtils';
@@ -47,7 +65,7 @@ import Snapshot from '../entities/Snapshot';
 export default {
   name: 'padding-command',
   components: {
-    CommandPanel, CommandHistory, LoadPanel, CMDHeader,
+    CommandPanel, LoadPanel, CMDHeader, SideOfPaddingCommand,
   },
   data() {
     return {
@@ -56,11 +74,13 @@ export default {
       cmd: new Command({}),
       cid: null,
       snapId: null,
+      snap: new Snapshot({}),
       location: null,
       cmdLoading: {
         doing: false,
         success: false,
       },
+      shareCode: null,
     };
   },
   watch: {
@@ -95,6 +115,12 @@ export default {
         ? title[this.location]
         : '填充命令';
     },
+    findSnapRequest() {
+      return {
+        snapId: this.snapId,
+        shareCode: this.shareCode,
+      };
+    },
   },
   methods: {
     hendleSelectCmd(cid) {
@@ -126,21 +152,21 @@ export default {
     },
     getRemoteSnap() {
       console.log('online-remote');
-      SnapshotApi.findBySid(this.snapId).then((resp) => {
+      SnapshotApi.findBySid(this.findSnapRequest).then((resp) => {
         console.log(resp);
-        const snap = Snapshot.fromObj(resp.data.data);
-        this.paramVal = snap.paramVal;
-        this.optionVal = snap.optionVal;
-      });
+        this.snap = Snapshot.fromObj(resp.data.data);
+        this.paramVal = this.snap.paramVal;
+        this.optionVal = this.snap.optionVal;
+      }).catch(e => console.log(e));
     },
     getLocalSnap() {
       console.log('get Snap');
       if (this.snapId !== null
         && this.snapId !== undefined
         && StringUtils.nonEmptyString(this.cmd.commandName)) {
-        const snap = this.getCommandHis()(this.cmd.commandName)[this.snapId];
-        if (snap) {
-          const copyOne = JSON.parse(JSON.stringify(snap));
+        this.snap = this.getCommandHis()(this.cmd.commandName)[this.snapId];
+        if (this.snap) {
+          const copyOne = JSON.parse(JSON.stringify(this.snap));
           console.log(copyOne);
           this.paramVal = (copyOne.paramVal || []).map(p => new Param(p));
           this.optionVal = (copyOne.optionVal || []).map(p => new CommandOption(p));
@@ -153,6 +179,7 @@ export default {
     this.cid = this.$route.params.cid;
     this.snapId = this.$route.params.snapId;
     this.location = this.$route.params.location;
+    this.shareCode = this.$route.params.shareCode;
     document.title = this.computedTitle;
     console.log('create');
     // 根据路由获取
@@ -174,6 +201,7 @@ export default {
 .el-main {
   display: flex;
   overflow: hidden;
+  padding-right: 0px;
 }
 .commit {
   width: 50%;

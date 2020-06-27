@@ -2,7 +2,7 @@
   <!-- <div style="width: 100%; padding: 10px;"> -->
     <!-- {{JSON.stringify(getCommandHis(commandName))}} -->
     <!-- {{snaps[commandName]}} -->
-  <el-scrollbar style="width: 100%;">
+  <el-scrollbar style="width: 100%;height:100%;">
     <CommandExhibitCard style="margin-bottom: 10px;"
       :snap='snap'
       :index='index'

@@ -21,7 +21,6 @@ export default class Snapshot {
     this.optionVal = Object.prototype.toString.call(snap.optionVal) === '[object Array]' ? snap.optionVal : [];
     this.share = snap.share === true;
     this.shareCode = snap.shareCode;
-    this.allowCopy = snap.allowCopy === true;
     this.did = snap.did; // 开发者ID
     this.version = snap.version;
     this.commandName = snap.commandName;

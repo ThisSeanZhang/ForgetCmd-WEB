@@ -3,6 +3,7 @@ function dateFormat(fmt, time) {
   let result = fmt;
   const opt = {
     'Y+': date.getFullYear().toString(),
+    'y+': date.getFullYear().toString(),
     'M+': (date.getMonth() + 1).toString(),
     'd+': date.getDate().toString(),
     'H+': date.getHours().toString(),

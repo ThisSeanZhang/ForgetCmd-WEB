@@ -1,6 +1,6 @@
 export default {
   JUST_ALLOW_NORMAL_WORD: {
-    regx: /^[\u4e00-\u9fa5a-zA-Z0-9 \\-\\_]+$/i,
+    regx: /^[\u4e00-\u9fa5a-zA-Z0-9 \-_]+$/i,
     message: 'other.str.JUST_ALLOW_NORMAL_WORD',
   },
   NOT_BLANK_START: {

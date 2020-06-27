@@ -11,10 +11,11 @@ export default {
     };
     return ajax(request);
   },
-  findBySid(sid) {
+  findBySid(data) {
     const request = {
       method: 'GET',
-      url: `/snapshots/${sid}`,
+      url: `/snapshots/${data.snapId}`,
+      data,
     };
     return ajax(request);
   },
@@ -31,5 +32,13 @@ export default {
       url: `/manager/snaps/${snapId}`,
     };
     return ajax(request);
+  },
+  searchSnap(data, loading) {
+    const request = {
+      method: 'GET',
+      url: '/snapshots/search',
+      data,
+    };
+    return ajax(request, loading);
   },
 };

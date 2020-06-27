@@ -26,12 +26,13 @@ const getters = {
   signed(state) {
     return state.signed;
   },
-  nickName() {
+  nickName(state) {
     return state.nickName;
   },
-  did() {
+  did(state) {
     return state.did;
   },
+  admin: state => state.admin,
 };
 const mutations = {
   FLASH_THE_INFO(state, info) {

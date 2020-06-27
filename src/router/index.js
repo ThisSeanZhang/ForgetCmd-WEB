@@ -47,6 +47,11 @@ export default new Router({
       name: 'snap-padding',
       component: PaddingCommand,
     },
+    { // 从某个快照复原 填充命令
+      path: '/cmd/padding/:cid/:location/:snapId/shareCode/:shareCode',
+      name: 'snap-padding-width-share-code',
+      component: PaddingCommand,
+    },
     { // 对存在的命令进行创建请求
       path: '/cmd/:cid/commits/create',
       name: 'create-commit',

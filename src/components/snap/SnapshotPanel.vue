@@ -41,11 +41,11 @@
       </transition>
     </MessageInput>
     <!-- copy -->
-    <MessageInput :label="$t('entities.snap.copy')" >
+    <!-- <MessageInput :label="$t('entities.snap.copy')" >
       <el-switch
           v-model="snap.allowCopy">
         </el-switch>
-    </MessageInput>
+    </MessageInput> -->
     <!-- desc -->
     <MessageInput :label="$t('entities.snap.remark')" v-model="snap.desc" >
       <el-input

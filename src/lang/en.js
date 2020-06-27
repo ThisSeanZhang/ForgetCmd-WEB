@@ -119,7 +119,7 @@ export default {
     },
     btn: {
       operate: 'Operate',
-      cancel: 'cancel',
+      cancel: 'Cancel',
       ok: 'OK',
       per: 'Per',
       next: 'Next',
