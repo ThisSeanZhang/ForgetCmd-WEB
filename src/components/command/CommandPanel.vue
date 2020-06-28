@@ -1,20 +1,32 @@
 <template>
-  <div>
-    <div>
+  <div class="cmd-panel">
+    <div class="cmd-main">
       <div class="cmd-info">
-        <CommandInfo :cmd="cmd" />
+        <CommandInfo :improve="improve" :cmd="inCmd" />
       </div>
-      <div>命令参数：</div>
-      <CommandParam :params="params" />
-      <div>命令选项：</div>
-      <CommandOption :options="options" />
+      <!-- <el-scrollbar style="height: 90%;"> -->
+      <div class="cmd-param">
+        <div>{{$t('page.commandPanel.param')}}:</div>
+        <CommandParam
+          :paramDef="inCmd.params"
+          :paramVal="paramVal"
+          v-on:upParamVal="upParamVal($event)" />
+      </div>
+      <div class="cmd-option">
+        <div>{{$t('page.commandPanel.option')}}:</div>
+        <OptionPanel style="height: calc(100% - 21px);"
+        :options="inCmd.options"  :optionDef="inCmd.options" :optionVal="optionVal" />
+      </div>
+      <!-- </el-scrollbar> -->
     </div>
-    <div><CommandExhibit :cmd="cmd" :options="options" :params="params" /></div>
+    <CommandExhibit class="cmd-exhibit" :cmd="inCmd"
+    :createHist="createHist"
+    :options="optionVal" :params="paramVal" />
   </div>
 </template>
 <script>
 import CommandInfo from './CommandInfo.vue';
-import CommandOption from './CommandOption.vue';
+import OptionPanel from '../option/OptionPanel.vue';
 import CommandParam from './CommandParam.vue';
 import CommandExhibit from './CommandExhibit.vue';
 // import { wantNothing } from '../api/fetch';
@@ -29,35 +41,67 @@ export default {
       type: Command,
       default: () => new Command({}),
     },
+    // 命令参数存储的值
+    paramVal: {
+      type: Array,
+      default: () => [],
+    },
+    // 命令选项存储的值
+    optionVal: {
+      type: Array,
+      default: () => [],
+    },
+    improve: {
+      type: Boolean,
+      default: () => false,
+    },
+    createHist: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   components: {
-    CommandInfo, CommandOption, CommandParam, CommandExhibit,
+    CommandInfo, OptionPanel, CommandParam, CommandExhibit,
   },
   data() {
     return {
-      cmd: null,
-      params: [],
-      options: [],
       cmdSuccessLoad: false,
     };
   },
   methods: {
-    updateParams(params) {
-      this.params = params;
-    },
-    updateOption(options) {
-      this.options = options;
-    },
-    hendleSelectCmd(cid) {
-      this.$router.push(`/cmds/${cid}`);
+    upParamVal(value) {
+      console.log(`总页面${JSON.stringify(value)}`);
+      this.$emit('upParamVal', value);
     },
   },
   created() {
-    this.cmd = this.inCmd;
-    this.options = this.inCmd.options;
-    this.params = this.inCmd.params;
   },
 };
 </script>
 <style style="scss" scoped>
+.cmd-panel{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cmd-info{
+  min-height: 10%;
+}
+.cmd-main{
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+.cmd-param{
+  height: 69px;
+  height: max(69px, 18%);
+}
+.cmd-option{
+  height: calc(90% - 69px);
+  height: calc(90% - max(69px, 18%));
+}
+.cmd-exhibit{
+  height: 30%;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="param-container">
-    <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
+    <el-button icon="el-icon-plus" @click="editOption(undefined)"></el-button>
     <div class="params-c">
       <div v-for="(option, index) in options" :key="index" class="per-param">
         <div style="flex: 2;">
@@ -10,10 +10,10 @@
           <div>{{convertType(option.type)}}</div>
         </div>
         <div style="flex: 4;">
-          <div>{{option.description}}</div>
+          <div>{{option.getCurrentLangDesc(currentLang)}}</div>
         </div>
         <div class="per-operation" style="width: 80px;">
-          <i @click="editParam(index)"
+          <i @click="editOption(index)"
             class="el-icon-edit"></i>
           <i class="el-icon-delete-solid" @click="delDelete(index)"></i>
         </div>
@@ -21,32 +21,15 @@
     </div>
     <!-- 底部空白填充 -->
     <div style="flex: 1;"></div>
-    <div class="per-delete-param" style="display: none">
-      <div style="flex: 2;">文件夹名称</div>
-      <div style="flex: 1;">STRING</div>
-      <div style="flex: 4;">指定文件夹</div>
-      <div class="per-operation" style="width: 80px;">
-        <el-popover
-          placement="top"
-          width="160">
-          <p>这是一段内容这是一段内容确定删除吗？</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
-          </div>
-          <i slot="reference" class="el-icon-refresh-right"></i>
-        </el-popover>
-      </div>
-    </div>
     <edit-option-panel v-model="optionDdrawerShow"
-      :InOption="currentParam" v-on:updateOption="updateOption($event)" />
+      :InOption="currentOption" v-on:updateOption="updateOption($event)" />
   </div>
 </template>
 <script>
 import ListUtils from '../../entities/ListUtils';
 import EditOptionPanel from './EditOptionPanel.vue';
-import Option from '../../entities/Option';
-import { wantNothing } from '../../api/fetch';
+import CommandOption from '../../entities/CommandOption';
+// import { wantNothing } from '../../api/fetch';
 
 export default {
   name: 'edit-option-info',
@@ -62,33 +45,35 @@ export default {
       options: null,
       optionDdrawerShow: false,
       editIndex: undefined,
-      paramTypeEnum: [],
     };
   },
   computed: {
-    currentParam() {
+    currentOption() {
       return this.options.length > 0 && this.editIndex !== undefined
         ? this.options[this.editIndex]
-        : new Option({});
+        : new CommandOption({ type: 0 });
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   methods: {
     convertType(key) {
-      // console.log(this.paramTypeEnum.filter(p => p.key === key));
-      const typeList = this.paramTypeEnum.filter(p => p.key === key);
-      return typeList.length > 0 ? typeList[0].value : 'UNDEFINED';
+      const typeList = CommandOption.types().filter(p => p.key === key);
+      return typeList.length > 0 ? typeList[0].value : 'STRING';
     },
     isEmptyList(options) {
       return ListUtils.isEmptyList(options);
     },
-    editParam(index) {
+    editOption(index) {
       this.editIndex = index;
-      console.log(this.currentParam);
       this.optionDdrawerShow = true;
     },
     updateOption(option) {
+      // console.log(`commit option ${JSON.stringify(option)}`);
       if (this.editIndex !== undefined) {
         this.options.splice(this.editIndex, 1, option);
+        // console.log(`commit option ${JSON.stringify(this.options)}`);
       } else {
         this.options.push(option);
       }
@@ -99,12 +84,7 @@ export default {
   },
   created() {
     this.options = this.value;
-    // this.options.push(new Option({ paramName: 'aaaa', type: 1 }));
-    // this.options.push(new Option({ paramName: 'bbb' }));
-    console.log(this.options);
-    Option.loadType().then((resp) => {
-      this.paramTypeEnum = resp.data.data;
-    }).catch(wantNothing);
+    // console.log(`传入的Option${this.options}`);
   },
 };
 </script>

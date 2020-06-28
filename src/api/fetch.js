@@ -1,16 +1,40 @@
+import Vue from 'vue';
 import axios from 'axios';
 import { Message } from 'element-ui';
-// import store from '../store';
+import store from '../store';
 
 const TIME_OUT_MAX = 5000;
 
+function checkSession() {
+  if (!store.state.UserInfo.signed) {
+    return;
+  }
+  const request = {
+    methods: 'GET',
+    url: `/sessions/${store.state.UserInfo.did}`,
+  };
+  const sender = axios.create({
+    timeout: TIME_OUT_MAX,
+  });
+
+  sender(request)
+    .then((resp) => {
+      store.dispatch('UserInfo/setUserInfo', resp.data.data);
+    })
+    .catch(() => {
+      store.dispatch('UserInfo/removeSignedUser');
+    });
+}
+
 const ajax = (option = {
   url: '', data: {}, isSilence: false, method: 'GET',
-}) => {
+}, loading = { doing: false, success: false }) => {
+  // set page loading === true
+  Vue.set(loading, 'doing', true);
   const opts = { method: option.method || 'GET', url: option.url };
   const query = {};
   Object.entries(option.data || {}).forEach(([key, value]) => {
-    if (value && value !== '') {
+    if (value !== null && value !== undefined && value !== '') {
       (query[key] = value);
     }
   });
@@ -22,35 +46,19 @@ const ajax = (option = {
     instance(opts)
       .then((res) => {
         resolve(res);
+        Vue.set(loading, 'doing', false);
+        Vue.set(loading, 'success', true);
+        store.dispatch('UserInfo/updateExpTime');
       })
       .catch((error) => {
-        // checkSession();
+        checkSession();
         reject(error);
+        Vue.set(loading, 'doing', false);
+        Vue.set(loading, 'success', false);
       });
   });
 };
-// const checkSession = function () {
-//   if (!store.state.UserInfo.signed) {
-//     return;
-//   }
-//   const request = {
-//     methods: 'GET',
-//     url: `/session/${  store.state.UserInfo.developerId}`,
-//   };
-//   const sender = axios.create({
-//     timeout: TIME_OUT_MAX,
-//   });
 
-//   sender(request)
-//     .then((resp) => {
-//       store.dispatch('UserInfo/setUserInfo', resp.data.data);
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//       Message('登入信息已经过期了,访问非公开信息需要重新登陆哦');
-//       store.dispatch('UserInfo/delUserInfo');
-//     });
-// };
 function handleNotHTTPError(error, reject) {
   if (error.request) {
     Message.error('发送失败请检查网络连接╮（╯＿╰）╭');

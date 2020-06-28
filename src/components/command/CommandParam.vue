@@ -1,35 +1,106 @@
 <template>
-  <div>
-    <div v-for="param in params" :key="param.cpid">
-      <el-popover
-        placement="right"
-        width="200"
-        trigger="hover"
-        :content="param.description"
-        >
-        <div class="per-option" slot="reference">
-          <div class="param-brief">{{param.paramName}}</div>
-          <div class="param-input">
-            <el-input
-              class="param-value"
-              placeholder="请输入内容"
-              v-model="param.value"
-              clearable>
-            </el-input>
-          </div>
-        </div>
-      </el-popover>
-    </div>
+  <div style="display: flex;justify-content: space-between;height: calc(100% - 21px);">
+    <!-- <div style="flex: 1;"> -->
+    <el-scrollbar style="100%">
+      <div style="display: inline-block;" v-for="(param, index) in exhibitParam"
+      :key="param.index" >
+        <el-popover
+          placement="top"
+          trigger="hover"
+          :disabled="!param.selected || param.descIndex >= paramDef.length"
+          :content="getDefSesc(param.descIndex)">
+          <el-tag
+            slot="reference"
+            closable
+            @close="handleClose(index)"
+            @click="changeSelect(index)"
+            :type="param.selected ? 'success': 'info'" >
+            {{param.value}}
+          </el-tag>
+        </el-popover>
+      </div>
+    <!-- </div> -->
+    </el-scrollbar>
+    <el-button size="small" icon="el-icon-set-up" @click="paramDrawShow = true" ></el-button>
+  <ParamsListPanel
+    v-model="paramDrawShow"
+    :params='paramVal'
+    v-on:updateVal="updateVal($event)">
+  </ParamsListPanel>
   </div>
 </template>
 <script>
+import ParamsListPanel from './ParamsListPanel.vue';
+// import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'common-param',
+  components: { ParamsListPanel },
   props: {
-    params: {
+    paramDef: {
       type: Array,
+      default: () => [],
     },
+    paramVal: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  computed: {
+    exhibitParam() {
+      let index = -1;
+      return this.paramVal
+        .map((p) => {
+          const r = { ...p };
+          r.descIndex = p.selected ? index += 1 : -1;
+          return r;
+        });
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
+  },
+  data() {
+    return {
+      cparams: [],
+      inputValue: null,
+      paramDrawShow: false,
+      aparams: [],
+    };
+  },
+  methods: {
+    updateVal(event) {
+      console.log(event);
+      this.$emit('upParamVal', event);
+    },
+    oneclick() {
+      console.log('one click');
+    },
+    doubleClick() {
+      console.log('double click');
+    },
+    handleInputConfirm() {
+      if (this.inputValue) {
+        this.cparams.push({ value: this.inputValue });
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
+    getDefSesc(index) {
+      if (index < 0 || index >= this.paramDef.length) return '';
+      return this.paramDef[index].getCurrentLangDesc(this.currentLang);
+    },
+    changeSelect(index) {
+      const param = this.paramVal[index];
+      this.$set(param, 'selected', !param.selected);
+    },
+    handleClose(index) {
+      this.paramVal.splice(index, 1);
+    },
+  },
+  created() {
+    this.cparams = [{ value: 'aaa' }, { value: 'bbb' }, { value: 'ccc' }];
+    this.aparams = [{ value: 'aaa', index: 0 }, { value: 'bbb', index: 1 }, { value: 'ccc', index: 2 }];
   },
 };
 </script>
@@ -54,5 +125,11 @@ export default {
 }
 .per-option{
   margin-bottom: 10px;
+}
+.draing-tag{
+  opacity: 0.5;
+}
+.flip-list-move {
+  transition: transform 1s;
 }
 </style>

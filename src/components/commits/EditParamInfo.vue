@@ -1,43 +1,35 @@
 <template>
   <div class="param-container">
     <el-button icon="el-icon-plus" @click="editParam(undefined)"></el-button>
-    <div class="params-c">
-      <div v-for="(param, index) in params" :key="index" class="per-param">
-        <div style="flex: 2;">
-          <div>{{param.paramName}}</div>
+    <div class="params-c" @drop="drop($event)" @dragover="dragover($event)">
+      <transition-group name="flip-list">
+        <div v-for="(param, index) in params" :key="param.index"
+          class="per-param"
+          :draggable="index === choiceIndex"
+          @mousedown="mousedown(index)"
+          @dragstart.capture="dragstart($event, index)"
+          @dragend.capture="dragend(index)"
+          @dragenter.capture="dragenter(index)"
+        >
+          <!-- <div style="flex: 2;">
+            <div>{{param.paramName}}</div>
+          </div> -->
+          <!-- <div style="flex: 1;">
+            <div>{{convertType(param.type)}}</div>
+          </div> -->
+          <div style="flex: 4;">
+            <div>{{param.getCurrentLangDesc(currentLang)}}</div>
+          </div>
+          <div class="per-operation" style="width: 80px;">
+            <i @click="editParam(index)"
+              class="el-icon-edit"></i>
+            <i class="el-icon-delete-solid"  @click.stop="delDelete(index)"></i>
+          </div>
         </div>
-        <div style="flex: 1;">
-          <div>{{convertType(param.type)}}</div>
-        </div>
-        <div style="flex: 4;">
-          <div>{{param.description}}</div>
-        </div>
-        <div class="per-operation" style="width: 80px;">
-          <i @click="editParam(index)"
-            class="el-icon-edit"></i>
-          <i class="el-icon-delete-solid"  @click="delDelete(index)"></i>
-        </div>
-      </div>
+      </transition-group>
     </div>
     <!-- 底部空白填充 -->
     <div style="flex: 1;"></div>
-    <div class="per-delete-param" style="display: none">
-      <div style="flex: 2;">文件夹名称</div>
-      <div style="flex: 1;">STRING</div>
-      <div style="flex: 4;">指定文件夹</div>
-      <div class="per-operation" style="width: 80px;">
-        <el-popover
-          placement="top"
-          width="160">
-          <p>这是一段内容这是一段内容确定删除吗？</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
-          </div>
-          <i slot="reference" class="el-icon-refresh-right"></i>
-        </el-popover>
-      </div>
-    </div>
     <edit-param-panel v-model="paramDdrawerShow"
       :InParam="currentParam" v-on:updateParam="updateParam($event)" />
   </div>
@@ -45,8 +37,8 @@
 <script>
 import ListUtils from '../../entities/ListUtils';
 import EditParamPanel from './EditParamPanel.vue';
-import CmdParam from '../../entities/CmdParam';
-import { wantNothing } from '../../api/fetch';
+import CmdParam from '../../entities/Param';
+// import { wantNothing } from '../../api/fetch';
 
 export default {
   name: 'edit-param-info',
@@ -63,13 +55,18 @@ export default {
       paramDdrawerShow: false,
       editIndex: undefined,
       paramTypeEnum: [],
+      choiceIndex: undefined,
+      onIndex: undefined,
     };
   },
   computed: {
     currentParam() {
       return this.params.length > 0 && this.editIndex !== undefined
         ? this.params[this.editIndex]
-        : new CmdParam({});
+        : new CmdParam({ index: this.params.length });
+    },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
     },
   },
   methods: {
@@ -97,15 +94,48 @@ export default {
       // this.$emit('input', this.params.filter((_, i) => i !== index));
       this.params.splice(index, 1);
     },
+    drop(event) {
+      event.preventDefault();
+      console.log('drop');
+      const cParam = this.params.splice(this.choiceIndex, 1)[0];
+      console.log(cParam);
+      this.params.splice(this.onIndex, 0, cParam);
+      console.log(this.params);
+    },
+    // 拖动开始
+    dragstart(event, index) {
+    // event 是被拖动的元素
+      event.dataTransfer.setData('text/plain', event.target);
+      console.log('dragstart', index);
+      this.choiceIndex = index;
+    },
+    // 拖动结束
+    dragend(event) {
+      this.onIndex = undefined;
+      this.choiceIndex = undefined;
+      console.log('dragend', event);
+    },
+    // 拖动到某个块中
+    dragenter(index) {
+      this.onIndex = index;
+      console.log('dragenter', index);
+    },
+    mousedown(index) {
+      this.choiceIndex = index;
+    },
+    dragover(event) {
+      // console.log(event);
+      event.preventDefault();
+    },
   },
   created() {
     this.params = this.value;
-    this.params.push(new CmdParam({ paramName: 'aaaa', type: 1 }));
-    this.params.push(new CmdParam({ paramName: 'bbb' }));
+    // this.params.push(new CmdParam({ paramName: 'aaaa', type: 1 }));
+    // this.params.push(new CmdParam({ paramName: 'bbb' }));
     console.log(this.params);
-    CmdParam.loadType().then((resp) => {
-      this.paramTypeEnum = resp.data.data;
-    }).catch(wantNothing);
+    // CmdParam.loadType().then((resp) => {
+    //   this.paramTypeEnum = resp.data.data;
+    // }).catch(wantNothing);
   },
 };
 </script>
@@ -167,5 +197,8 @@ export default {
   i:hover {
     color: #5cb6ff;
   }
+}
+.flip-list-move {
+  transition: transform 0.6s;
 }
 </style>

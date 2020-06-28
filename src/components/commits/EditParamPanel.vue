@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     center
-    title="添加参数"
     @open="cleanParam"
     :before-close="handleDrawerClose"
     :visible.sync="drawerVisible"
@@ -9,20 +8,26 @@
     direction="rtl"
     custom-class="params-drawer"
     size="50%">
+    <div slot="title">{{$t('page.commitPanel.editParams.edit-title')}}</div>
     <div class="params-drawer-content">
       <el-form :model="param" label-width="80px">
-          <el-form-item label="参数名">
+          <!-- <el-form-item label="参数名">
             <el-input v-model="param.paramName"></el-input>
+          </el-form-item> -->
+          <el-form-item :label="$t('entities.param.description')">
+            <div style="display:flex;">
+              <el-input
+                type="textarea"
+                :autosize="{ minRows: 2, maxRows: 6}"
+                :placeholder="$t('entities.param.desc-input')"
+                v-model="param.description[currentLang]">
+              </el-input>
+              <el-tooltip  :content="$t('other.lang.moreLang')" placement="top">
+                <el-button @click="multipLangDescDialog = true" icon="el-icon-more"></el-button>
+              </el-tooltip>
+            </div>
           </el-form-item>
-          <el-form-item label="描述">
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 6}"
-              placeholder="请输入描述"
-              v-model="param.description">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="类型">
+          <!-- <el-form-item label="类型">
             <el-select v-model="param.type" placeholder="请选择">
               <el-option
                 v-for="item in paramType"
@@ -53,37 +58,43 @@
             </el-input>
             <el-button v-else class="button-new-tag"
             size="small" @click="showInput">+ New Tag</el-button>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
-            <el-button @click="drawerVisible = false">取消</el-button>
-            <el-button type="primary" @click="confirmParam">确定</el-button>
+            <el-button @click="drawerVisible = false">{{$t('other.btn.cancel')}}</el-button>
+            <el-button type="primary" @click="confirmParam">{{$t('other.btn.ok')}}</el-button>
           </el-form-item>
         </el-form>
     </div>
+    <MultipLangDesc v-model="multipLangDescDialog"
+      :appendToBody='true'
+      v-on:updateDesc='param.description = $event'
+      :inDesc="param.description"
+    />
   </el-drawer>
 </template>
 <script>
 // import ListUtils from '../../entities/ListUtils';
-import CmdParam from '../../entities/CmdParam';
-import { wantNothing } from '../../api/fetch';
+import CmdParam from '../../entities/Param';
+import MultipLangDesc from './MultipLangDesc.vue';
+// import { wantNothing } from '../../api/fetch';
 
 export default {
   name: 'edit-param-panel',
+  components: { MultipLangDesc },
   props: {
     value: {
       type: Boolean,
     },
     InParam: {
       type: CmdParam,
-      default: function name() {
-        return new CmdParam({});
-      },
+      default: () => undefined,
     },
   },
   data() {
     return {
       param: new CmdParam({}),
       paramType: [],
+      multipLangDescDialog: false,
     };
   },
   computed: {
@@ -95,25 +106,25 @@ export default {
         this.$emit('input', vNew);
       },
     },
+    currentLang() {
+      return this.$i18n.locale || 'zh';
+    },
   },
   methods: {
     confirmParam() {
-      console.log(JSON.stringify(this.InParam));
+      console.log(JSON.stringify(this.param));
       this.$emit('updateParam', this.param);
       this.drawerVisible = false;
     },
     cleanParam() {
       this.param = this.InParam.deepCopy();
-      CmdParam.loadType().then((resp) => {
-        this.paramType = resp.data.data;
-      }).catch(wantNothing);
     },
     handleDrawerClose(done) {
       if (JSON.stringify(this.InParam) === JSON.stringify(this.param)) {
         done();
         return;
       }
-      this.$confirm('要保存已经修改的吗？')
+      this.$confirm(this.$t('other.leave.want-save'))
         .then(() => {
           this.confirmParam();
           done();

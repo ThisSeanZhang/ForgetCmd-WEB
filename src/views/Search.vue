@@ -1,24 +1,27 @@
 <template>
   <el-container>
-    <el-header>Header</el-header>
+    <el-header>
+      <CMDHeader></CMDHeader>
+    </el-header>
     <el-main>
       <div class="search-bar-wapper">
-        <div><h1>忘记命令怎么使用了(っ °Д °;)っ让我来帮帮你吧[]~(￣▽￣)~*</h1></div>
+        <div><h1>{{$t('page.index.title')}}</h1></div>
         <SelectSearchBar v-on:currentSelect="hendleSelectCmd($event)"/>
       </div>
     </el-main>
-    <el-footer>Footer</el-footer>
+    <!-- <el-footer>Footer</el-footer> -->
   </el-container>
 </template>
 <script>
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
+import CMDHeader from '@/components/header/Header.vue';
 
 export default {
   name: 'search',
-  components: { SelectSearchBar },
+  components: { SelectSearchBar, CMDHeader },
   methods: {
     hendleSelectCmd(cid) {
-      this.$router.push(`/cmds/${cid}`);
+      this.$router.push(`/cmd/padding/${cid}`);
     },
   },
 };

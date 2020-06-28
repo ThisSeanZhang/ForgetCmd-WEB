@@ -1,9 +1,10 @@
 <template>
   <div>
     <div class="exhibit-head">
-      <div>命令预览</div>
+      <div>{{$t('page.commandPanel.preview')}}</div>
       <div>
-        <el-tooltip effect="dark" content="复制" placement="top">
+        <el-tooltip effect="dark"
+          :content="$t('other.btn.copy')" placement="top">
           <el-button circle
           v-clipboard:copy="dealValue(copyLine)"
           v-clipboard:success="onCopy"
@@ -19,7 +20,8 @@
             <!-- {{currentModel === exhibitModel.ONELINE ? '单行模式' : '多行模式'}} -->
           </el-button>
         </el-tooltip>
-        <el-tooltip effect="dark" content="创建快照" placement="top">
+        <el-tooltip effect="dark"
+          :content="$t('page.commandPanel.previewPanel.snapshot')" placement="top">
           <el-button
             circle
             @click="createSnapshot"
@@ -46,23 +48,31 @@
         <span v-if="index !== params.length - 1">&nbsp;\</span>
       </div>
     </div> -->
-    <div v-if="currentModel === exhibitModel.ONELINE">
-        {{dealValue(oneLine)}}
-    </div>
-    <div v-if="currentModel === exhibitModel.MULTLINE">
-      <div v-for="(line, index) in dealValue(multLine)" :key="index">
-        {{line}}
+    <el-scrollbar style="height: calc(100% - 44px);">
+      <div v-if="currentModel === exhibitModel.ONELINE">
+          {{dealValue(oneLine)}}
       </div>
-    </div>
+      <div v-if="currentModel === exhibitModel.MULTLINE">
+        <div v-for="(line, index) in dealValue(multLine)" :key="index">
+          {{line}}
+        </div>
+      </div>
+    </el-scrollbar>
+    <SnapshotPanel :inSnap="snap" v-model="snapCreateDialogVisible" />
   </div>
 </template>
 <script>
+import { mapMutations, mapGetters } from 'vuex';
 import Command from '../../entities/Command';
+import TimeUtils from '../../entities/TimeUtils';
+import SnapshotPanel from '../snap/SnapshotPanel.vue';
 import Snapshot from '../../entities/Snapshot';
+import StringUtils from '../../entities/StringUtils';
 // import CmdParam from '../../entities/CmdParam';
 
 export default {
   name: 'command-exhibit',
+  components: { SnapshotPanel },
   props: {
     cmd: {
       type: Command,
@@ -75,30 +85,54 @@ export default {
       type: Array,
       default: () => [],
     },
+    createHist: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data() {
     return {
       allRows: [],
       exhibitModel: { ONELINE: Symbol('one line'), MULTLINE: Symbol('Multip line') },
       currentModel: null,
+      snapCreateDialogVisible: false,
     };
   },
   computed: {
+    snap() {
+      const { commandName, cid } = { ...this.cmd };
+      return new Snapshot({
+        cid,
+        paramVal: this.params,
+        optionVal: this.options,
+        commandName,
+        did: this.did,
+      });
+    },
     exhibitBtn() {
       return this.currentModel === this.exhibitModel.ONELINE
-        ? { icon: 'el-icon-document-remove', desc: '单行模式' }
-        : { icon: 'el-icon-document', desc: '多行模式' };
+        ? { icon: 'el-icon-document-remove', desc: this.$t('page.commandPanel.previewPanel.oneLine') }
+        : { icon: 'el-icon-document', desc: this.$t('page.commandPanel.previewPanel.multiple') };
     },
+    ...mapGetters('UserInfo', ['did']),
   },
   methods: {
     createSnapshot() {
-      Snapshot.createSnapshot(this.cmd);
+      this.snapCreateDialogVisible = true;
+      // SnapApi.createSnapshot(this.cmd);
     },
     buildHyphen(option) {
       if (option.briefName === option.fullName) {
         return '--';
       }
+      if (StringUtils.isEmptyString(option.briefName)) {
+        return '--';
+      }
       return '-';
+    },
+    exhibitName(option) {
+      if (!option) return '';
+      return option.briefName && option.briefName !== '' ? option.briefName : option.fullName;
     },
     dealValue(deal) {
       let allRows = [];
@@ -107,15 +141,27 @@ export default {
         .filter(option => option.selected)
         .map((option) => {
           if (option.isMultip()) {
-            return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${option.briefName} ${p.value}`);
+            return option.value.filter(p => p.selected).map(p => `${this.buildHyphen(option)}${this.exhibitName(option)} ${p.value}`);
           }
-          return [`${this.buildHyphen(option)}${option.briefName} ${option.value}`];
+          return [`${this.buildHyphen(option)}${this.exhibitName(option)} ${option.value}`];
         })
         .reduce((a1, a2) => a1.concat(a2), []);
       // console.log(JSON.stringify(cmdOption));
       allRows = allRows.concat(cmdOption);
-      allRows = allRows.concat(this.params.map(p => p.value));
+      allRows = allRows.concat(this.params.filter(p => p.selected).map(p => p.value));
       return typeof deal === 'function' ? deal(allRows) : allRows;
+    },
+    craeteHistory() {
+      if (!this.createHist) return;
+      const createTime = new Date().getTime();
+      this.newRecord({
+        ...this.cmd.toSnap(),
+        title: TimeUtils.dateFormat('YYYY-MM-dd HH:mm:ss', createTime),
+        location: 'local-browser',
+        createTime,
+        paramVal: this.params,
+        optionVal: this.options,
+      });
     },
     oneLine(params) {
       return params.join(' ');
@@ -129,16 +175,20 @@ export default {
         : params.map((p, index) => (index === params.length - 1 ? p : `${p} \\\r`)).join('');
     },
     onCopy() {
+      this.craeteHistory();
       this.$notify({
-        title: '复制成功',
+        title: this.$t('other.copy.message.success'),
         type: 'success',
+        // position: 'top-left',
       });
     },
     onError() {
       this.$notify.error({
-        title: '复制失败！',
+        title: this.$t('other.copy.message.fail'),
+        // position: 'top-left',
       });
     },
+    ...mapMutations('CommandHistory', ['newRecord']),
   },
   created() {
     this.currentModel = this.exhibitModel.MULTLINE;
