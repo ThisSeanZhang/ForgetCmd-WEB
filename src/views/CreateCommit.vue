@@ -24,11 +24,11 @@
 </template>
 <script>
 import { ajax, wantNothing } from '@/api/fetch';
+import CMDHeader from '@/components/header/Header.vue';
 import Commit from '../entities/CommandCommit';
 import Command from '../entities/Command';
 import CommitPanel from '../components/commits/CommitPanel.vue';
 import CommandPanel from '../components/command/CommandPanel.vue';
-import CMDHeader from '@/components/header/Header.vue';
 import LoadPanel from '../components/common/LoadPanel.vue';
 
 // 直接修改不会刷新页面

@@ -51,13 +51,13 @@
 // import Commit from '../entities/CommandCommit';
 import { mapGetters } from 'vuex';
 import { ajax, wantNothing } from '@/api/fetch';
+import CMDHeader from '@/components/header/Header.vue';
 import Command from '../entities/Command';
 import CommandPanel from '../components/command/CommandPanel.vue';
 // import CommandHistory from '../components/history/CommandHistory.vue';
 // import RemoteSnaps from '../components/snap/RemoteSnaps.vue';
 import SideOfPaddingCommand from './SideOfPaddingCommand.vue';
 import LoadPanel from '../components/common/LoadPanel.vue';
-import CMDHeader from '@/components/header/Header.vue';
 import StringUtils from '../entities/StringUtils';
 import Param from '../entities/Param';
 import CommandOption from '../entities/CommandOption';

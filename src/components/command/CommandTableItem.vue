@@ -54,8 +54,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import Command from '../../entities/Command';
 import { ajax, wantNothing } from '@/api/fetch';
+import Command from '../../entities/Command';
 
 export default {
   name: 'command-table-item',

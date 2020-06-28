@@ -44,13 +44,13 @@
   </el-container>
 </template>
 <script>
+import CMDHeader from '@/components/header/Header.vue';
 // import Commit from '../entities/CommandCommit';
 import { ajax, wantNothing } from '../api/fetch';
 import Command from '../entities/Command';
 import CommandOption from '../entities/CommandOption';
 import ItemConfirm from '../components/commits/ItemConfirm.vue';
 import CommandPanel from '../components/command/CommandPanel.vue';
-import CMDHeader from '@/components/header/Header.vue';
 import CommitItem from '../entities/CommitItem';
 import Param from '../entities/Param';
 import LoadPanel from '../components/common/LoadPanel.vue';

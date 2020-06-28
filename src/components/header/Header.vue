@@ -41,9 +41,9 @@
 </template>
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex';
-import { ajax } from '../../api/fetch';
 import SelectSearchBar from '@/components/search/SelectSearchBar.vue';
 import AccountMain from '../developer/AccountMain.vue';
+import { ajax } from '../../api/fetch';
 
 export default {
   name: 'cmd-header',
