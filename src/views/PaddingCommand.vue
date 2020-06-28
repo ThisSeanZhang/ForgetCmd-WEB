@@ -5,11 +5,12 @@
         v-on:currentSelect="hendleSelectCmd($event)"
       ></CMDHeader>
     </el-header>
-    <el-main>
+    <el-main
+    v-if="loading.success"
+    v-loading="loading.doing"
+    >
       <CommandPanel
         style="margin: 0px 5px"
-        v-if="cmdLoading.success"
-        v-loading="cmdLoading.doing"
         class="cmd-perview"
         :inCmd='cmd'
         :improve="true"
@@ -17,13 +18,12 @@
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
-      <LoadPanel v-bind:loading="cmdLoading"
-        v-else class="cmd-perview" v-bind:callBack="getCommandById" />
       <SideOfPaddingCommand
         v-if="cmdLoading.success"
         v-loading="cmdLoading.doing"
         :cid="cid"
         :location="location"
+        :commandName="cmd.commandName"
         :snap="snap"
       />
       <!-- <div style="height: 100%;
@@ -41,6 +41,8 @@
         :commandName="cmd.commandName" />
       </div> -->
     </el-main>
+    <LoadPanel v-bind:loading="loading"
+        v-else class="cmd-perview" v-bind:callBack="getCommandById" />
     <el-footer>
     </el-footer>
   </el-container>
@@ -80,6 +82,11 @@ export default {
         doing: false,
         success: false,
       },
+      snapLoading: {
+        doing: false,
+        success: true,
+        needInputShareCode: false,
+      },
       shareCode: null,
     };
   },
@@ -100,6 +107,12 @@ export default {
     // },
   },
   computed: {
+    loading() {
+      return {
+        doing: this.cmdLoading.doing || this.snapLoading.doing,
+        success: this.cmdLoading.success && this.snapLoading.success,
+      };
+    },
     request() {
       return {
         method: 'GET',
@@ -178,6 +191,12 @@ export default {
   created() {
     this.cid = this.$route.params.cid;
     this.snapId = this.$route.params.snapId;
+    if (StringUtils.nonEmptyString(this.snapId)) {
+      this.snapLoading = {
+        doing: false,
+        success: false,
+      };
+    }
     this.location = this.$route.params.location;
     this.shareCode = this.$route.params.shareCode;
     document.title = this.computedTitle;

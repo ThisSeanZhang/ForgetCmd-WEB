@@ -13,12 +13,12 @@
       <CommandHistory
         v-if="tag === 'local-browser'"
         :cid="cid"
-        :commandName="snap.commandName" />
+        :commandName="commandName" />
       <!-- 快照 -->
       <RemoteSnaps
         v-else-if="tag === 'online-remote'"
         :cid="cid"
-        :commandName="snap.commandName" />
+        :commandName="commandName" />
       <!-- 基本信息 -->
       <SnapInfoPanel
       v-else-if="tag === 'snap-info'"
@@ -52,6 +52,9 @@ export default {
     location: {
       type: String,
       default: () => 'local-browser',
+    },
+    commandName: {
+      type: String,
     },
   },
   data() {
