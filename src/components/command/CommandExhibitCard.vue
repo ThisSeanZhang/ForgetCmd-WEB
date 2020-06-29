@@ -61,7 +61,9 @@
         {{line}}
       </div>
     </div>
-    <SnapshotPanel :edit="true" :inSnap="snap" v-model="editDialogVisible" />
+    <SnapshotPanel
+      :edit="true" :inSnap="snap" v-model="editDialogVisible"
+    />
   </el-card>
 </template>
 <script>

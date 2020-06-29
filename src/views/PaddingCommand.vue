@@ -42,7 +42,8 @@
       </div> -->
     </el-main>
     <LoadPanel v-bind:loading="loading"
-        v-else class="cmd-perview" v-bind:callBack="getCommandById" />
+        v-else class="cmd-perview" v-on:inform="getCommandById">
+    </LoadPanel>
     <el-footer>
     </el-footer>
   </el-container>
@@ -165,7 +166,7 @@ export default {
     },
     getRemoteSnap() {
       console.log('online-remote');
-      SnapshotApi.findBySid(this.findSnapRequest).then((resp) => {
+      SnapshotApi.findBySid(this.findSnapRequest, this.snapLoading).then((resp) => {
         console.log(resp);
         this.snap = Snapshot.fromObj(resp.data.data);
         this.paramVal = this.snap.paramVal;

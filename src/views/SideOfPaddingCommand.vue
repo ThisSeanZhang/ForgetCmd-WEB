@@ -27,7 +27,8 @@
     <div class="right-btn">
       <div class="panel-btn"
       @click="tag = lab"
-      v-for="lab in Object.keys(tags)" :key="lab">{{tags[lab]}}</div>
+      v-for="lab in Object.keys(tags)" :key="lab"
+      >{{$t(`page.sideOfCommandPadding.${tags[lab]}`)}}</div>
     </div>
   </div>
 <!-- </div> -->
@@ -57,15 +58,19 @@ export default {
       type: String,
     },
   },
+  computed: {
+    tags() {
+      return {
+        'local-browser': 'history',
+        'online-remote': 'snapshot',
+        'snap-info': 'snap-info',
+        // 'blog': '博客',
+      };
+    },
+  },
   data() {
     return {
       tag: null,
-      tags: {
-        'local-browser': '历史',
-        'online-remote': '快照',
-        'snap-info': '信息',
-        // 'blog': '博客',
-      },
     };
   },
   created() {

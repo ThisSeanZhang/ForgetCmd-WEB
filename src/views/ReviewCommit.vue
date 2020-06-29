@@ -16,7 +16,7 @@
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
       <LoadPanel v-bind:loading="commitLoading"
-        v-else class="cmd-perview" v-bind:callBack="fetchCommitItems" />
+        v-else class="cmd-perview" v-on:inform="fetchCommitItems" />
 
       <div
         v-if="commitLoading.success"
@@ -30,7 +30,7 @@
         </div>
       </div>
       <LoadPanel v-bind:loading="commitLoading"
-      v-else  v-bind:callBack="fetchCommitItems" />
+      v-else  v-on:inform="fetchCommitItems" />
     </el-main>
     <!-- 当页面提交成功或者没有东西展示时呈现的 -->
     <el-main v-else>

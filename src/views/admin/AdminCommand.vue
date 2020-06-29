@@ -5,7 +5,7 @@
   </div> -->
   <CommandTable v-if="loading.success" :cmds="cmds" />
   <LoadPanel v-bind:loading="loading"
-        v-else class="cmd-perview" v-bind:callBack="fetchCommandsInfo" />
+        v-else class="cmd-perview" v-on:inform="fetchCommandsInfo" />
 
 </div>
 </template>

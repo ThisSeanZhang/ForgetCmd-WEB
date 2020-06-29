@@ -5,7 +5,7 @@
     </div>
     <div>
       <i class="el-icon-refresh"></i>回到主页
-      <i class="el-icon-refresh" @click="callBack"></i>重试
+      <i class="el-icon-refresh" @click="inform"></i>重试
     </div>
   </div>
 </template>
@@ -13,16 +13,17 @@
 export default {
   name: 'load-panel',
   props: {
-    callBack: {
-      type: Function,
-      default: () => () => {},
-    },
     loading: {
       type: Object,
       default: () => ({
         doing: false,
         success: false,
       }),
+    },
+  },
+  methods: {
+    inform() {
+      this.$emit('inform');
     },
   },
 };

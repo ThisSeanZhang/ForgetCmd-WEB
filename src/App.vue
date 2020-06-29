@@ -26,6 +26,8 @@ export default {
   scrollbar-width: none;
   display: flex;
   width: 100%;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC",
+    "Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 .el-scrollbar__wrap{
   overflow-x: hidden!important;

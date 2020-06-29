@@ -69,6 +69,7 @@
 </el-dialog>
 </template>
 <script>
+import { wantNothing } from '../../api/fetch';
 import Snapshot from '../../entities/Snapshot';
 import SnapApi from '../../api/SnapShotApi';
 import MessageInput from '../base/MessageInput.vue';
@@ -137,7 +138,13 @@ export default {
           this.dialogVisible = false;
         });
     },
-    submitSnap() {},
+    submitSnap() {
+      SnapApi.updateSnap(this.snap.toData())
+        .then(() => {
+          this.inSnap.updateFrom(this.snap);
+          this.dialogVisible = false;
+        }).catch(wantNothing);
+    },
   },
 };
 </script>

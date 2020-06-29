@@ -111,8 +111,6 @@ export default {
 .el-card{
   margin: 10px 0px;
 }
-.cmd-info-bar{
-}
 .el-row{
   flex: 1;
 }

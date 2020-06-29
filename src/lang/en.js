@@ -62,6 +62,11 @@ export default {
       createTitle: 'CREATE SNAPSHOT',
       editTitle: 'EDIT SNAPSHOT',
     },
+    sideOfCommandPadding: {
+      'snap-info': 'SNAP INFO',
+      history: 'HISTORY',
+      snapshot: 'SNAP',
+    },
   },
   entities: {
     command: {

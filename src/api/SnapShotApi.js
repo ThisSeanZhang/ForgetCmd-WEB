@@ -11,13 +11,13 @@ export default {
     };
     return ajax(request);
   },
-  findBySid(data) {
+  findBySid(data, loading) {
     const request = {
       method: 'GET',
       url: `/snapshots/${data.snapId}`,
       data,
     };
-    return ajax(request);
+    return ajax(request, loading);
   },
   adminAllSnap() {
     const request = {
@@ -40,5 +40,13 @@ export default {
       data,
     };
     return ajax(request, loading);
+  },
+  updateSnap(snap) {
+    const request = {
+      method: 'PUT',
+      url: `/snapshots/${snap.snapId}`,
+      data: snap,
+    };
+    return ajax(request);
   },
 };

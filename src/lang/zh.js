@@ -62,6 +62,11 @@ export default {
       createTitle: '创建快照',
       editTitle: '编辑快照',
     },
+    sideOfCommandPadding: {
+      'snap-info': '快照信息',
+      history: '历史记录',
+      snapshot: '快照',
+    },
   },
   entities: {
     command: {

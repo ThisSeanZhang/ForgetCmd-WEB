@@ -96,4 +96,10 @@ export default class Snapshot {
       paramVal: CmdParam.convertObjs(strUtil.parse(obj.paramVal), () => []),
     });
   }
+
+  updateFrom(snapshot) {
+    this.title = snapshot.title;
+    this.share = snapshot.share;
+    this.shareCode = snapshot.shareCode;
+  }
 }

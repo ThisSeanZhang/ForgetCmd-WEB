@@ -16,7 +16,7 @@
       <CommitPanel v-if="loading.success && !loading.doing"
         :commit="commit" :originCmd="originCmd" class="commit" />
       <LoadPanel v-bind:loading="loading"
-        v-else class="cmd-perview" v-bind:callBack="getCommandById" />
+        v-else class="cmd-perview" v-on:inform="getCommandById" />
     </el-main>
     <el-footer>
     </el-footer>
