@@ -43,6 +43,11 @@
     </el-main>
     <LoadPanel v-bind:loading="loading"
         v-else class="cmd-perview" v-on:inform="getCommandById">
+        <div v-if="snapLoading.needInputShareCode">
+          <el-input v-model="shareCode" class="input-with-select">
+            <el-button @click="getSnap" slot="append" icon="el-icon-position"></el-button>
+          </el-input>
+        </div>
     </LoadPanel>
     <el-footer>
     </el-footer>
@@ -51,7 +56,7 @@
 <script>
 // import Commit from '../entities/CommandCommit';
 import { mapGetters } from 'vuex';
-import { ajax, wantNothing } from '@/api/fetch';
+import { ajax, wantNothing, handleError } from '@/api/fetch';
 import CMDHeader from '@/components/header/Header.vue';
 import Command from '../entities/Command';
 import CommandPanel from '../components/command/CommandPanel.vue';
@@ -109,9 +114,14 @@ export default {
   },
   computed: {
     loading() {
+      const message = [
+        this.cmdLoading,
+        this.snapLoading,
+      ].filter(l => !l.success).map(l => l.message);
       return {
         doing: this.cmdLoading.doing || this.snapLoading.doing,
         success: this.cmdLoading.success && this.snapLoading.success,
+        message: message[0],
       };
     },
     request() {
@@ -138,7 +148,11 @@ export default {
   },
   methods: {
     hendleSelectCmd(cid) {
-      this.$router.push(`/cmd/padding/${cid}`);
+      // this.$router.push(`/cmd/padding/${cid}`);
+      const routeUrl = this.$router.resolve({
+        path: `/cmd/padding/${cid}`,
+      });
+      window.open(routeUrl.href, '_blank');
     },
     getCommandById() {
       if (!this.cid) {
@@ -171,7 +185,10 @@ export default {
         this.snap = Snapshot.fromObj(resp.data.data);
         this.paramVal = this.snap.paramVal;
         this.optionVal = this.snap.optionVal;
-      }).catch(e => console.log(e));
+      }).catch(handleError({
+        401: () => { this.snapLoading.needInputShareCode = true; },
+        403: () => { this.snapLoading.needInputShareCode = true; },
+      }, true));
     },
     getLocalSnap() {
       console.log('get Snap');
@@ -192,14 +209,12 @@ export default {
   created() {
     this.cid = this.$route.params.cid;
     this.snapId = this.$route.params.snapId;
-    if (StringUtils.nonEmptyString(this.snapId)) {
-      this.snapLoading = {
-        doing: false,
-        success: false,
-      };
-    }
     this.location = this.$route.params.location;
     this.shareCode = this.$route.params.shareCode;
+    if (this.location === 'online-remote') {
+      this.snapLoading.doing = false;
+      this.snapLoading.success = false;
+    }
     document.title = this.computedTitle;
     console.log('create');
     // 根据路由获取

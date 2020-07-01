@@ -67,6 +67,9 @@ export default {
       history: '历史记录',
       snapshot: '快照',
     },
+    loadPanel: {
+      message: '啊欧，出现错误',
+    },
   },
   entities: {
     command: {
@@ -136,6 +139,8 @@ export default {
       restore: '恢复',
       pause: '暂停',
       edit: '编辑',
+      index: '去主页',
+      reflash: '刷新',
       'jump-to-padding': '跳转至填充界面',
       'sign-in': '登入',
       'sign-out': '退出',
@@ -171,6 +176,14 @@ export default {
       JUST_ALLOW_NORMAL_WORD: '仅“-,_, ”为允许的特殊符号',
       NOT_BLANK_START: '不允许空格开头',
       NOT_EMPTY: '不允许为空',
+    },
+    except: {
+      snapshot: {
+        not_found: '找不到此快照',
+        unauthorized: '哦豁,被加密了. 需要使用快照码才能解开',
+        share_code_not_match: '快照码不匹配',
+      },
+      unknow: '未可预见的错误, 再尝试一次吧',
     },
   },
   lang: {

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import { Message } from 'element-ui';
 import store from '../store';
+import i18n from '../lang';
 
 const TIME_OUT_MAX = 5000;
 
@@ -48,6 +49,7 @@ const ajax = (option = {
         resolve(res);
         Vue.set(loading, 'doing', false);
         Vue.set(loading, 'success', true);
+        Vue.set(loading, 'message', res.data.message);
         store.dispatch('UserInfo/updateExpTime');
       })
       .catch((error) => {
@@ -55,6 +57,7 @@ const ajax = (option = {
         reject(error);
         Vue.set(loading, 'doing', false);
         Vue.set(loading, 'success', false);
+        Vue.set(loading, 'message', error.response.data.message);
       });
   });
 };
@@ -112,11 +115,23 @@ function wantNothing(error) {
         Message.error('发送失败请检查网络连接╮（╯＿╰）╭');
         break;
       default:
-        Message.warning(`${error.response.data.message}(●ˇ∀ˇ●)`);
+        Message.warning(`${i18n.t(error.response.data.message)}(●ˇ∀ˇ●)`);
     }
   } else {
     handleNotHTTPError(error, () => {});
   }
+}
+function handleError(funcs = {}, showMessage = false) {
+  return (error) => {
+    if (!error.response) handleNotHTTPError(error, funcs.handleNetError || (() => {}));
+    const dealFunc = funcs[parseInt(error.response.status, 10)];
+    if (dealFunc) {
+      dealFunc(error);
+      if (showMessage) Message.info(`(●ˇ∀ˇ●) ${i18n.t(error.response.data.message)}`);
+    } else {
+      Message.warning(`(●ˇ∀ˇ●) ${i18n.t(error.response.data.message)}`);
+    }
+  };
 }
 
 export {
@@ -124,4 +139,5 @@ export {
   handleAll,
   just404,
   wantNothing,
+  handleError,
 };

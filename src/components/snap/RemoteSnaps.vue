@@ -13,6 +13,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import { handleError } from '@/api/fetch';
 import SnapShotApi from '../../api/SnapShotApi';
 import Snapshot from '../../entities/Snapshot';
 import CommandExhibitCard from '../command/CommandExhibitCard.vue';
@@ -51,7 +52,7 @@ export default {
       this.getSnapFunc().then((resp) => {
         console.log(resp);
         this.snaps = resp.data.data.map(Snapshot.fromObj);
-      });
+      }).catch(handleError());
     },
     restore(snap) {
       const routeUrl = this.$router.resolve({

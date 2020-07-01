@@ -67,6 +67,9 @@ export default {
       history: 'HISTORY',
       snapshot: 'SNAP',
     },
+    loadPanel: {
+      message: 'aho, some error occur',
+    },
   },
   entities: {
     command: {
@@ -136,6 +139,8 @@ export default {
       restore: 'Restore',
       pause: 'Pause',
       edit: 'Edit',
+      index: 'Go Index',
+      reflash: 'Reflash',
       'jump-to-padding': 'To Padding',
       'sign-in': 'Sign In',
       'sign-out': 'Sign out',
@@ -171,6 +176,14 @@ export default {
       JUST_ALLOW_NORMAL_WORD: 'Special symbols allowed: -,_, ,',
       NOT_BLANK_START: 'Not begin with space',
       NOT_EMPTY: 'Not empty',
+    },
+    except: {
+      snapshot: {
+        not_found: 'Can Not Found This Snapshot',
+        unauthorized: 'Please Input Snapshot Share Code Continue',
+        share_code_not_match: 'share code not match',
+      },
+      unknow: 'Unknow Error Occur, Once Again',
     },
   },
   lang: {
