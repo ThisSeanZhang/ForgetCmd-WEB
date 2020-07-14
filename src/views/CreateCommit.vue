@@ -41,7 +41,7 @@ export default {
     return {
       paramVal: [],
       optionVal: [],
-      commit: Commit.CreateFackCommit(),
+      commit: new Commit({}),
       originCmd: new Command({}),
       loading: {
         doing: false,
@@ -74,14 +74,14 @@ export default {
     },
     getCommandById() {
       if (!this.cid) {
-        this.loading.success = false;
-        this.loading.doing = true;
-        this.originCmd = new Command({});
-        this.commit = new Commit({});
-        setTimeout(() => {
-          this.loading.success = true;
-          this.loading.doing = false;
-        }, 5);
+        // this.loading.success = false;
+        // this.loading.doing = true;
+        // this.originCmd = new Command({});
+        // this.commit = new Commit({});
+        // setTimeout(() => {
+        this.loading.success = true;
+        this.loading.doing = false;
+        // }, 5);
         return;
       }
       ajax(this.request, this.loading).then((resp) => {

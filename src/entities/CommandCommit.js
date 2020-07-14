@@ -114,6 +114,7 @@ export default class CommandCommit {
       options: JSON.stringify(CommandOption.convertDatas(this.options)),
       params: JSON.stringify(Param.convertDatas(this.params)),
       items: CommitItem.convertDatas(this.items),
+      did: this.did,
     };
   }
 

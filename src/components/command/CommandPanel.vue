@@ -21,6 +21,7 @@
     </div>
     <CommandExhibit class="cmd-exhibit" :cmd="inCmd"
     :createHist="createHist"
+    :createSnap="createSnap"
     :options="optionVal" :params="paramVal" />
   </div>
 </template>
@@ -56,6 +57,10 @@ export default {
       default: () => false,
     },
     createHist: {
+      type: Boolean,
+      default: () => false,
+    },
+    createSnap: {
       type: Boolean,
       default: () => false,
     },

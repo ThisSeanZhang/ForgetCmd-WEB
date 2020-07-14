@@ -3,17 +3,17 @@
   <div>
     <i class="el-icon-delete" @click="changeTab" ></i>
   </div>
-  <CommitsTable v-on:reviewCmd="review($event)" v-if="!cmdTab" />
-  <div v-else v-loading="loading.doing" class="command-list">
-    <el-scrollbar v-if="loading.success" style="height: inherit;" >
-      <CommandListCommitPanel v-on:reviewCmd="review($event)"
-        v-for="(cmd, index) in cmds" :key="index" :cmd="cmd" >
-      </CommandListCommitPanel>
-    </el-scrollbar>
-    <div v-else @click="fetchCommandsInfo">
-      <i class="el-icon-refresh" ></i>
-      重新加载
+  <el-scrollbar v-if="loading.success" style="height: calc(100% - 21px);" >
+    <CommitsTable v-on:reviewCmd="review($event)" v-if="!cmdTab" />
+    <div v-else v-loading="loading.doing" class="command-list">
+        <CommandListCommitPanel v-on:reviewCmd="review($event)"
+          v-for="(cmd, index) in cmds" :key="index" :cmd="cmd" >
+        </CommandListCommitPanel>
     </div>
+  </el-scrollbar>
+  <div v-else @click="fetchCommitsInfo">
+    <i class="el-icon-refresh" ></i>
+    重新加载
   </div>
 </div>
 </template>
@@ -27,7 +27,7 @@ import CommitsTable from '../../components/commits/CommitsTable.vue';
 import CommandListCommitPanel from '../../components/commits/CommandListCommitPanel.vue';
 
 export default {
-  name: 'developer-commit-history',
+  name: 'user-commit-history',
   components: {
     CommitsTable, CommandListCommitPanel,
   },
@@ -49,7 +49,7 @@ export default {
   watch: {
     cmdTab(n) {
       if (n) {
-        this.fetchCommandsInfo();
+        this.fetchCommitsInfo();
       }
     },
   },
@@ -63,7 +63,7 @@ export default {
       console.log(this.cmdTab);
       this.cmdTab = !this.cmdTab;
     },
-    fetchCommandsInfo() {
+    fetchCommitsInfo() {
       const request = {
         url: '/commits/cmds',
         method: 'GET',
@@ -86,7 +86,8 @@ export default {
     },
   },
   created() {
-    this.fetchCommandsInfo();
+    this.fetchCommitsInfo();
+    this.$emit('flash', this.fetchCommitsInfo);
   },
 };
 </script>
@@ -112,6 +113,7 @@ export default {
 }
 .command-list{
   height: 100%;
+  overflow: hidden;
 }
 .exhibit-cmd{
   flex: 1;

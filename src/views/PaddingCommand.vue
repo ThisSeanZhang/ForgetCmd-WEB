@@ -15,6 +15,7 @@
         :inCmd='cmd'
         :improve="true"
         :createHist="true"
+        :createSnap="true"
         :paramVal='paramVal'
         :optionVal='optionVal'
         v-on:upParamVal="upParamVal($event)" />
@@ -80,7 +81,7 @@ export default {
       paramVal: [],
       optionVal: [],
       cmd: new Command({}),
-      cid: null,
+      // cid: null,
       snapId: null,
       snap: new Snapshot({}),
       location: null,
@@ -97,22 +98,22 @@ export default {
     };
   },
   watch: {
-    // commit: {
-    //   handler(nval, oval) {
-    //     console.log(nval, oval);
-    //     this.cmd = this.commit.toCommand();
-    //     console.log(JSON.stringify(this.cmd));
-    //   },
-    //   deep: true,
-    // },
     cid() {
+      this.snapId = this.$route.params.snapId;
+      this.location = this.$route.params.location;
+      this.shareCode = this.$route.params.shareCode;
+      if (this.location === 'online-remote') {
+        this.snapLoading.doing = false;
+        this.snapLoading.success = false;
+      }
+      document.title = this.computedTitle;
       this.getCommandById();
     },
-    // location() {
-    //   this.getSnap();
-    // },
   },
   computed: {
+    cid() {
+      return this.$route.params.cid;
+    },
     loading() {
       const message = [
         this.cmdLoading,
@@ -148,11 +149,11 @@ export default {
   },
   methods: {
     hendleSelectCmd(cid) {
-      // this.$router.push(`/cmd/padding/${cid}`);
-      const routeUrl = this.$router.resolve({
-        path: `/cmd/padding/${cid}`,
-      });
-      window.open(routeUrl.href, '_blank');
+      this.$router.push(`/cmd/padding/${cid}`);
+      // const routeUrl = this.$router.resolve({
+      //   path: `/cmd/padding/${cid}`,
+      // });
+      // window.open(routeUrl.href, '_blank');
     },
     getCommandById() {
       if (!this.cid) {
@@ -207,7 +208,7 @@ export default {
     ...mapGetters('CommandHistory', ['getCommandHis']),
   },
   created() {
-    this.cid = this.$route.params.cid;
+    // this.cid = this.$route.params.cid;
     this.snapId = this.$route.params.snapId;
     this.location = this.$route.params.location;
     this.shareCode = this.$route.params.shareCode;
@@ -216,6 +217,7 @@ export default {
       this.snapLoading.success = false;
     }
     document.title = this.computedTitle;
+    this.getCommandById();
     console.log('create');
     // 根据路由获取
     // this.getCommandById();

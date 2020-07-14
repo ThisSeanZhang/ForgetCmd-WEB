@@ -9,19 +9,11 @@
         @open="handleOpen"
         @close="handleClose" :collapse="isCollapse"
       >
-        <!-- <el-menu-item index="1">
-          <i class="el-icon-location"></i>
-          <span slot="title">快照</span>
-        </el-menu-item> -->
         <el-menu-item index="0" @click="toPath('commits')">
           <i class="el-icon-menu"></i>
           <span slot="title">改进历史</span>
         </el-menu-item>
-        <el-menu-item index="1" @click="toPath('commands')">
-          <i class="el-icon-document"></i>
-          <span slot="title">命令管理</span>
-        </el-menu-item>
-        <el-menu-item index="2" @click="toPath('snapshots')">
+        <el-menu-item index="1" @click="toPath('snapshots')">
           <i class="el-icon-setting"></i>
           <span slot="title">快照管理</span>
         </el-menu-item>
@@ -42,10 +34,11 @@
 </el-container>
 </template>
 <script>
+// import { mapGetters } from 'vuex';
 import CMDHeader from '@/components/header/Header.vue';
 
 export default {
-  name: 'admin-manage',
+  name: 'developer-manage',
   components: { CMDHeader },
   data() {
     return {
@@ -55,19 +48,23 @@ export default {
   },
   computed: {
     routeKey() {
-      return `admin-manage${new Date().getTime()}`;
+      return `developer-manage${new Date().getTime()}`;
     },
     defaultActive() {
       const path = this.$route.path.split('/');
-      const index = ['commits', 'commands', 'snapshots'].indexOf(path[path.length - 1]);
+      const index = ['commits', 'snapshots'].indexOf(path[path.length - 1]);
       return index > -1 ? String(index) : '0';
     },
+    visiDid() {
+      return this.$route.params.did;
+    },
+    // ...mapGetters('UserInfo', ['did']),
   },
   methods: {
     handleOpen() {},
     handleClose() {},
     toPath(model) {
-      this.$router.push({ path: `/admin/${model}` }, () => {}, this.flash);
+      this.$router.push({ path: `/developer/${this.visiDid}/${model}` }, () => {}, this.flash);
     },
   },
   created() {

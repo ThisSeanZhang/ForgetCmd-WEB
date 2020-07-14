@@ -24,6 +24,7 @@
           :content="$t('page.commandPanel.previewPanel.snapshot')" placement="top">
           <el-button
             circle
+            v-if="createSnap"
             @click="createSnapshot"
             icon="el-icon-camera">
           </el-button>
@@ -86,6 +87,10 @@ export default {
       default: () => [],
     },
     createHist: {
+      type: Boolean,
+      default: () => false,
+    },
+    createSnap: {
       type: Boolean,
       default: () => false,
     },

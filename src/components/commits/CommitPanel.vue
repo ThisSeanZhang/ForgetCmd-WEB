@@ -109,6 +109,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import Command from '../../entities/Command';
 import CommandCommit from '../../entities/CommandCommit';
 import EditBaseInfo from './EditBaseInfo.vue';
@@ -166,6 +167,7 @@ export default {
   },
   methods: {
     submitCmd() {
+      this.commit.did = this.did;
       CommitAPI.sendCommit(this.commit, this.submitLoading).then((resp) => {
         console.log(JSON.stringify(resp));
         this.ccid = resp.data.data.ccid;
@@ -269,6 +271,7 @@ export default {
         title: this.$t('page.commitPanel.stepInfo.result'),
       }];
     },
+    ...mapGetters('UserInfo', ['did']),
   },
   created() {
     this.currentStep = this.procedure.BASE_INFO;

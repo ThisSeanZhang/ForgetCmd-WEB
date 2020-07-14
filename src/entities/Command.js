@@ -20,6 +20,7 @@ export default class Command {
     this.options = cmd.options ? cmd.options : [];
     this.params = cmd.params ? cmd.params : [];
     this.status = cmd.status;
+    this.did = cmd.did;
   }
 
   static findByCid(cid) {

@@ -1,21 +1,22 @@
 
-// import DeveloperInfo from '@/views/developer/DeveloperInfo.vue';
-// import DeveloperCommitHistory from '@/views/developer/DeveloperCommitHistory.vue';
+import DeveloperManage from '@/views/developer/DeveloperManage.vue';
+import DeveloperCommitHistory from '@/views/developer/DeveloperCommitHistory.vue';
+import DeveloperSnap from '@/views/developer/DeveloperSnap.vue';
 
 export default [
-  // { // 用户个人页面
-  //   path: '/developer/:did',
-  //   name: 'developer-info',
-  //   component: DeveloperInfo,
-  //   children: [
-  //     {
-  //       path: 'commits',
-  //       component: DeveloperCommitHistory,
-  //     },
-  //     // {
-  //     //   path: 'commits',
-  //     //   component: DeveloperCommitHistory
-  //     // },
-  //   ],
-  // },
+  { // 用户个人页面
+    path: '/developer/:did',
+    name: 'developer-manage',
+    component: DeveloperManage,
+    children: [
+      {
+        path: 'commits',
+        component: DeveloperCommitHistory,
+      },
+      {
+        path: 'snapshots',
+        component: DeveloperSnap,
+      },
+    ],
+  },
 ];

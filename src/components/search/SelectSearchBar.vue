@@ -36,12 +36,14 @@ export default {
     return {
       options: [],
       value: '',
+      query: '',
       loading: false,
     };
   },
   methods: {
     remoteMethod(query) {
       if (query !== '') {
+        this.query = query;
         console.log(query);
         this.loading = true;
         const request = {
@@ -73,6 +75,7 @@ export default {
     handelChange(item) {
       console.log('handle', item);
       this.$emit('currentSelect', item);
+      this.value = this.query;
       // this.$router.push(`/cmds/${item}`);
     },
   },
