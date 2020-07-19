@@ -242,7 +242,7 @@ export default {
         return;
       }
       const request = {
-        url: '/commits/items',
+        url: '/items',
         method: 'GET',
         data: {
           ccids: this.ccids,

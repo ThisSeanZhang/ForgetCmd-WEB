@@ -141,6 +141,8 @@ export default {
       edit: 'Edit',
       index: 'Go Index',
       reflash: 'Reflash',
+      view: 'View',
+      toCmd: 'To Padding CMD',
       'jump-to-padding': 'To Padding',
       'sign-in': 'Sign In',
       'sign-out': 'Sign out',

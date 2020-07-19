@@ -99,15 +99,7 @@ export default {
   },
   watch: {
     cid() {
-      this.snapId = this.$route.params.snapId;
-      this.location = this.$route.params.location;
-      this.shareCode = this.$route.params.shareCode;
-      if (this.location === 'online-remote') {
-        this.snapLoading.doing = false;
-        this.snapLoading.success = false;
-      }
-      document.title = this.computedTitle;
-      this.getCommandById();
+      this.init();
     },
   },
   computed: {
@@ -205,20 +197,22 @@ export default {
         }
       }
     },
+    init() {
+      this.snapId = this.$route.params.snapId;
+      this.location = this.$route.params.location;
+      this.shareCode = this.$route.params.shareCode;
+      if (this.location === 'online-remote') {
+        this.snapLoading.doing = false;
+        this.snapLoading.success = false;
+      }
+      document.title = this.computedTitle;
+      this.getCommandById();
+    },
     ...mapGetters('CommandHistory', ['getCommandHis']),
   },
   created() {
     // this.cid = this.$route.params.cid;
-    this.snapId = this.$route.params.snapId;
-    this.location = this.$route.params.location;
-    this.shareCode = this.$route.params.shareCode;
-    if (this.location === 'online-remote') {
-      this.snapLoading.doing = false;
-      this.snapLoading.success = false;
-    }
-    document.title = this.computedTitle;
-    this.getCommandById();
-    console.log('create');
+    this.init();
     // 根据路由获取
     // this.getCommandById();
   },

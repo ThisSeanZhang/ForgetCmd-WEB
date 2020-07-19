@@ -1,35 +1,20 @@
 <template>
-<div>
-  <div>
-    <i class="el-icon-delete" @click="changeTab" ></i>
-  </div>
-  <el-scrollbar v-if="loading.success" style="height: calc(100% - 21px);" >
-    <CommitsTable v-on:reviewCmd="review($event)" v-if="!cmdTab" />
-    <div v-else v-loading="loading.doing" class="command-list">
-        <CommandListCommitPanel v-on:reviewCmd="review($event)"
-          v-for="(cmd, index) in cmds" :key="index" :cmd="cmd" >
-        </CommandListCommitPanel>
-    </div>
+<el-scrollbar v-if="loading.success" style="height: 100%;" >
+    <CommitSingleCard  v-for="(commit, i) in commits" :key="i" :commit="commit" />
   </el-scrollbar>
-  <div v-else @click="fetchCommitsInfo">
-    <i class="el-icon-refresh" ></i>
-    重新加载
-  </div>
-</div>
+  <LoadPanel v-bind:loading="loading" v-else v-on:inform="fetchCommitsInfo()"></LoadPanel>
 </template>
 <script>
-import { ajax, wantNothing } from '@/api/fetch';
-import Commit from '@/entities/CommandCommit';
-import CommitsTable from '../../components/commits/CommitsTable.vue';
-// import Command from '@/entities/Command';
-// import CommitPanel from '@/components/commits/CommitPanel.vue';
-// import CommandPanel from '@/components/command/CommandPanel.vue';
-import CommandListCommitPanel from '../../components/commits/CommandListCommitPanel.vue';
+import { wantNothing } from '@/api/fetch';
+import CommitAPI from '../../api/CommitAPI';
+import CommitSingleCard from '../../components/commits/CommitSingleCard.vue';
+import LoadPanel from '../../components/common/LoadPanel.vue';
+import CommandCommit from '../../entities/CommandCommit';
 
 export default {
   name: 'user-commit-history',
   components: {
-    CommitsTable, CommandListCommitPanel,
+    LoadPanel, CommitSingleCard,
   },
   data() {
     return {
@@ -38,8 +23,8 @@ export default {
       optionVal: [],
       currentIndex: null,
       cmdTab: true,
-      cmds: [],
-      reviewCmd: new Commit({}).toCommand(),
+      commits: [],
+      reviewCmd: new CommandCommit({}).toCommand(),
       loading: {
         doing: false,
         success: false,
@@ -64,13 +49,9 @@ export default {
       this.cmdTab = !this.cmdTab;
     },
     fetchCommitsInfo() {
-      const request = {
-        url: '/commits/cmds',
-        method: 'GET',
-      };
-      ajax(request, this.loading).then((resp) => {
-        console.log(resp.data.data);
-        this.cmds = resp.data.data;
+      CommitAPI.getCommitsByDid(this.$route.params.did, this.loading).then((resp) => {
+        this.commits = resp.data.data.map(CommandCommit.fromObj);
+        console.log(this.commits);
       }).catch(wantNothing);
     },
     review(cmd) {

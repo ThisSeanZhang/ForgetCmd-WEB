@@ -12,6 +12,7 @@ import ListCommit from '@/views/commit/ListCommit.vue';
 import DeveloperRouter from './DeveloperRouter';
 import AdminRouter from './AdminRouter';
 import NotFound from '../views/base/NotFound.vue';
+import CommitDetail from '../views/commit/CommitDetail.vue';
 
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
@@ -61,6 +62,11 @@ export default new Router({
       path: '/commits/create',
       name: 'create-commit-new',
       component: CreateCommit,
+    },
+    { // 查看具体commit
+      path: '/commits/:ccid/',
+      name: 'commit',
+      component: CommitDetail,
     },
     {
       path: '/commits',

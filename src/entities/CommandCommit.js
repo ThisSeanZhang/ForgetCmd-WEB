@@ -21,6 +21,8 @@ export default class CommandCommit {
     this.params = commit.params ? commit.params.map(p => new Param(p)) : [];
     this.status = commit.status;
     this.items = commit.items;
+    this.createTime = commit.createTime;
+    this.remark = commit.remark;
   }
 
   static findByCid(cid) {
@@ -114,7 +116,9 @@ export default class CommandCommit {
       options: JSON.stringify(CommandOption.convertDatas(this.options)),
       params: JSON.stringify(Param.convertDatas(this.params)),
       items: CommitItem.convertDatas(this.items),
+      createTime: this.createTime,
       did: this.did,
+      remark: this.remark,
     };
   }
 

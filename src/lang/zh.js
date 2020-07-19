@@ -141,6 +141,8 @@ export default {
       edit: '编辑',
       index: '去主页',
       reflash: '刷新',
+      view: '预览',
+      toCmd: '去填充命令',
       'jump-to-padding': '跳转至填充界面',
       'sign-in': '登入',
       'sign-out': '退出',
